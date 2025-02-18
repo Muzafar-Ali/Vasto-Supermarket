@@ -7,9 +7,9 @@ export type TOrder = {
   productId: mongoose.Schema.Types.ObjectId;
   productDetails: mongoose.Schema.Types.ObjectId[];
   paymentId: string;
-  paymentStatus: string;
+  paymentStatus: 'unpaid' | 'paid' | 'pending' | 'refunded';
   deliveryAddress: Object;
-  deliveryStatus: string;
+  deliveryStatus: 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
   subTotalAmount: number;
   totalAmount: number;
   invoiceReceipt: string;

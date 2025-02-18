@@ -10,16 +10,17 @@ import { errorHandler } from "./middlewares/error.middleware.js";
 
 const app = express();
 
+
 app.use(cors({
   origin: "*",
   credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(morgan("dev"));
 app.use(helmet({
   crossOriginResourcePolicy: false
 }))
+app.use(morgan("dev"));
 
 // Home route
 app.get("/", (req, res) => {

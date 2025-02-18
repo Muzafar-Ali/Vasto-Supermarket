@@ -27,7 +27,8 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
   },
   paymentStatus: {
     type: String,
-    default:""
+    enum: ['unpaid', 'paid', 'pending', 'refunded'],
+    default:'unpaid'
   },
   deliveryAddress: {
     type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +36,7 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
   },
   deliveryStatus: {
     type: String,
+    enum: ['processing', 'shipped', 'delivered', 'cancelled', 'returned'],
     required: true,
   },
   subTotalAmount: {

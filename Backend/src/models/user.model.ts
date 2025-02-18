@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { TUserDocument } from "../types/user.type.js";
+import bcrypt from "bcryptjs";
+import config from "../config/confiq.js";
 
 const userSchema = new mongoose.Schema<TUserDocument>({
   name: { 
@@ -62,6 +64,35 @@ const userSchema = new mongoose.Schema<TUserDocument>({
     default: "user" 
   },
 }, { timestamps: true });
+
+userSchema.pre("save", async function (next) {
+  const user = this as TUserDocument;
+  
+  if(!user.isModified("password")) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(Number(config.saltWorkFactor));
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
+
+  } catch (error: any) {
+    console.error('Error during password hashing:', error);
+    next(error);
+  }
+  next();
+})
+
+userSchema.methods.comparePassword = async function (candidatePassword: string) {
+  const user = this as TUserDocument;
+  try {
+    const isMatch = await bcrypt.compare(candidatePassword, user.password);      
+    return isMatch;
+    
+  } catch (error) {
+    console.error("comparePassword error = ", error);
+    return false
+  }
+}
 
 const UserModel = mongoose.models.User || mongoose.model<TUserDocument>("User", userSchema);
 
