@@ -6,6 +6,7 @@ import config from "./config/confiq.js";
 import helmet from "helmet";
 import { connectDB } from "./config/connectDB.js";
 import v1Routes from "./routes/v1/index.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 
 const app = express();
 
@@ -20,11 +21,15 @@ app.use(helmet({
   crossOriginResourcePolicy: false
 }))
 
-app.use("/api/v1", v1Routes)
 // Home route
 app.get("/", (req, res) => {
   res.send("Vasto Supermarket says Hello!");
 });
+
+app.use("/api/v1", v1Routes)
+
+// Error middleware 
+app.use(errorHandler);
 
 app.listen(config.port, () => {
   connectDB();
