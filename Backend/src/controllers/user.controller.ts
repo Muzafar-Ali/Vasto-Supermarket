@@ -78,10 +78,12 @@ export const userLoginHandler = async (req: Request<{}, {}, UserLoginInput['body
 
 export const userLogoutHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.cookie("accessToken", "", { maxAge: 0 })
-    res.cookie("refreshToken", "", { maxAge: 0 })
+    const userId = req.userId;
+    
     res.clearCookie("accessToken")
     res.clearCookie("refreshToken")
+
+    await UserModel.findByIdAndUpdate(userId, { refreshToken: "" });
 
     res.status(200).json({
       message: "Logged out successfully"
