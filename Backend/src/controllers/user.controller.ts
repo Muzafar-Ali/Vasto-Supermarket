@@ -1,16 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import { RegisterUserInput, registerUserSchema } from "../schema/reisgterUser.schema.js";
+import { RegisterUserInput, registerUserSchema, UserLoginInput } from "../schema/user.schema.js";
 import UserModel from "../models/user.model.js";
 import ErrorHandler from "../utils/errorClass.js";
+import generateAccessTokenAndSetCookie from "../utils/generateAccessTokenAndSetCookie.js";
+import generateRefreshTokenAndSetCookie from "../utils/generateRefreshTokenAndSetCookie.js";
+import config from "../config/confiq.js";
 
-export const registerUserController = async (req: Request<{}, {}, RegisterUserInput["body"]>, res: Response, next: NextFunction) => {
+export const registerUserHandler = async (req: Request<{}, {}, RegisterUserInput["body"]>, res: Response, next: NextFunction) => {
   try {
     const userData = req.body
 
     const userExist = await UserModel.findOne({ email: userData.email })    
     if(userExist) throw new ErrorHandler("User already registered", 409)
     
-     // Password mismatch logic is  handled by Zod schema(registerUserSchema) (refine method)  
+     // Password mismatch logic is handled by Zod schema(registerUserSchema) (refine method)  
     // if(userData.password !== userData.confirmPassword) throw new ErrorHandler("Passwords does not match", 400)
 
     const newUser = new UserModel({
@@ -26,6 +29,66 @@ export const registerUserController = async (req: Request<{}, {}, RegisterUserIn
     
   } catch (error) {
     console.error("registerUserController Error : ", error)
+    next(error)
+  }
+}
+
+export const userLoginHandler = async (req: Request<{}, {}, UserLoginInput['body']>, res: Response, next: NextFunction) => {
+  try {
+    const userData = req.body
+    
+    const user = await UserModel.findOne({ email: userData.email })
+    if (!user) throw new ErrorHandler("invalid credentials", 401)
+    
+    const isMatch = await user.comparePassword(userData.password)
+    if (!isMatch) throw new ErrorHandler("invalid credentials", 401)
+      
+    if (user.status !== "active") throw new ErrorHandler("You are blocked by admin", 403)
+    
+    // Generate access token and refresh token and set cookies concurrently
+    const [accessToken, refreshToken] = await Promise.all([
+      generateRefreshTokenAndSetCookie(user._id, res),
+      generateAccessTokenAndSetCookie(user._id, res)
+    ])
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      user._id,
+      { 
+        lastLoginDate: Date.now(),
+        refreshToken 
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: `Welcome back ${updatedUser.name}`,
+      user: {
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        lastLoginDate: updatedUser.lastLoginDate
+      }
+    })
+
+  } catch (error) {
+    console.error("userLoginHandler Error : ", error)
+    next(error)
+  }
+}
+
+export const userLogoutHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.cookie("accessToken", "", { maxAge: 0 })
+    res.cookie("refreshToken", "", { maxAge: 0 })
+    res.clearCookie("accessToken")
+    res.clearCookie("refreshToken")
+
+    res.status(200).json({
+      message: "Logged out successfully"
+    })
+
+  } catch (error) {
+    console.error("userLogoutHandler Error : ", error)
     next(error)
   }
 }

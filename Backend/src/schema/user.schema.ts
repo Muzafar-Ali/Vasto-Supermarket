@@ -6,6 +6,7 @@ import { JSDOM } from "jsdom";
 const window = new JSDOM("").window;
 const domPurify = DOMPurify(window)
 
+// user registration request validation
 export const registerUserSchema = z.object({
   body: z.object({
     name: z.string({
@@ -19,7 +20,7 @@ export const registerUserSchema = z.object({
       required_error: "Email is required",
     })
     .email({ message: "Invalid email address" })
-    .transform((value) => domPurify.sanitize(value.trim().toLocaleLowerCase())),
+    .transform((value) => domPurify.sanitize(value.trim().toLowerCase())),
     
     password: z.string({
       required_error: "Password is required",
@@ -40,4 +41,22 @@ export const registerUserSchema = z.object({
   }),
 })
 
+// user login request validation
+export const userLoginSchema = z.object({
+  body: z.object({
+    email: z.string({
+      required_error: "Email is required",
+    })
+    .email("Invalid email")
+    .transform((value) => domPurify.sanitize(value.trim().toLowerCase())),
+    
+    password: z.string({
+      required_error: "Password is required",
+    })
+    .min(6, "Password must be at least 6 characters long")
+    .transform((value) => domPurify.sanitize(value.trim())),
+  })
+})
+
 export type RegisterUserInput = z.infer<typeof registerUserSchema>
+export type UserLoginInput = z.infer<typeof userLoginSchema>

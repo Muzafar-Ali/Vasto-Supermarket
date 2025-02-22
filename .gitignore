@@ -1,0 +1,19 @@
+# dependencies
+/Backend/node_modules
+
+# production
+/Backend/build
+
+# misc
+/Backend/.env
+
+# Transpiled/bundled output
+/Backend/dist
+
+# IDEs
+/Backend/.vscode/
+
+
+/Backend/npm-debug.log*
+/Backend/yarn-debug.log*
+/Backend/yarn-error.log*
