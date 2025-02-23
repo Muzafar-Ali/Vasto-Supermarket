@@ -8,8 +8,14 @@ import { connectDB } from "./config/connectDB.js";
 import v1Routes from "./routes/v1/index.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
 
+// Swagger imports
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs"; // To load the YAML file
+
 const app = express();
 
+// Load the OpenAPI specification from the YAML file
+const swaggerDocument = YAML.load("./openapi.yaml");
 
 app.use(cors({
   origin: "*",
@@ -21,6 +27,9 @@ app.use(helmet({
   crossOriginResourcePolicy: false
 }))
 app.use(morgan("dev"));
+
+// Serve Swagger docs
+app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Home route
 app.get("/", (req, res) => {

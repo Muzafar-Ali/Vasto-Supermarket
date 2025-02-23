@@ -1,0 +1,239 @@
+openapi: 3.1.0
+info:
+  title: Vasto Supermarket API
+  description: API documentation for the Vasto Supermarket backend
+  version: 1.0.0
+  servers:
+  # - url: 'https://api.vasto.supermarket/dev'  # Development URL
+  #   description: Development server (for debugging and testing)
+  # - url: 'https://api.vasto.supermarket/prod'  # Production URL
+  #   description: Production server (for live environment)
+paths:
+  /api/v1/user/register:
+    post:
+      summary: Register a new user
+      description: Registers a new user by accepting email, password, and other details. Ensures that the user is not already registered.
+      operationId: registerUser
+      requestBody:
+        description: User registration details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The user's email address
+                  example: "user@example.com"
+                password:
+                  type: string
+                  description: The user's password
+                  example: "password123"
+                confirmPassword:
+                  type: string
+                  description: The user's password confirmation (same as password)
+                  example: "password123"
+                name:
+                  type: string
+                  description: The user's full name
+                  example: "John Doe"
+              required:
+                - email
+                - password
+                - confirmPassword
+                - name
+      responses:
+        '200':
+          description: Successfully registered user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You registered successfully"
+        '409':
+          description: User already registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User already registered"
+        '400':
+          description: Validation error or password mismatch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Passwords do not match"
+
+  /api/v1/user/login:
+    post:
+      summary: User login
+      description: Authenticates a user with email and password, generates access and refresh tokens.
+      operationId: userLogin
+      requestBody:
+        description: User login credentials
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The user's email address
+                  example: "user@example.com"
+                password:
+                  type: string
+                  description: The user's password
+                  example: "password123"
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login and token generation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Welcome back John Doe"
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: The user's unique ID
+                        example: "60b6b0e8f3a5f127e45f5b3b"
+                      name:
+                        type: string
+                        description: The user's name
+                        example: "John Doe"
+                      email:
+                        type: string
+                        description: The user's email address
+                        example: "user@example.com"
+                      lastLoginDate:
+                        type: string
+                        format: date-time
+                        description: The date when the user last logged in
+                        example: "2025-02-22T10:00:00Z"
+        '401':
+          description: Invalid credentials, either email or password is incorrect.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid credentials"
+        '403':
+          description: The user is blocked by the admin.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "You are blocked by admin"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+  /api/v1/user/logout:
+    post:
+      summary: User logout
+      description: Logs the user out by clearing their access and refresh tokens.
+      operationId: userLogout
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logged out successfully"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+  /api/v1/user/refresh-token:
+    post:
+      summary: Refreshes the user's access token
+      description: |
+        Accepts a refresh token and returns a new access token if the refresh token is valid.
+        Ensures the token is not expired or invalid.
+      operationId: refreshToken
+      requestBody:
+        description: The refresh token for generating a new access token
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: The user's refresh token (can also be provided as a bearer token in the header)
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTg5NzQyMTI4OTMxMzMwMjA4NzkiLCJpYXQiOjE2NzU4NTExMzgsImV4cCI6MTY3NTg1NDczOH0.LC_fEgFlqZTqN3yZA0zm6cXygXYdUls45bc0zm37cYI"
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Access Token refreshed successfully"
+        '401':
+          description: Unauthorized or invalid/expired refresh token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorized or invalid refresh token"
+        '400':
+          description: Bad request (invalid token format or missing refresh token)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid token format or missing refresh token"
