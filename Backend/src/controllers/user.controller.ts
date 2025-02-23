@@ -7,6 +7,11 @@ import generateRefreshTokenAndSetCookie from "../utils/generateRefreshTokenAndSe
 import config from "../config/confiq.js";
 import jwt from "jsonwebtoken";
 
+/**
+ * @desc    Register a new user
+ * @route   POST /api/v1/register
+ * @access  Public
+ */
 export const registerUserHandler = async (req: Request<{}, {}, RegisterUserInput["body"]>, res: Response, next: NextFunction) => {
   try {
     const userData = req.body
@@ -34,6 +39,11 @@ export const registerUserHandler = async (req: Request<{}, {}, RegisterUserInput
   }
 }
 
+/**
+ * @desc    User login and generate tokens
+ * @route   POST /api/v1/login
+ * @access  Public
+ */
 export const userLoginHandler = async (req: Request<{}, {}, UserLoginInput['body']>, res: Response, next: NextFunction) => {
   try {
     const userData = req.body
@@ -77,6 +87,11 @@ export const userLoginHandler = async (req: Request<{}, {}, UserLoginInput['body
   }
 }
 
+/**
+ * @desc    User logout and clear tokens
+ * @route   POST /api/v1/logout
+ * @access  Private
+ */
 export const userLogoutHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.userId;
@@ -96,6 +111,11 @@ export const userLogoutHandler = async (req: Request, res: Response, next: NextF
   }
 }
 
+/**
+ * @desc    Refresh access token using refresh token
+ * @route   POST /api/v1/refresh-token
+ * @access  Public
+ */
 export const refreshAccessTokenHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const refreshToken = req.cookies.refreshToken || req.headers.authorization?.split(' ')[1];

@@ -1,10 +1,5 @@
 import { z } from "zod";
-import DOMPurify from 'dompurify';
-import { JSDOM } from "jsdom";
-
-// Create a DOMPurify instance
-const window = new JSDOM("").window;
-const domPurify = DOMPurify(window)
+import domPurify from "../config/domPurifyInstance.js";
 
 // user registration request validation
 export const registerUserSchema = z.object({

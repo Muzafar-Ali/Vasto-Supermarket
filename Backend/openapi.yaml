@@ -11,6 +11,9 @@ info:
 paths:
   /api/v1/user/register:
     post:
+      tags:
+        - Development
+        - Production
       summary: Register a new user
       description: Registers a new user by accepting email, password, and other details. Ensures that the user is not already registered.
       operationId: registerUser
@@ -77,6 +80,9 @@ paths:
 
   /api/v1/user/login:
     post:
+      tags:
+        - Development
+        - Production
       summary: User login
       description: Authenticates a user with email and password, generates access and refresh tokens.
       operationId: userLogin
@@ -163,6 +169,9 @@ paths:
 
   /api/v1/user/logout:
     post:
+      tags:
+        - Development
+        - Production
       summary: User logout
       description: Logs the user out by clearing their access and refresh tokens.
       operationId: userLogout
@@ -190,6 +199,9 @@ paths:
 
   /api/v1/user/refresh-token:
     post:
+      tags:
+        - Development
+        - Production
       summary: Refreshes the user's access token
       description: |
         Accepts a refresh token and returns a new access token if the refresh token is valid.
@@ -237,3 +249,86 @@ paths:
                   message:
                     type: string
                     example: "Invalid token format or missing refresh token"
+
+  /api/v1/category:
+    post:
+      tags:
+        - Development
+        - Production
+      summary: Add a new category
+      description: |
+        This endpoint allows the creation of a new category. The request body should contain the category's name, description, and an image file.
+        In development, error responses will provide more verbose details.
+      operationId: addCategory
+      requestBody:
+        description: Category details for creation
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the category
+                  example: "Electronics"
+                description:
+                  type: string
+                  description: A description of the category
+                  example: "Devices and gadgets for everyday use."
+                image:
+                  type: string
+                  format: binary
+                  description: The image associated with the category
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Category created successfully"
+        '400':
+          description: Bad request due to missing or invalid data (e.g., missing image or category already exists)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Image is required"
+        '409':
+          description: Category already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Category already exists"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
