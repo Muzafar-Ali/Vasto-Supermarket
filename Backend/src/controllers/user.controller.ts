@@ -5,6 +5,7 @@ import ErrorHandler from "../utils/errorClass.js";
 import generateAccessTokenAndSetCookie from "../utils/generateAccessTokenAndSetCookie.js";
 import generateRefreshTokenAndSetCookie from "../utils/generateRefreshTokenAndSetCookie.js";
 import config from "../config/confiq.js";
+import jwt from "jsonwebtoken";
 
 export const registerUserHandler = async (req: Request<{}, {}, RegisterUserInput["body"]>, res: Response, next: NextFunction) => {
   try {
@@ -94,3 +95,32 @@ export const userLogoutHandler = async (req: Request, res: Response, next: NextF
     next(error)
   }
 }
+
+export const refreshAccessTokenHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const refreshToken = req.cookies.refreshToken || req.headers.authorization?.split(' ')[1];
+    
+    if(!refreshToken) throw new ErrorHandler("Unauthorized", 401);
+
+    const decode = jwt.verify(refreshToken, config.jwtSecret!) as jwt.JwtPayload;
+    if(!decode) throw new ErrorHandler("invalid token", 401);
+
+    const expiray = decode?.exp! * 1000;
+    if( expiray < Date.now()) throw new ErrorHandler("Token expired", 401);
+
+
+    const user = await UserModel.findById(decode.userId)
+    if(!user) throw new ErrorHandler("invalid token", 401);
+    if(user.refreshToken !== refreshToken) throw new ErrorHandler("invalid token", 401)
+
+    generateAccessTokenAndSetCookie(user._id, res)
+
+    res.status(200).json({
+      message: "Access Token refreshed successfully"
+    })
+
+  } catch (error) {
+    console.error("refreshAccessTokenHandler Error : ", error)
+    next(error)
+  }
+}  

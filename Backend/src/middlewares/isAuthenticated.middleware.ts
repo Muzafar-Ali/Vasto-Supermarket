@@ -19,7 +19,6 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
     const decode = jwt.verify(accessToken, config.jwtSecret!) as jwt.JwtPayload; 
     if(!decode) throw new ErrorHandler("invalid token", 401);
 
-
     req.userId = decode.userId
 
     next()
