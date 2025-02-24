@@ -18,7 +18,18 @@ export const addCategorySchema = z.object({
     .transform((value) => domPurify.sanitize(value.trim()))
 
     // image:  this will be handled by multer 
+  }),
+
+});
+
+export const updateCategorySchema = addCategorySchema.extend({
+  body: addCategorySchema.shape.body.partial(),  // This makes all fields optional in the body
+  params: z.object({
+    id: z.string({
+      required_error: "Category id is required"
+    }).transform((value) => domPurify.sanitize(value.trim()))
   })
 });
 
 export type AddCategoryInput = z.infer<typeof addCategorySchema>;
+export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;

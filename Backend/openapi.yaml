@@ -12,7 +12,6 @@ paths:
   /api/v1/user/register:
     post:
       tags:
-        - Development
         - Production
       summary: Register a new user
       description: Registers a new user by accepting email, password, and other details. Ensures that the user is not already registered.
@@ -81,7 +80,6 @@ paths:
   /api/v1/user/login:
     post:
       tags:
-        - Development
         - Production
       summary: User login
       description: Authenticates a user with email and password, generates access and refresh tokens.
@@ -170,7 +168,6 @@ paths:
   /api/v1/user/logout:
     post:
       tags:
-        - Development
         - Production
       summary: User logout
       description: Logs the user out by clearing their access and refresh tokens.
@@ -200,7 +197,6 @@ paths:
   /api/v1/user/refresh-token:
     post:
       tags:
-        - Development
         - Production
       summary: Refreshes the user's access token
       description: |
@@ -253,7 +249,6 @@ paths:
   /api/v1/category:
     post:
       tags:
-        - Development
         - Production
       summary: Add a new category
       description: |
@@ -319,6 +314,200 @@ paths:
                   message:
                     type: string
                     example: "Category already exists"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+    get:
+      tags:
+        - Production
+      summary: Get all categories
+      description: Fetches all categories available in the system.
+      operationId: getAllCategories
+      responses:
+        '200':
+          description: Successfully fetched categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The unique identifier of the category
+                          example: "60b6b0e8f3a5f127e45f5b3b"
+                        name:
+                          type: string
+                          description: The name of the category
+                          example: "Electronics"
+                        description:
+                          type: string
+                          description: The description of the category
+                          example: "Devices and gadgets for everyday use."
+        '404':
+          description: No categories found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No categories found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
+                    
+  /api/v1/category/{id}:
+    patch:
+      tags:
+        - Production
+      summary: Update an existing category
+      description: |
+        This endpoint allows updating an existing category's name, description, and image file.
+        In development, error responses will provide more verbose details.
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the category to update.
+          schema:
+            type: string
+      requestBody:
+        description: The updated category details
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name of the category
+                  example: "Electronics"
+                description:
+                  type: string
+                  description: A new description for the category
+                  example: "Devices and gadgets for everyday use."
+                image:
+                  type: string
+                  format: binary
+                  description: An image file associated with the category
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Category updated successfully"
+        '400':
+          description: Bad request (invalid data or missing parameters)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid data provided"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+    delete:
+      tags:
+        - Production
+      summary: Delete an existing category
+      description: |
+        This endpoint allows deleting a category by its ID.
+        In development, error responses will provide more verbose details.
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the category to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Category deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Category deleted successfully"
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Category not found"
         '500':
           description: Internal server error
           content:

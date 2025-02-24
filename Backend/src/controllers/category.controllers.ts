@@ -1,10 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import { AddCategoryInput } from "../schema/category.schema.js";
+import { AddCategoryInput, UpdateCategoryInput } from "../schema/category.schema.js";
 import CategoryModel from "../models/category.model.js";
 import ErrorHandler from "../utils/errorClass.js";
-import uploadImageToCloudinary from "../utils/uploadImageToCloudinary.js";
 import mongoose from "mongoose";
+import { addCategory, deleteCategoryService, updateCategory } from "../services/category.services.js";
+import SubCategory from "../models/subCategory.js";
+import ProductModel from "../models/product.model.js";
 
+/**
+ * @desc    Add a new category
+ * @route   POST /api/v1/category
+ * @access  Private (requires authentication)
+ */
 export const addCategoryHandler = async (req: Request<{}, {}, AddCategoryInput["body"]>, res: Response, next: NextFunction) => {
   const session = await mongoose.startSession(); // Start a new session
 
@@ -16,25 +23,8 @@ export const addCategoryHandler = async (req: Request<{}, {}, AddCategoryInput["
 
     if (!image) throw new ErrorHandler("Image is required", 400);
 
-    // Check if category already exists
-    const categoryExists = await CategoryModel.findOne({ name }).session(session); // Ensure this query runs within the session
-    if (categoryExists) throw new ErrorHandler("Category already exists", 400);
-
-    // Upload image to Cloudinary
-    const imageUrl = await uploadImageToCloudinary(image, "category");
-    if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
-
-    // Create the category in the database
-    const category = await CategoryModel.create([{
-      name,
-      description,
-      image: imageUrl
-    }], { session }); // Pass the session with the create operation
-
-    if (!category) throw new ErrorHandler("Category not created", 400);
-
-    // Commit the transaction if everything is successful
-    await session.commitTransaction();
+    // Call the service to add the category
+    await addCategory(name, description, image);
 
     res.status(201).json({
       success: true,
@@ -42,12 +32,77 @@ export const addCategoryHandler = async (req: Request<{}, {}, AddCategoryInput["
     });
 
   } catch (error) {
-    // If any error occurs, abort the transaction and handle the error
-    await session.abortTransaction(); // Rollback all changes in the transaction
     console.error("addCategoryHandler Error : ", error);
+    next(error); // Pass the error to error handling middleware
+  }
+};
+
+/**
+ * @desc    Get all categories
+ * @route   GET /api/v1/category
+ * @access  Public
+ */
+export const getAllCategoriesHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const categories = await CategoryModel.find({});
+
+    if (!categories) throw new ErrorHandler("No categories found", 404);
+
+    res.status(200).json({
+      success: true,
+      categories,
+    });
+
+  } catch (error) {
+    console.error("getAllCategoriesHandler Error : ", error);
     next(error);
-  } finally {
-    // End the session
-    session.endSession();
+  }
+};
+
+/**
+ * @desc    Update an existing category
+ * @route   PATCH /api/v1/category/:id
+ * @access  Private (requires authentication)
+ */
+export const updateCategoryHandler = async (req: Request<UpdateCategoryInput['params'], {}, UpdateCategoryInput['body']>, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    const image = req.file;
+
+    // Call the service to update the category
+    await updateCategory(id, name, description, image);
+
+    res.status(200).json({
+      success: true,
+      message: "Category updated successfully",
+    });
+
+  } catch (error) {
+    console.error("updateCategory Error : ", error);
+    next(error);
+  }
+};
+
+/**
+ * @desc    Delete an existing category
+ * @route   DELETE /api/v1/category/:id
+ * @access  Private (requires authentication)
+ */
+export const deleteCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    // Call the service to delete the category
+    await deleteCategoryService(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Category deleted successfully",
+    });
+
+  } catch (error) {
+    console.error("deleteCategory Error : ", error);
+    next(error);
   }
 };

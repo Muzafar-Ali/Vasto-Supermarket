@@ -1,11 +1,18 @@
 import { Router } from "express";
-import { addCategoryHandler } from "../../controllers/category.controllers.js";
+import { addCategoryHandler, deleteCategoryHandler, getAllCategoriesHandler, updateCategoryHandler } from "../../controllers/category.controllers.js";
 import validateRequest from "../../middlewares/validateRequest.middleware.js";
-import { addCategorySchema } from "../../schema/category.schema.js";
+import { addCategorySchema, updateCategorySchema } from "../../schema/category.schema.js";
 import { upload } from "../../middlewares/multer.middleware.js";
+import isAuthenticated from "../../middlewares/isAuthenticated.middleware.js";
 
 const router = Router();
 
-router.route("/").post( upload.single('image'), validateRequest(addCategorySchema), addCategoryHandler);
+router.route("/")
+.post( isAuthenticated, upload.single('image'), validateRequest(addCategorySchema), addCategoryHandler)
+.get(getAllCategoriesHandler)
+
+router.route("/:id")
+.patch(isAuthenticated, upload.single('image'), validateRequest(updateCategorySchema), updateCategoryHandler)
+.delete(isAuthenticated, deleteCategoryHandler);
 
 export default router;

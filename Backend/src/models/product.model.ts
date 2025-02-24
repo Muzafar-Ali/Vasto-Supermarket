@@ -16,14 +16,14 @@ const productSchema = new mongoose.Schema<TProductDocument>({
     type: [String],
     default: [],
   },
-  categoryId: [
+  category: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       required: true,
     },
   ],
-  subCategoryId: [
+  subCategory: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubCategory",

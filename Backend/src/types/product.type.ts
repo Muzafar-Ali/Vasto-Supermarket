@@ -4,8 +4,8 @@ export type TProduct = {
   name: string;
   description: string;
   imageUrl: string[];
-  categoryId: mongoose.Schema.Types.ObjectId[];
-  subCategoryId: mongoose.Schema.Types.ObjectId[];
+  category: mongoose.Schema.Types.ObjectId[];
+  subCategory: mongoose.Schema.Types.ObjectId[];
   unit: string;
   stock: number;
   price: number;

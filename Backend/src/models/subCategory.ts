@@ -6,7 +6,7 @@ const subCategorySchema = new mongoose.Schema<TSubCategoryDocument>({
     type: String,
     required: true
   },
-  categoryId: [
+  category: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
@@ -19,6 +19,6 @@ const subCategorySchema = new mongoose.Schema<TSubCategoryDocument>({
   }
 }, {timestamps: true})
 
-const SubCategory = mongoose.model<TSubCategoryDocument>('SubCategory', subCategorySchema)
+const SubCategoryModel = mongoose.model<TSubCategoryDocument>('SubCategory', subCategorySchema)
 
-export default SubCategory
+export default SubCategoryModel
