@@ -43,14 +43,14 @@ export const addCategory = async (name: string, description: string, image: Expr
 };
 
 export const updateCategory = async (id: string, name?: string, description?: string, image?: Express.Multer.File) => {
-  const updateCategory: any = {};
+  const updateCategoryData: any = {};
 
-  if (name) updateCategory.name = name;
-  if (description) updateCategory.description = description;
+  if (name) updateCategoryData.name = name;
+  if (description) updateCategoryData.description = description;
   if (image) {
     const imageUrl = await uploadImageToCloudinary(image, "category");
     if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
-    updateCategory.image = imageUrl;
+    updateCategoryData.image = imageUrl;
   }
 
   const updatedCategory = await CategoryModel.findByIdAndUpdate(id, updateCategory, { new: true });

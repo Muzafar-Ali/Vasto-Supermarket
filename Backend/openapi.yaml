@@ -521,3 +521,301 @@ paths:
                   message:
                     type: string
                     example: "Internal server error"
+                    
+  /api/v1/sub-category:
+    post:
+      tags:
+        - Production
+      summary: Add a new sub-category
+      description: |
+        This endpoint allows the creation of a new sub-category. The request body should contain the sub-category's name, associated category, and an image file.
+        In development, error responses will provide more verbose details.
+      operationId: addSubCategory
+      requestBody:
+        description: Sub-category details for creation
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the sub-category
+                  example: "Smartphones"
+                category:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of category IDs associated with this sub-category
+                  example: ["60b6b0e8f3a5f127e45f5b3b"]
+                image:
+                  type: string
+                  format: binary
+                  description: An image file associated with the sub-category
+      responses:
+        '201':
+          description: Sub-category created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Sub category added successfully"
+        '400':
+          description: Bad request due to missing or invalid data (e.g., missing image, sub-category already exists)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Image is required"  # Or "Sub Category already exists"
+        '500':
+          description: Internal server error (e.g., failed to upload image to Cloudinary)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
+
+    get:
+      tags:
+        - Production
+      summary: Get all sub-categories
+      description: Fetches all sub-categories available in the system.
+      operationId: getAllSubCategories
+      responses:
+        '200':
+          description: Successfully fetched sub-categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The unique identifier of the sub-category
+                          example: "60b6b0e8f3a5f127e45f5b3b"
+                        name:
+                          type: string
+                          description: The name of the sub-category
+                          example: "Smartphones"
+                        category:
+                          type: array
+                          items:
+                            type: string
+                          description: A list of category IDs associated with this sub-category
+                          example: ["60b6b0e8f3a5f127e45f5b3b"]
+                        image:
+                          type: string
+                          description: URL of the image associated with the sub-category
+                          example: "https://res.cloudinary.com/example-url.jpg"
+        '404':
+          description: No sub-categories found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No sub-categories found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+  /api/v1/sub-category/{id}:
+    patch:
+      tags:
+        - Production
+      summary: Update an existing sub-category
+      description: |
+        This endpoint allows updating an existing sub-category's name, associated categories, and image file.
+        In development, error responses will provide more verbose details.
+      operationId: updateSubCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the sub-category to update.
+          schema:
+            type: string
+      requestBody:
+        description: The updated sub-category details
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name of the sub-category
+                  example: "Smartphones"
+                category:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of category IDs to associate with the sub-category
+                  example: ["60b6b0e8f3a5f127e45f5b3b"]
+                image:
+                  type: string
+                  format: binary
+                  description: The new image associated with the sub-category
+      responses:
+        '200':
+          description: Sub-category updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Sub category updated successfully"
+        '400':
+          description: Bad request (e.g., missing image, sub-category not updated)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Image is required"  # Or "Sub category not updated"
+        '404':
+          description: Sub-category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Category not found"
+        '500':
+          description: Internal server error (e.g., failed to upload image to Cloudinary)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
+    delete:
+      tags:
+        - Production
+      summary: Delete an existing sub-category
+      description: |
+        This endpoint allows the deletion of an existing sub-category. The sub-category cannot be deleted if it's associated with any products.
+      operationId: deleteSubCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the sub-category to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sub-category deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Sub category deleted successfully"
+        '400':
+          description: Sub-category cannot be deleted because it is associated with products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Category cannot be deleted as it is associated with subcategories or products"
+        '404':
+          description: Sub-category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Sub-category not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
