@@ -819,3 +819,449 @@ paths:
                   message:
                     type: string
                     example: "Internal server error"
+
+  /api/v1/product:
+    post:
+      tags:
+        - Production
+      summary: Create a new product
+      description: |
+        This endpoint allows creating a new product with associated categories, sub-categories, images, and other product details.
+      operationId: createProduct
+      requestBody:
+        description: The details of the product to create
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the product
+                  example: "iPhone 15"
+                description:
+                  type: string
+                  description: A detailed description of the product
+                  example: "The latest iPhone model with enhanced features."
+                category:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of category IDs to associate with the product
+                  example: ["60b6b0e8f3a5f127e45f5b3b"]
+                subCategory:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of sub-category IDs to associate with the product
+                  example: ["60b6b0e8f3a5f127e45f5b4c"]
+                price:
+                  type: number
+                  description: The price of the product
+                  example: 999.99
+                discount:
+                  type: number
+                  description: The discount percentage on the product
+                  example: 10
+                unit:
+                  type: string
+                  description: The unit of measurement for the product
+                  example: "piece"
+                stock:
+                  type: number
+                  description: The quantity of the product in stock
+                  example: 100
+                published:
+                  type: boolean
+                  description: Whether the product is published and available for sale
+                  example: true
+                moreDetails:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: Additional details about the product (optional)
+                  example: {"color": "red", "weight": "200g"}
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Product images to be uploaded
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Product created successfully"
+        '400':
+          description: Bad request (e.g., no images uploaded, missing required fields)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No images uploaded"  # Or "Product not created"
+        '500':
+          description: Internal server error (e.g., failed to upload images to Cloudinary)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
+    get:
+      tags:
+        - Production
+      summary: Get all products
+      description: |
+        This endpoint retrieves all products from the database, sorted by creation date in descending order.
+      operationId: getAllProducts
+      responses:
+        '200':
+          description: Successfully retrieved the list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The product's unique identifier
+                          example: "60b6b0e8f3a5f127e45f5b3b"
+                        name:
+                          type: string
+                          description: The name of the product
+                          example: "iPhone 15"
+                        description:
+                          type: string
+                          description: A brief description of the product
+                          example: "The latest iPhone model with enhanced features."
+                        price:
+                          type: number
+                          description: The price of the product
+                          example: 999.99
+                        discount:
+                          type: number
+                          description: The discount percentage on the product
+                          example: 10
+                        unit:
+                          type: string
+                          description: The unit of measurement for the product
+                          example: "piece"
+                        stock:
+                          type: number
+                          description: The quantity of the product in stock
+                          example: 100
+                        published:
+                          type: boolean
+                          description: Whether the product is published and available for sale
+                          example: true
+                        imageUrl:
+                          type: array
+                          items:
+                            type: string
+                          description: The URLs of the product images
+                          example: ["https://cloudinary.com/path/to/image.jpg"]
+        '404':
+          description: No products found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No product found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
+
+  /api/v1/product/{id}:
+    get:
+      tags:
+        - Production
+      summary: Get a specific product by ID
+      description: |
+        This endpoint retrieves a single product based on its unique identifier (ID).
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the product to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  product:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: The product's unique identifier
+                        example: "60b6b0e8f3a5f127e45f5b3b"
+                      name:
+                        type: string
+                        description: The name of the product
+                        example: "iPhone 15"
+                      description:
+                        type: string
+                        description: A brief description of the product
+                        example: "The latest iPhone model with enhanced features."
+                      price:
+                        type: number
+                        description: The price of the product
+                        example: 999.99
+                      discount:
+                        type: number
+                        description: The discount percentage on the product
+                        example: 10
+                      unit:
+                        type: string
+                        description: The unit of measurement for the product
+                        example: "piece"
+                      stock:
+                        type: number
+                        description: The quantity of the product in stock
+                        example: 100
+                      published:
+                        type: boolean
+                        description: Whether the product is published and available for sale
+                        example: true
+                      imageUrl:
+                        type: array
+                        items:
+                          type: string
+                        description: The URLs of the product images
+                        example: ["https://cloudinary.com/path/to/image.jpg"]
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No product found"
+    patch:
+      tags:
+        - Production
+      summary: Update a product by ID
+      description: |
+        This endpoint updates the details of an existing product. You can update fields such as name, description, price, stock, etc.
+        This operation requires authentication.
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the product to update.
+          schema:
+            type: string
+      requestBody:
+        description: The updated product details
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The new name of the product
+                  example: "iPhone 15 Pro"
+                description:
+                  type: string
+                  description: The new description of the product
+                  example: "The latest iPhone model with a better camera and more features."
+                category:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of category IDs to associate with the product
+                  example: ["60b6b0e8f3a5f127e45f5b3b"]
+                subCategory:
+                  type: array
+                  items:
+                    type: string
+                  description: A list of sub-category IDs to associate with the product
+                  example: ["60b6b0e8f3a5f127e45f5b4c"]
+                price:
+                  type: number
+                  description: The updated price of the product
+                  example: 1099.99
+                discount:
+                  type: number
+                  description: The updated discount percentage
+                  example: 15
+                unit:
+                  type: string
+                  description: The unit of measurement for the product
+                  example: "piece"
+                stock:
+                  type: number
+                  description: The updated stock quantity
+                  example: 80
+                published:
+                  type: boolean
+                  description: Whether the product is published and available for sale
+                  example: true
+                moreDetails:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: Additional details about the product (optional)
+                  example: {"color": "black", "weight": "210g"}
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Updated product images
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Product updated successfully"
+        '400':
+          description: Bad request (e.g., missing required fields)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Product not updated"
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No product found"
+        '500':
+          description: Internal server error (e.g., failed to upload images)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
+    delete:
+      tags:
+        - Production
+      summary: Delete a product by ID
+      description: |
+        This endpoint deletes a product based on its unique identifier (ID). Requires authentication.
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the product to delete.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Product deleted successfully"
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No product found"

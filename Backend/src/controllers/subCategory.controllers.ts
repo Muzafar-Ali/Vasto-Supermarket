@@ -37,7 +37,7 @@ export const addSubCategoryHandler = async (req: Request<{}, {}, AddSubCategoryI
  */
 export const getAllSubCategoriesHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // Call the service to get all sub categories
+    
     const subCategories = await SubCategoryModel.find({}).sort({ createdAt: -1 });
     if(!subCategories) throw new ErrorHandler("No sub categories found", 404);
 

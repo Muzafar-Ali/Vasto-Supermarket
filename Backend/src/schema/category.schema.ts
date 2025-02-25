@@ -1,6 +1,7 @@
 import { z } from "zod";
 import domPurify from "../config/domPurifyInstance.js";
 
+// Add category request validation & sanitization
 export const addCategorySchema = z.object({
   body: z.object({
     name: z.string({
@@ -22,6 +23,7 @@ export const addCategorySchema = z.object({
 
 });
 
+// Update category request validation & sanitization
 export const updateCategorySchema = addCategorySchema.extend({
   body: addCategorySchema.shape.body.partial(),  // This makes all fields optional in the body
   params: z.object({
@@ -31,5 +33,15 @@ export const updateCategorySchema = addCategorySchema.extend({
   })
 });
 
+// Delete category request validation & sanitization
+export const deleteCategorySchema = z.object({
+  params: z.object({
+    id: z.string({
+      required_error: "Category id is required"
+    }).transform((value) => domPurify.sanitize(value.trim()))
+  })
+});
+
 export type AddCategoryInput = z.infer<typeof addCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
+export type DeleteCategoryInput = z.infer<typeof deleteCategorySchema>;

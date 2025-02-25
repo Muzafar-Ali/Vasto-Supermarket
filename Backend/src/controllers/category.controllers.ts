@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { AddCategoryInput, UpdateCategoryInput } from "../schema/category.schema.js";
+import { AddCategoryInput, DeleteCategoryInput, UpdateCategoryInput } from "../schema/category.schema.js";
 import CategoryModel from "../models/category.model.js";
 import ErrorHandler from "../utils/errorClass.js";
 import mongoose from "mongoose";
 import { addCategory, deleteCategoryService, updateCategory } from "../services/category.services.js";
 import SubCategory from "../models/subCategory.js";
 import ProductModel from "../models/product.model.js";
+import { DeleteProductInput } from "../schema/product.schema.js";
 
 /**
  * @desc    Add a new category
@@ -89,7 +90,7 @@ export const updateCategoryHandler = async (req: Request<UpdateCategoryInput['pa
  * @route   DELETE /api/v1/category/:id
  * @access  Private (requires authentication)
  */
-export const deleteCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCategoryHandler = async (req: Request<DeleteProductInput['params']>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
 

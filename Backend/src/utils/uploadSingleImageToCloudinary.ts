@@ -1,7 +1,7 @@
 import cloudinary from "../config/cloudinary.js";
 import ErrorHandler from "./errorClass.js";
 
-const uploadImageToCloudinary = async ( image: Express.Multer.File, subFolder: string ) => {
+const uploadSingleImageToCloudinary = async ( image: Express.Multer.File, subFolder: string ) => {
   try {
 
     // Convert buffer to data URI
@@ -17,9 +17,9 @@ const uploadImageToCloudinary = async ( image: Express.Multer.File, subFolder: s
     return imageUpload.secure_url;
     
   } catch (error) {
-    console.error('uploadImageToCloudinary error: ', error);
+    console.error('uploadSingleImageToCloudinary error: ', error);
     throw new ErrorHandler("Failed to upload image to Cloudinary", 500);   
   }
 };
 
-export default uploadImageToCloudinary;
+export default uploadSingleImageToCloudinary;

@@ -1,9 +1,9 @@
 import CategoryModel from "../models/category.model.js";
-import uploadImageToCloudinary from "../utils/uploadImageToCloudinary.js";
 import ErrorHandler from "../utils/errorClass.js";
 import mongoose from "mongoose";
 import SubCategoryModel from "../models/subCategory.js";
 import ProductModel from "../models/product.model.js";
+import uploadSingleImageToCloudinary from "../utils/uploadSingleImageToCloudinary.js";
 
 
 export const addCategory = async (name: string, description: string, image: Express.Multer.File) => {
@@ -17,7 +17,7 @@ export const addCategory = async (name: string, description: string, image: Expr
     if (categoryExists) throw new ErrorHandler("Category already exists", 400);
 
     // Upload image to Cloudinary
-    const imageUrl = await uploadImageToCloudinary(image, "category");
+    const imageUrl = await uploadSingleImageToCloudinary(image, "category");
     if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
 
     // Create the category in the database
@@ -48,7 +48,7 @@ export const updateCategory = async (id: string, name?: string, description?: st
   if (name) updateCategoryData.name = name;
   if (description) updateCategoryData.description = description;
   if (image) {
-    const imageUrl = await uploadImageToCloudinary(image, "category");
+    const imageUrl = await uploadSingleImageToCloudinary(image, "category");
     if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
     updateCategoryData.image = imageUrl;
   }

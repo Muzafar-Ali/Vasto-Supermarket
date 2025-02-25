@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { addCategoryHandler, deleteCategoryHandler, getAllCategoriesHandler, updateCategoryHandler } from "../../controllers/category.controllers.js";
 import validateRequest from "../../middlewares/validateRequest.middleware.js";
-import { addCategorySchema, updateCategorySchema } from "../../schema/category.schema.js";
+import { addCategorySchema, deleteCategorySchema, updateCategorySchema } from "../../schema/category.schema.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import isAuthenticated from "../../middlewares/isAuthenticated.middleware.js";
 
@@ -13,6 +13,6 @@ router.route("/")
 
 router.route("/:id")
 .patch(isAuthenticated, upload.single('image'), validateRequest(updateCategorySchema), updateCategoryHandler)
-.delete(isAuthenticated, deleteCategoryHandler);
+.delete(isAuthenticated, validateRequest(deleteCategorySchema), deleteCategoryHandler);
 
 export default router;

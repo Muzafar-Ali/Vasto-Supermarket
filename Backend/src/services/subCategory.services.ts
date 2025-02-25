@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import SubCategoryModel from "../models/subCategory.js";
-import uploadImageToCloudinary from "../utils/uploadImageToCloudinary.js";
 import ErrorHandler from "../utils/errorClass.js";
 import CategoryModel from "../models/category.model.js";
 import ProductModel from "../models/product.model.js";
+import uploadSingleImageToCloudinary from "../utils/uploadSingleImageToCloudinary.js";
 
 export const addSubCategory = async (name: string, category: string[], image: Express.Multer.File) => {
   const session = await mongoose.startSession();
@@ -16,7 +16,7 @@ export const addSubCategory = async (name: string, category: string[], image: Ex
     if (subCategoryExists) throw new ErrorHandler("Sub Category already exists", 400);
 
     // Upload image to Cloudinary
-    const imageUrl = await uploadImageToCloudinary(image, "sub-category");
+    const imageUrl = await uploadSingleImageToCloudinary(image, "sub-category");
     if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
 
     // Create the category in the database
@@ -47,7 +47,7 @@ export const updateSubCategory = async (id: string, name?: string, category?: st
   if (name) updateSubCategoryData.name = name;
   if (category) updateSubCategoryData.category = category;
   if (image) {
-    const imageUrl = await uploadImageToCloudinary(image, "category");
+    const imageUrl = await uploadSingleImageToCloudinary(image, "category");
     if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
     updateSubCategoryData.image = imageUrl;
   }

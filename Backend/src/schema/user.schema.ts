@@ -1,7 +1,7 @@
 import { z } from "zod";
 import domPurify from "../config/domPurifyInstance.js";
 
-// user registration request validation
+// user registration request validation & sanitization
 export const registerUserSchema = z.object({
   body: z.object({
     name: z.string({
@@ -36,7 +36,7 @@ export const registerUserSchema = z.object({
   }),
 })
 
-// user login request validation
+// user login request validation & sanitization
 export const userLoginSchema = z.object({
   body: z.object({
     email: z.string({

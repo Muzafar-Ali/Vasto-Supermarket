@@ -54,7 +54,7 @@ const productSchema = new mongoose.Schema<TProductDocument>({
     type: Object,
     default: {},
   },
-  publish: {
+  published: {
     type: Boolean,
     default: true,
     trim: true,

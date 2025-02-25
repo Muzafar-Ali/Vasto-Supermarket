@@ -11,7 +11,7 @@ export type TProduct = {
   price: number;
   discount: number;
   moreDetails: object;
-  publish: boolean;
+  published: boolean;
 }
 
 export type TProductDocument = TProduct & mongoose.Document & {
