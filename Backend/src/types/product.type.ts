@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 
 export type TProduct = {
   name: string;
+  slug: string;
   description: string;
   imageUrl: string[];
   category: mongoose.Schema.Types.ObjectId[];

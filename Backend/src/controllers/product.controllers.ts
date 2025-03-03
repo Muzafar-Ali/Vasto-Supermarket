@@ -38,7 +38,7 @@ export const createProductHandler = async (req: Request<{}, {}, CreateProductInp
 export const getAllProductssHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
 
-    const products = await ProductModel.find({}).sort({ createdAt: -1 });
+    const products = await ProductModel.find({}).sort({ createdAt: -1 }).populate('category subCategory');;
     if(!products) throw new ErrorHandler("No product found", 404);
 
     res.status(200).json({
@@ -60,7 +60,7 @@ export const getProductHandler = async (req: Request<GetProductInput['params']>,
   try {
     const { id } = req.params
 
-    const products = await ProductModel.find({}).sort({ createdAt: -1 });
+    const products = await ProductModel.findOne({_id: id}).populate('category subCategory');
     if(!products) throw new ErrorHandler("No product found", 404);
 
     res.status(200).json({
