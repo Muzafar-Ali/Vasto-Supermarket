@@ -7,6 +7,12 @@ const productSchema = new mongoose.Schema<TProductDocument>({
     required: [true, 'Product name is required'],
     trim: true,
   },
+  slug: {
+    type: String,
+    slug: 'name',
+    unique: true,
+    trim: true,
+  },
   description: {
     type: String,
     required: true,
@@ -60,6 +66,14 @@ const productSchema = new mongoose.Schema<TProductDocument>({
     trim: true,
   },
 }, { timestamps: true })
+
+productSchema.pre('save', function (next) {
+    if (!this.slug) { // Only set slug if it's not already provided
+      let slug = this.name.toLowerCase().replace(/\s+/g, '-');
+      this.slug = slug;
+    }
+  next();
+})
 
 const ProductModel = mongoose.models.Product || mongoose.model<TProductDocument>("Product", productSchema)
 

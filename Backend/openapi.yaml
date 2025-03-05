@@ -12,7 +12,7 @@ paths:
   /api/v1/user/register:
     post:
       tags:
-        - Production
+        - User
       summary: Register a new user
       description: Registers a new user by accepting email, password, and other details. Ensures that the user is not already registered.
       operationId: registerUser
@@ -80,7 +80,7 @@ paths:
   /api/v1/user/login:
     post:
       tags:
-        - Production
+        - User
       summary: User login
       description: Authenticates a user with email and password, generates access and refresh tokens.
       operationId: userLogin
@@ -168,7 +168,7 @@ paths:
   /api/v1/user/logout:
     post:
       tags:
-        - Production
+        - User
       summary: User logout
       description: Logs the user out by clearing their access and refresh tokens.
       operationId: userLogout
@@ -197,7 +197,7 @@ paths:
   /api/v1/user/refresh-token:
     post:
       tags:
-        - Production
+        - User
       summary: Refreshes the user's access token
       description: |
         Accepts a refresh token and returns a new access token if the refresh token is valid.
@@ -249,7 +249,7 @@ paths:
   /api/v1/category:
     post:
       tags:
-        - Production
+        - Category
       summary: Add a new category
       description: |
         This endpoint allows the creation of a new category. The request body should contain the category's name, description, and an image file.
@@ -330,7 +330,7 @@ paths:
 
     get:
       tags:
-        - Production
+        - Category
       summary: Get all categories
       description: Fetches all categories available in the system.
       operationId: getAllCategories
@@ -392,7 +392,7 @@ paths:
   /api/v1/category/{id}:
     patch:
       tags:
-        - Production
+        - Category
       summary: Update an existing category
       description: |
         This endpoint allows updating an existing category's name, description, and image file.
@@ -468,7 +468,7 @@ paths:
 
     delete:
       tags:
-        - Production
+        - Category
       summary: Delete an existing category
       description: |
         This endpoint allows deleting a category by its ID.
@@ -525,7 +525,7 @@ paths:
   /api/v1/sub-category:
     post:
       tags:
-        - Production
+        - Sub-category
       summary: Add a new sub-category
       description: |
         This endpoint allows the creation of a new sub-category. The request body should contain the sub-category's name, associated category, and an image file.
@@ -596,7 +596,7 @@ paths:
 
     get:
       tags:
-        - Production
+        - Sub-category
       summary: Get all sub-categories
       description: Fetches all sub-categories available in the system.
       operationId: getAllSubCategories
@@ -662,9 +662,77 @@ paths:
                     example: "Internal server error"
 
   /api/v1/sub-category/{id}:
+    get:
+      tags:
+        - Sub-category
+      summary: Get a single sub-category by ID
+      description: Retrieve details of a specific sub-category, including its associated categories and image.
+      operationId: getSubCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the sub-category to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved sub-category details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  subCategory:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "65a1b2c3d4e5f67890123456"
+                      name:
+                        type: string
+                        example: "Smartphones"
+                      category:
+                        type: array
+                        items:
+                          type: string
+                        example: ["60b6b0e8f3a5f127e45f5b3b"]
+                      image:
+                        type: string
+                        example: "https://example.com/sub-category-image.jpg"
+        '404':
+          description: Sub-category not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Sub-category not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
+
     patch:
       tags:
-        - Production
+        - Sub-category
       summary: Update an existing sub-category
       description: |
         This endpoint allows updating an existing sub-category's name, associated categories, and image file.
@@ -754,7 +822,7 @@ paths:
                     example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
     delete:
       tags:
-        - Production
+        - Sub-category
       summary: Delete an existing sub-category
       description: |
         This endpoint allows the deletion of an existing sub-category. The sub-category cannot be deleted if it's associated with any products.
@@ -823,7 +891,7 @@ paths:
   /api/v1/product:
     post:
       tags:
-        - Production
+        - Product
       summary: Create a new product
       description: |
         This endpoint allows creating a new product with associated categories, sub-categories, images, and other product details.
@@ -930,7 +998,7 @@ paths:
                     example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
     get:
       tags:
-        - Production
+        - Product
       summary: Get all products
       description: |
         This endpoint retrieves all products from the database, sorted by creation date in descending order.
@@ -1019,7 +1087,7 @@ paths:
   /api/v1/product/{id}:
     get:
       tags:
-        - Production
+        - Product
       summary: Get a specific product by ID
       description: |
         This endpoint retrieves a single product based on its unique identifier (ID).
@@ -1098,7 +1166,7 @@ paths:
                     example: "No product found"
     patch:
       tags:
-        - Production
+        - Product
       summary: Update a product by ID
       description: |
         This endpoint updates the details of an existing product. You can update fields such as name, description, price, stock, etc.
@@ -1226,7 +1294,7 @@ paths:
                     example: "Failed to upload image to Cloudinary"  # Or "Internal server error"
     delete:
       tags:
-        - Production
+        - Product
       summary: Delete a product by ID
       description: |
         This endpoint deletes a product based on its unique identifier (ID). Requires authentication.

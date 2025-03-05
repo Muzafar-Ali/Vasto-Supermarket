@@ -61,6 +61,29 @@ export const getAllCategoriesHandler = async (req: Request, res: Response, next:
 };
 
 /**
+ * @desc    Get single category
+ * @route   GET /api/v1/category/:id
+ * @access  Public
+ */
+export const getSingleCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    const categoryProducts = await ProductModel.find({category: id});
+    if (!categoryProducts) throw new ErrorHandler("category Products not found", 404);
+
+    res.status(200).json({
+      success: true,
+      categoryProducts,
+    });
+
+  } catch (error) {
+    console.error("getSingleCategoryHandler Error : ", error);
+    next(error);
+  }
+};
+
+/**
  * @desc    Update an existing category
  * @route   PATCH /api/v1/category/:id
  * @access  Private (requires authentication)

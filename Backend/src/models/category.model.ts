@@ -7,6 +7,12 @@ const categorySchema = new mongoose.Schema<TCategoryDocument>({
     required: true,
     unique: true
   },
+  slug: {
+    type: String,
+    slug: 'name',
+    unique: true,
+    trim: true,
+  },
   description: {
     type: String,
     required: true
@@ -16,6 +22,15 @@ const categorySchema = new mongoose.Schema<TCategoryDocument>({
     required: true
   }
 }, { timestamps: true })
+
+categorySchema.pre('save', function (next) {
+  if (!this.slug) { // Only set slug if it's not already provided
+    let slug = this.name.toLowerCase().replace(/\s+/g, '-');
+    this.slug = slug;
+  }
+next();
+})
+
 
 const CategoryModel = mongoose.models.Category || mongoose.model<TCategoryDocument>("Category", categorySchema)
 
