@@ -67,10 +67,10 @@ export const createProductSchema = z.object({
 })
 
 // get product request validation & sanitization
-export const getProductSchema = z.object({
+export const getProductByIdSchema = z.object({
   params: z.object({
     id: z.string({
-      required_error: "Product id is required",
+      required_error: "id is required",
     }).transform(value => domPurify.sanitize(value.trim())),
   })
 })
@@ -85,16 +85,7 @@ export const updateProductSchema = createProductSchema.extend({
   })
 })
 
-// Delete product request validation & sanitization
-export const deletProductSchema = z.object({
-  params: z.object({
-    id: z.string({
-      required_error: "Product id is required",
-    }).transform(value => domPurify.sanitize(value.trim())),
-  })
-})
 
 export type CreateProductInput = z.infer<typeof createProductSchema> 
-export type GetProductInput = z.infer<typeof getProductSchema>
+export type GetProductByIdInput = z.infer<typeof getProductByIdSchema>
 export type UpdateProductInput = z.infer<typeof updateProductSchema>
-export type DeleteProductInput = z.infer<typeof deletProductSchema>

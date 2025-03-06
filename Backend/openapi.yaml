@@ -1333,3 +1333,86 @@ paths:
                   message:
                     type: string
                     example: "No product found"
+
+  /api/v1/product/category/{id}:
+    get:
+      tags:
+        - Product
+      summary: Get products by category
+      description: |
+        This endpoint retrieves a list of products that belong to a specific category.
+      operationId: getProductByCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the category to retrieve products for.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved products in the category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The product's unique identifier
+                          example: "60b6b0e8f3a5f127e45f5b3b"
+                        name:
+                          type: string
+                          description: The name of the product
+                          example: "iPhone 15"
+                        description:
+                          type: string
+                          description: A brief description of the product
+                          example: "The latest iPhone model with enhanced features."
+                        price:
+                          type: number
+                          description: The price of the product
+                          example: 999.99
+                        discount:
+                          type: number
+                          description: The discount percentage on the product
+                          example: 10
+                        unit:
+                          type: string
+                          description: The unit of measurement for the product
+                          example: "piece"
+                        stock:
+                          type: number
+                          description: The quantity of the product in stock
+                          example: 100
+                        published:
+                          type: boolean
+                          description: Whether the product is published and available for sale
+                          example: true
+                        imageUrl:
+                          type: array
+                          items:
+                            type: string
+                          description: The URLs of the product images
+                          example: ["https://cloudinary.com/path/to/image.jpg"]
+        '404':
+          description: No products found for the given category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No product found"

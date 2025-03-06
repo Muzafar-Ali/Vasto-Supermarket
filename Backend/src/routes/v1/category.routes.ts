@@ -12,7 +12,7 @@ router.route("/")
 .get(getAllCategoriesHandler);
 
 router.route("/:id")
-.get(getSingleCategoryHandler)
+.get(validateRequest(deleteCategorySchema), getSingleCategoryHandler)
 .patch(isAuthenticated, upload.single('image'), validateRequest(updateCategorySchema), updateCategoryHandler)
 .delete(isAuthenticated, validateRequest(deleteCategorySchema), deleteCategoryHandler);
 

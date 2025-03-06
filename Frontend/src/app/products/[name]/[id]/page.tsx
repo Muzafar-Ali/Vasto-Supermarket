@@ -13,7 +13,7 @@ const Product = ({params}: {params: Promise<{ id: string }>}) => {
   
   return (
     <Wrapper> 
-      <div>
+      <div className='sticky top-24 mx-auto grid'>
         product
       </div>
     </Wrapper>

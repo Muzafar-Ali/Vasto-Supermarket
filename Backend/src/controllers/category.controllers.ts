@@ -4,9 +4,8 @@ import CategoryModel from "../models/category.model.js";
 import ErrorHandler from "../utils/errorClass.js";
 import mongoose from "mongoose";
 import { addCategory, deleteCategoryService, updateCategory } from "../services/category.services.js";
-import SubCategory from "../models/subCategory.js";
 import ProductModel from "../models/product.model.js";
-import { DeleteProductInput } from "../schema/product.schema.js";
+import { GetProductByIdInput } from "../schema/product.schema.js";
 
 /**
  * @desc    Add a new category
@@ -65,7 +64,7 @@ export const getAllCategoriesHandler = async (req: Request, res: Response, next:
  * @route   GET /api/v1/category/:id
  * @access  Public
  */
-export const getSingleCategoryHandler = async (req: Request, res: Response, next: NextFunction) => {
+export const getSingleCategoryHandler = async (req: Request<GetProductByIdInput["params"]>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
 
@@ -113,7 +112,7 @@ export const updateCategoryHandler = async (req: Request<UpdateCategoryInput['pa
  * @route   DELETE /api/v1/category/:id
  * @access  Private (requires authentication)
  */
-export const deleteCategoryHandler = async (req: Request<DeleteProductInput['params']>, res: Response, next: NextFunction) => {
+export const deleteCategoryHandler = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
 

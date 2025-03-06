@@ -1,6 +1,6 @@
 
 export type TCategory = {
-  _id: number;
+  _id: string;
   name: string;
   slug: string
   description: string;

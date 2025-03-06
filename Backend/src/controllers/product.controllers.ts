@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateProductInput, GetProductInput, UpdateProductInput } from "../schema/product.schema.js";
+import { CreateProductInput, GetProductByIdInput, UpdateProductInput } from "../schema/product.schema.js";
 import { createProduct, updateProduct } from "../services/product.services.js";
 import ErrorHandler from "../utils/errorClass.js";
 import ProductModel from "../models/product.model.js";
@@ -56,7 +56,7 @@ export const getAllProductssHandler = async (req: Request, res: Response, next: 
  * @route   GET /api/v1/product/:id
  * @access  Public
  */
-export const getProductHandler = async (req: Request<GetProductInput['params']>, res: Response, next: NextFunction) => {
+export const getProductHandler = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params
 
@@ -73,13 +73,38 @@ export const getProductHandler = async (req: Request<GetProductInput['params']>,
   }
 }
 
+/**
+ * @desc    Get products by category
+ * @route   GET /api/v1/product/category/:id
+ * @access  Public
+ */
+export const getProductByCategory = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params
+    console.log('id', id);
+    
+    // const products = (await ProductModel.find({category: id}).populate('category subCategory').sort({ createdAt: -1 }).limit(15));
+    const products = await ProductModel.find({
+      category: {$in: id}
+    }).populate('category subCategory').limit(15);
+    if(!products) throw new ErrorHandler("No product found", 404);
+
+    res.status(200).json({
+      success: true,
+      products,
+    })
+    
+  } catch (error) {
+    
+  }
+}
 
 /**
  * @desc    Delete a product by ID.
  * @route   DELETE /api/v1/product/:id
  * @access  Private (requires authentication)
  */
-export const deleteProductHandler = async (req: Request<GetProductInput['params']>, res: Response, next: NextFunction) => {
+export const deleteProductHandler = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params
     
