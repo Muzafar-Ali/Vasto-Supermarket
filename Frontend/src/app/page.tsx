@@ -1,5 +1,5 @@
 import Categories from "@/components/home/Categories";
-import CategoryProductDispaly from "@/components/home/categoryProductDisplay/CategoryProductDispaly";
+import CategoryProductsDisplay from "@/components/home/categoryProductDisplay/CategoryProductsDisplay";
 import Hero from "@/components/home/Hero";
 import Navbar from "@/components/navbar/Navbar";
 
@@ -9,7 +9,7 @@ export default function Home() {
       <Navbar/>
       <Hero/>
       <Categories/>
-      <CategoryProductDispaly/>
+      <CategoryProductsDisplay/>
     </div>
   );
 }

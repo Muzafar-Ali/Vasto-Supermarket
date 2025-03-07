@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 const Navbar = () => {
   return (
-    <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 w-full shadow-md pt-2 max-xl:pb-2">
+    <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 z-50 w-full shadow-md pt-2 max-xl:pb-2">
       <div className="flex items-center justify-between gap-2">
         {/* logo */}
         <div className="">
