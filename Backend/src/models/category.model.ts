@@ -24,13 +24,19 @@ const categorySchema = new mongoose.Schema<TCategoryDocument>({
 }, { timestamps: true })
 
 categorySchema.pre('save', function (next) {
-  if (!this.slug) { // Only set slug if it's not already provided
-    let slug = this.name.toLowerCase().replace(/\s+/g, '-');
+  if (!this.slug) { 
+    let slug = this.name
+      .toLowerCase()
+      .trim()
+      .replace(/&/g, 'and')      // Replace "&" with "and"
+      .replace(/,/g, '')         // Remove commas
+      .replace(/[^\w\s-]/g, '')  // Remove other special characters
+      .replace(/\s+/g, '-');     // Replace spaces with hyphens
+
     this.slug = slug;
   }
-next();
-})
-
+  next();
+});
 
 const CategoryModel = mongoose.models.Category || mongoose.model<TCategoryDocument>("Category", categorySchema)
 

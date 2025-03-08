@@ -3,6 +3,14 @@ import ErrorHandler from "./errorClass.js";
 
 const uploadMultipleImagesToCloudinary = async (images: Express.Multer.File[], subFolder: string, title: string) => {
   try {
+    
+    const slug = title?.toLowerCase()
+    .trim()
+    .replace(/&/g, 'and')      // Replace "&" with "and"
+    .replace(/,/g, '')         // Remove commas
+    .replace(/[^\w\s-]/g, '')  // Remove other special characters
+    .replace(/\s+/g, '-');     // Replace spaces with hyphens
+
     // Create an array to hold the URLs of the uploaded images
     const imageUrls: string[] = [];
 
@@ -16,7 +24,7 @@ const uploadMultipleImagesToCloudinary = async (images: Express.Multer.File[], s
       const imageUpload = await cloudinary.uploader.upload(dataURI, {
         resource_type: "image",
         public_id: `image${Math.round(Math.random() * 1E9)}`,
-        folder: `vasto-supermarket/${subFolder}/${title}`,
+        folder: `vasto-supermarket/${subFolder}/${slug}`,
       });
 
       // Push the uploaded image URL to the imageUrls array

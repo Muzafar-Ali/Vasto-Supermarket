@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProductHandler, deleteProductHandler, getAllProductssHandler, getProductByCategory, getProductHandler, updateProductHandler } from "../../controllers/product.controllers.js";
+import { createProductHandler, deleteProductHandler, getAllProductssHandler, getProductByCategory, getProductBySubCategory, getProductHandler, updateProductHandler } from "../../controllers/product.controllers.js";
 import isAuthenticated from "../../middlewares/isAuthenticated.middleware.js";
 import { upload } from "../../middlewares/multer.middleware.js";
 import validateRequest from "../../middlewares/validateRequest.middleware.js";
@@ -17,5 +17,7 @@ router.route("/:id")
 .delete(isAuthenticated, validateRequest(getProductByIdSchema), deleteProductHandler);
 
 router.route("/category/:id").get(validateRequest(getProductByIdSchema), getProductByCategory)
+router.route("/sub-category/:id").get(validateRequest(getProductByIdSchema), getProductBySubCategory)
+
 
 export default router;

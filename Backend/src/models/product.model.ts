@@ -68,12 +68,19 @@ const productSchema = new mongoose.Schema<TProductDocument>({
 }, { timestamps: true })
 
 productSchema.pre('save', function (next) {
-    if (!this.slug) { // Only set slug if it's not already provided
-      let slug = this.name.toLowerCase().replace(/\s+/g, '-');
-      this.slug = slug;
-    }
+  if (!this.slug) { 
+    let slug = this.name
+      .toLowerCase()
+      .trim()
+      .replace(/&/g, 'and')      // Replace "&" with "and"
+      .replace(/,/g, '')         // Remove commas
+      .replace(/[^\w\s-]/g, '')  // Remove other special characters
+      .replace(/\s+/g, '-');     // Replace spaces with hyphens
+
+    this.slug = slug;
+  }
   next();
-})
+});
 
 const ProductModel = mongoose.models.Product || mongoose.model<TProductDocument>("Product", productSchema)
 

@@ -12,7 +12,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 
-
 const CategoryProductsSlider = ({id, category}: {id: string, category: string}) => {
   const { getProductByCategory, categoryProducts} = useProductStore();
   

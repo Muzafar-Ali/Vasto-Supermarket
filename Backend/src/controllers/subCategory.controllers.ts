@@ -3,6 +3,7 @@ import { AddSubCategoryInput, UpdateSubCategoryInput } from "../schema/subCatego
 import ErrorHandler from "../utils/errorClass.js";
 import { addSubCategory, deleteSubCategoryService, updateSubCategory } from "../services/subCategory.services.js";
 import SubCategoryModel from "../models/subCategory.js";
+import { GetProductByIdInput } from "../schema/product.schema.js";
 
 /**
  * @desc    Add a new sub category
@@ -43,7 +44,31 @@ export const getAllSubCategoriesHandler = async (req: Request, res: Response, ne
 
     res.status(200).json({
       success: true,
-      data: subCategories,
+      numberOfSubCatgeories: subCategories.length,
+      subCategories,
+    })
+  } catch (error) {
+    console.error("getAllSubCategoriesHandler Error : ", error);
+    next(error);
+  } 
+}
+
+/**
+ * @desc    Get sub categories by category id
+ * @route   GET /api/v1/sub-category/:id
+ * @access  Public
+ */
+export const getSubCategoriesByCategoryIdHandler = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    const subCategories = await SubCategoryModel.find({ category: id }).sort({ createdAt: -1 });
+    if(!subCategories) throw new ErrorHandler("No sub categories found", 404);
+
+    res.status(200).json({
+      success: true,
+      numberOfSubCatgeories: subCategories.length,
+      subCategories,
     })
   } catch (error) {
     console.error("getAllSubCategoriesHandler Error : ", error);

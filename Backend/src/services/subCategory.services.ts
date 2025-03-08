@@ -16,7 +16,7 @@ export const addSubCategory = async (name: string, category: string[], image: Ex
     if (subCategoryExists) throw new ErrorHandler("Sub Category already exists", 400);
 
     // Upload image to Cloudinary
-    const imageUrl = await uploadSingleImageToCloudinary(image, "sub-category");
+    const imageUrl = await uploadSingleImageToCloudinary(image, "sub-category", name);
     if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
 
     // Create the category in the database

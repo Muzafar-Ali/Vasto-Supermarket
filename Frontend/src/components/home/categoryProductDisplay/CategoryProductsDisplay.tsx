@@ -4,17 +4,17 @@ import Wrapper from '@/components/Wrapper';
 import CategoryProductsSlider from './CategoryProductsSlider';
 
 const CategoriesToDisplay = [
-  "flour-rice-&-lentils", 
-  'home-&-office', 
-  'snacks-&-munchies', 
-  "pharma-&-wellness"
+  "flour-rice-and-lentils", 
+  'home-and-office', 
+  'snacks-and-munchies', 
+  "pharma-and-wellness"
 ]
 
 const CategoryProductsDisplay = () => {
   const { categories } = useCategoryStore();
-
-    // Filter categories based on predefined list
-    const filteredCAtegories = categories.filter((cat) => CategoriesToDisplay.includes(cat.slug));
+  
+  // Filter categories based on predefined list
+  const filteredCAtegories = categories.filter((cat) => CategoriesToDisplay.includes(cat.slug));
 
   return (
     <Wrapper>

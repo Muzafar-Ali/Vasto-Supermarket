@@ -100,6 +100,29 @@ export const getProductByCategory = async (req: Request<GetProductByIdInput['par
 }
 
 /**
+ * @desc    Get products by subCategory
+ * @route   GET /api/v1/product/sub-category/:id
+ * @access  Public
+ */
+export const getProductBySubCategory = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params
+
+    const products = await ProductModel.find({subCategory: id}).populate('category subCategory').sort({ createdAt: -1 }).limit(15);
+    if(!products) throw new ErrorHandler("No product found", 404);
+
+    res.status(200).json({
+      success: true,
+      products,
+    })
+
+  } catch (error) {
+    console.error("getAllSubCategoriesHandler Error : ", error);
+    next(error);
+  }
+} 
+
+/**
  * @desc    Delete a product by ID.
  * @route   DELETE /api/v1/product/:id
  * @access  Private (requires authentication)

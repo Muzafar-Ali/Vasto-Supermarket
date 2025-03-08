@@ -12,10 +12,10 @@ const Navbar = () => {
     <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 z-50 w-full shadow-md pt-2 max-xl:pb-2">
       <div className="flex items-center justify-between gap-2">
         {/* logo */}
-        <div className="">
+        <Link href="/" className="">
           <Image src={logo4} alt='logo' className='h-7 w-14 md:h-10 md:w-20 rounded md:rounded-md focus:outline-none' />
           {/* <h1 className='text-base font-semibold text-[#F7552E]/90 mt-2'>SUPERMARKET</h1> */}
-        </div>
+        </Link>
   
         {/* search */}
         <div className="bg-white h-7 md:h-10 min-w-[100px] sm:min-w-[400px] lg:min-w-[600px] flex items-center gap-2 px-1 rounded-md text-[#F65831]">

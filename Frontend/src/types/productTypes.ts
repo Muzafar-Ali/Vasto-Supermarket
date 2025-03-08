@@ -25,6 +25,8 @@ export type TProduct = {
 export type TProductStore = {
   loading: boolean,
   products: TProduct[],
+  subCategoryProducts: TProduct[],
   categoryProducts: { [categoryId: string]: TProduct[] };
   getProductByCategory: (id: string) => Promise<void>
+  getProductBySubCategory: (id: string) => Promise<void>
 }

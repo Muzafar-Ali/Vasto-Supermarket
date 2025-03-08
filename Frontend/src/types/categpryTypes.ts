@@ -7,10 +7,10 @@ export type TCategory = {
   image: string;
 }
 
-export type TCategoryStory = {
+export type TCategoryStore = {
   loading: boolean;
   categories: TCategory[];
   products: any[];
   getAllCategories: () => Promise<void>;
-  getCategory: (id: number) => Promise<void>;
+  getCategoryById: (id: number) => Promise<void>;
 }
