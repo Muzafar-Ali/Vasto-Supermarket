@@ -1,10 +1,11 @@
 
 export type TProduct = {
+  more_details: any;
   _id: number,
   name: string,
+  slug: string,
   price: number,
   description: string,
-  image_url: string
   category: {
     _id: number,
     name: string,
@@ -14,10 +15,10 @@ export type TProduct = {
   discount: number,
   imageUrl: string[],
   published: boolean,
-  slug: string,
   stock: number,
   subCategory: [],
   unit: string,
+  moreDetails: { [key: string]: string },
   updatedAt: string,
   __v: number,
 }
@@ -25,8 +26,11 @@ export type TProduct = {
 export type TProductStore = {
   loading: boolean,
   products: TProduct[],
+  product: TProduct | null,
+  // allProducts: TProduct[],
   subCategoryProducts: TProduct[],
   categoryProducts: { [categoryId: string]: TProduct[] };
   getProductByCategory: (id: string) => Promise<void>
   getProductBySubCategory: (id: string) => Promise<void>
+  getProductById: (id: string) => Promise<void>
 }

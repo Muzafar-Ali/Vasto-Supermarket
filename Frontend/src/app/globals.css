@@ -173,6 +173,9 @@
   min-width: 100px; /* Prevents extreme shrinking */
 }
 
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
 
 .scrollbarCustom::-webkit-scrollbar {
   width: 10px;

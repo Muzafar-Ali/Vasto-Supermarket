@@ -1,6 +1,6 @@
 'use client'
 import { useProductStore } from '@/store/prodcutStore';
-import DisplayCurrencyAndPrice from '@/utils/DisplayCurrencyAndPrice';
+import DisplayCurrencyAndPrice from '@/utils/displayCurrencyAndPrice';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react'

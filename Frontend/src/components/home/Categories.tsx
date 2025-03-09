@@ -14,9 +14,7 @@ const Categories = () => {
   const firstMatchingSubCategory = allSubCategories.find(subCat =>
     catIds.includes(subCat.category[0]) // Check if subcategory belongs to a main category
   );
-  
-  
-  
+    
   useEffect(() => {
     const getData = async () => {
       await getAllCategories();
@@ -25,19 +23,14 @@ const Categories = () => {
     getData()
     
   }, [])
-  // console.log('subCategories', allSubCategories);
-  // console.log('subCategories', categories);
-  // console.log('catIds', catIds);
-  // console.log('firstMatchingSubCategory', firstMatchingSubCategory);
-  
-  
+
   return (
     <Wrapper className="my-4 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 gap-4">
       { categories?.map((category) => (
         
         <Link 
         href={{
-          pathname: `/products/${category.slug}/${category._id}`,
+          pathname: `/productList/${category.slug}/${category._id}`,
           query: {
             subcategory: firstMatchingSubCategory?.slug,  // Dynamic Subcategory Slug
             subcatId: firstMatchingSubCategory?._id       // Dynamic Subcategory ID

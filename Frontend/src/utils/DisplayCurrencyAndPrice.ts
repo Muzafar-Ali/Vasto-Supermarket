@@ -1,4 +1,4 @@
-const DisplayCurrencyAndPrice = (price: number) => {
+const displayCurrencyAndPrice = (price: number) => {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'AED',
@@ -6,4 +6,4 @@ const DisplayCurrencyAndPrice = (price: number) => {
   return formatter.format(price);
 }
 
-export default DisplayCurrencyAndPrice;
+export default displayCurrencyAndPrice;

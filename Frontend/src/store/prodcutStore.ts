@@ -8,6 +8,7 @@ const baseURI = config.baseUri
 export const useProductStore= create<TProductStore>((set) => ({
   loading: false,
   products: [],
+  product: null,
   subCategoryProducts: [],
   categoryProducts: {},
   getProductByCategory: async (id) => {
@@ -25,7 +26,7 @@ export const useProductStore= create<TProductStore>((set) => ({
         set({ products: data.products });
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);      
+      console.error("Error fetching product by category:", error);      
     } finally{
       set({ loading: false });
 
@@ -40,7 +41,22 @@ export const useProductStore= create<TProductStore>((set) => ({
         set({ subCategoryProducts: data.products });
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error("Error fetching product by sub-category:", error);
+    } finally{
+      set({ loading: false });
+
+    }
+  },
+  getProductById: async (id) => {
+    try {
+      set({ loading: true });
+      const response = await axios.get(`${baseURI}/api/v1/product/${id}`);
+      const data = response.data;
+      if (data.success) {
+        set({ product: data.product });
+      }
+    } catch (error) {
+      console.error("Error fetching Product By Id:", error);
     } finally{
       set({ loading: false });
 

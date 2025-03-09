@@ -3,13 +3,12 @@ import ProductCard from '@/components/ProductCard'
 import Wrapper from '@/components/Wrapper'
 import { useProductStore } from '@/store/prodcutStore'
 import { useSubCategorytStore } from '@/store/subCategoryStore'
-
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { use, useEffect } from 'react'
 
-const Product = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
+const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
   const resolvedParams = use(params);
   const id = resolvedParams?.id;
   const slug = resolvedParams?.slug; 
@@ -34,7 +33,7 @@ const Product = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
   }, [id]);
   
   return (
-    <Wrapper className='sticky top-24 lg:top-20 pt-10 bg-primary-base/5'>
+    <Wrapper className='sticky top-24 lg:top-20 pt-10'>
       <div className='sticky top-24 grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr]'> 
 
         {/* side bar- sub category dispaly */}
@@ -42,7 +41,7 @@ const Product = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
           { subCategories?.map((subCategory) => (
             <Link
               href={{
-                pathname: `/products/${slug}/${id}`,
+                pathname: `/productList/${slug}/${id}`,
                 query: {
                   subcategory: subCategory.slug,  // Dynamic Subcategory Slug
                   subcatId: subCategory._id       // Dynamic Subcategory ID
@@ -62,7 +61,7 @@ const Product = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
         </div>
         
         {/* product list display */}
-        <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4'>
+        <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
           { subCategoryProducts?.map((product) => (
             <div key={product._id}>
               {/* <Image src={product.imageUrl[0]} alt={product.name} width={100} height={100} className='h-20 w-20'/>
@@ -77,4 +76,4 @@ const Product = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
   )
 }
 
-export default Product
+export default ProductList

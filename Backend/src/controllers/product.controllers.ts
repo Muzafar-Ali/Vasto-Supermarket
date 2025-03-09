@@ -60,12 +60,12 @@ export const getProductHandler = async (req: Request<GetProductByIdInput['params
   try {
     const { id } = req.params
 
-    const products = await ProductModel.findOne({_id: id}).populate('category subCategory');
-    if(!products) throw new ErrorHandler("No product found", 404);
+    const product = await ProductModel.findOne({_id: id}).populate('category subCategory');
+    if(!product) throw new ErrorHandler("No product found", 404);
 
     res.status(200).json({
       success: true,
-      products,
+      product,
     })
   } catch (error) {
     console.error("getAllSubCategoriesHandler Error : ", error);
