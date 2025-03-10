@@ -86,6 +86,26 @@ export const updateProductSchema = createProductSchema.extend({
 })
 
 
+export const searchProductsSchema = z.object({
+  query: z.object({
+    search: z.string({
+      invalid_type_error: "Search must be a string",
+      required_error: "Search is required",
+    }).transform(value => domPurify.sanitize(value.trim())),
+    
+    page: z.string({
+      invalid_type_error: "Page must be a number",
+      required_error: "Page is required",
+    }).transform(value => domPurify.sanitize(value.trim())).optional(),
+    
+    limit: z.string({
+      invalid_type_error: "Limit must be a number",
+      required_error: "Limit is required",    
+    }).transform(value => domPurify.sanitize(value.trim())).optional(),
+  })
+})
+
 export type CreateProductInput = z.infer<typeof createProductSchema> 
 export type GetProductByIdInput = z.infer<typeof getProductByIdSchema>
 export type UpdateProductInput = z.infer<typeof updateProductSchema>
+export type SearchProductsInput = z.infer<typeof searchProductsSchema>

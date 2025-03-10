@@ -8,6 +8,7 @@ import fastImage from "@/assets/minute_delivery.png"
 import bestPriceImage from "@/assets/Best_Prices_Offers.png"
 import basket from '@/assets/basket.png';
 import priceWithDiscount from '@/utils/priceWithDiscount';
+import { Separator } from '@/components/ui/separator';
 
 const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: string }> }) => {
   const resolvedParams = use(params);
@@ -40,7 +41,8 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
   if (!product) {
     return <p>Loading product...</p>;
   }
-
+  console.log('product.discount', product.discount);
+  
   return (
     <div className='bg-primary-base/5'>
       <Wrapper className='p-4 grid lg:grid-cols-2 gap-5'>
@@ -151,23 +153,34 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
           <div className='text-base lg:text-lg'>
             <p className='bg-green-300 w-fit px-2 rounded-full'>10 Min</p>
             <h2 className='text-lg font-semibold lg:text-3xl'>{product?.name}</h2>  
-            <p className=''>{product?.unit}</p> 
+            <p className='text-sm lg:text-base'>{product?.unit}</p> 
             {/* <Divider/> */}
+            <Separator className='my-3'/>
+            
+            {/* price and discount*/}
             <div>
               <p className=''>Price</p> 
               <div className='flex items-center gap-2 lg:gap-4'>
                 <div className='border border-green-600 px-2 lg:px-4 py-2 rounded bg-green-50 w-fit'>
-                  <p className='font-semibold text-sm lg:text-xl'>
-                    {displayCurrencyAndPrice(priceWithDiscount(product?.price,product?.discount))}
-                  </p>
+                  { product.discount === 0 ? (
+                    <p className='font-semibold text-sm lg:text-xl'>
+                      {displayCurrencyAndPrice(product?.price)}
+                    </p>
+
+                  ): (
+                    <p className='font-semibold text-sm lg:text-xl'>
+                      {displayCurrencyAndPrice(priceWithDiscount(product?.price,product?.discount))}
+                    </p>
+                  )}
                 </div>
+                
                 {
-                  product?.discount && (
-                    <p className='line-through ext-sm lg:text-xl'>{displayCurrencyAndPrice(product?.price)}</p>
+                  product?.discount > 0 && (
+                    <p className='line-through text-sm lg:text-xl'>{displayCurrencyAndPrice(product?.price)}</p>
                   )
                 }
                 {
-                  product?.discount && (
+                  product?.discount > 0 && (
                     <p className="font-bold text-green-600 lg:text-2xl">{product?.discount}% <span className='text-base text-neutral-500'>Discount</span></p>
                   )
                 }

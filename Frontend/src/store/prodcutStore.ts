@@ -10,6 +10,7 @@ export const useProductStore= create<TProductStore>((set) => ({
   products: [],
   product: null,
   subCategoryProducts: [],
+  searchedProducts: [],
   categoryProducts: {},
   getProductByCategory: async (id) => {
     try {      
@@ -54,6 +55,21 @@ export const useProductStore= create<TProductStore>((set) => ({
       const data = response.data;
       if (data.success) {
         set({ product: data.product });
+      }
+    } catch (error) {
+      console.error("Error fetching Product By Id:", error);
+    } finally{
+      set({ loading: false });
+
+    }
+  },
+  getSearchProducts: async (input, page, limit) => {
+    try {
+      set({ loading: true });
+      const response = await axios.get(`${baseURI}/api/v1/product/search?search=${input}&${page}&${limit}`);
+      const data = response.data;
+      if (data.success) {
+        set({ searchedProducts: data.products });
       }
     } catch (error) {
       console.error("Error fetching Product By Id:", error);

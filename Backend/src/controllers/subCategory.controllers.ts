@@ -71,7 +71,7 @@ export const getSubCategoriesByCategoryIdHandler = async (req: Request<GetProduc
       subCategories,
     })
   } catch (error) {
-    console.error("getAllSubCategoriesHandler Error : ", error);
+    console.error("getSubCategoriesByCategoryIdHandler Error : ", error);
     next(error);
   }
 }

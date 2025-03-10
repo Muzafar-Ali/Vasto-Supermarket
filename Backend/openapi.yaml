@@ -1423,6 +1423,153 @@ paths:
                     type: string
                     example: "No product found"
   
+  /api/v1/product/search:
+    get:
+      tags:
+        - Product
+      summary: Search for products
+      description: |
+        This endpoint allows users to search for products by keyword.
+        Supports pagination with `limit` and `page` query parameters.
+      operationId: searchProducts
+      parameters:
+        - name: search
+          in: query
+          required: true
+          description: The search term to filter products.
+          schema:
+            type: string
+            example: "rice"
+          allowEmptyValue: false  # Prevent sending an empty search
+          style: form
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          description: The number of products to return per page.
+          schema:
+            type: integer
+            default: 10
+            example: 10
+        - name: page
+          in: query
+          required: false
+          description: The page number for pagination.
+          schema:
+            type: integer
+            default: 1
+            example: 1
+      responses:
+        '200':
+          description: Successfully retrieved the search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: The product's unique identifier
+                          example: "60b6b0e8f3a5f127e45f5b3b"
+                        name:
+                          type: string
+                          description: The name of the product
+                          example: "Organic Rice"
+                        description:
+                          type: string
+                          description: A brief description of the product
+                          example: "High-quality organic rice."
+                        price:
+                          type: number
+                          description: The price of the product
+                          example: 5.99
+                        discount:
+                          type: number
+                          description: The discount percentage on the product
+                          example: 10
+                        unit:
+                          type: string
+                          description: The unit of measurement for the product
+                          example: "kg"
+                        stock:
+                          type: number
+                          description: The quantity of the product in stock
+                          example: 150
+                        published:
+                          type: boolean
+                          description: Whether the product is published and available for sale
+                          example: true
+                        imageUrl:
+                          type: array
+                          items:
+                            type: string
+                          description: The URLs of the product images
+                          example: ["https://cloudinary.com/path/to/rice.jpg"]
+                  productCount:
+                    type: integer
+                    description: Total number of matching products
+                    example: 50
+                  totalPages:
+                    type: integer
+                    description: Total number of pages
+                    example: 5
+                  page:
+                    type: integer
+                    description: Current page number
+                    example: 1
+                  limit:
+                    type: integer
+                    description: Number of products per page
+                    example: 10
+        '400':
+          description: Bad request, missing search query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Search query is required"
+        '404':
+          description: No products found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "No product found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "An error occurred while searching products"
+
+
   /api/v1/product/sub-category/{id}:
     get:
       tags:

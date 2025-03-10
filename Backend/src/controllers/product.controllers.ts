@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateProductInput, GetProductByIdInput, UpdateProductInput } from "../schema/product.schema.js";
+import { CreateProductInput, GetProductByIdInput, SearchProductsInput, UpdateProductInput } from "../schema/product.schema.js";
 import { createProduct, updateProduct } from "../services/product.services.js";
 import ErrorHandler from "../utils/errorClass.js";
 import ProductModel from "../models/product.model.js";
@@ -46,7 +46,7 @@ export const getAllProductssHandler = async (req: Request, res: Response, next: 
       products,
     })
   } catch (error) {
-    console.error("getAllSubCategoriesHandler Error : ", error);
+    console.error("getAllProductssHandler Error : ", error);
     next(error);
   }
 }
@@ -68,7 +68,7 @@ export const getProductHandler = async (req: Request<GetProductByIdInput['params
       product,
     })
   } catch (error) {
-    console.error("getAllSubCategoriesHandler Error : ", error);
+    console.error("getProductHandler Error : ", error);
     next(error);
   }
 }
@@ -95,7 +95,8 @@ export const getProductByCategory = async (req: Request<GetProductByIdInput['par
     })
     
   } catch (error) {
-    
+    console.error("getProductByCategory Error : ", error);
+    next(error);    
   }
 }
 
@@ -117,7 +118,7 @@ export const getProductBySubCategory = async (req: Request<GetProductByIdInput['
     })
 
   } catch (error) {
-    console.error("getAllSubCategoriesHandler Error : ", error);
+    console.error("getProductBySubCategory Error : ", error);
     next(error);
   }
 } 
@@ -139,7 +140,7 @@ export const deleteProductHandler = async (req: Request<GetProductByIdInput['par
       message: "Product deleted successfully"
     })
   } catch (error) {
-    console.error("getAllSubCategoriesHandler Error : ", error);
+    console.error("deleteProductHandler Error : ", error);
     next(error);
   }
 }
@@ -167,6 +168,63 @@ export const updateProductHandler = async(req: Request<UpdateProductInput['param
     
   } catch (error) {
     console.error("updateProductHandler Error : ", error);
+    next(error);
+  }
+}
+
+
+/**
+ * @desc    Search products.
+ * @route   GET /api/v1/product/search?search=flour,limit=10&page=5
+ * @access  Public
+ */
+export const searchProductsHandler = async (req: Request<{}, {}, {}, SearchProductsInput["query"]>, res: Response, next: NextFunction) => {
+  try {
+    console.log(req.query);
+    
+    let { search, limit, page } = req.query;
+
+    let limitNumber = Number(limit);
+    let pageNumber = Number(page);
+
+    if (!search) throw new ErrorHandler("Search query is required", 400);
+    
+    if (!pageNumber) {
+      pageNumber = 1;
+    } 
+    
+    if (!limitNumber) {
+      limitNumber = 10;
+    }
+
+    const skip = (pageNumber-1) * limitNumber
+
+    const [products , productCount] = await Promise.all([
+      ProductModel.find(
+        { $text: {$search: search as string } },
+        { score: { $meta: "textScore" } }
+      )
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNumber)
+      .populate('category subCategory'),
+      
+      ProductModel.countDocuments({ $text: { $search: search as string } })
+    ])
+    console.log(products);
+    
+    if(!products) throw new ErrorHandler("No product found", 404);
+      
+    res.status(200).json({
+      success: true,
+      products,
+      productCount,
+      totalPages: Math.ceil(productCount / limitNumber),
+      page: pageNumber,
+      limit: limitNumber
+    });
+  } catch (error) {
+    console.error("searchProductsHandler Error : ", error);
     next(error);
   }
 }

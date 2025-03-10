@@ -82,6 +82,17 @@ productSchema.pre('save', function (next) {
   next();
 });
 
+// create index named text
+productSchema.index({
+  name: 'text',
+  description: 'text',
+}, {
+  weights: {
+    name: 5,
+    description: 1,
+  },
+})
+
 const ProductModel = mongoose.models.Product || mongoose.model<TProductDocument>("Product", productSchema)
 
 export default ProductModel
