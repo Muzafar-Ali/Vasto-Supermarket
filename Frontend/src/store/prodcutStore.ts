@@ -10,8 +10,8 @@ export const useProductStore= create<TProductStore>((set) => ({
   products: [],
   product: null,
   subCategoryProducts: [],
-  searchedProducts: [],
   categoryProducts: {},
+  
   getProductByCategory: async (id) => {
     try {      
       set({ loading: true });
@@ -36,8 +36,10 @@ export const useProductStore= create<TProductStore>((set) => ({
   getProductBySubCategory: async (id) => {
     try {
       set({ loading: true });
+      
       const response = await axios.get(`${baseURI}/api/v1/product/sub-category/${id}`);
       const data = response.data;
+      
       if (data.success) {
         set({ subCategoryProducts: data.products });
       }
@@ -51,8 +53,10 @@ export const useProductStore= create<TProductStore>((set) => ({
   getProductById: async (id) => {
     try {
       set({ loading: true });
+
       const response = await axios.get(`${baseURI}/api/v1/product/${id}`);
       const data = response.data;
+      
       if (data.success) {
         set({ product: data.product });
       }
@@ -63,19 +67,76 @@ export const useProductStore= create<TProductStore>((set) => ({
 
     }
   },
-  getSearchProducts: async (input, page, limit) => {
+  // getSearchProducts: async (input, page, limit) => {
+  //   try {
+  //     set({ loading: true });
+
+  //     const response = await axios.get(`${baseURI}/api/v1/product/search?search=${input}&${page}&${limit}`);
+  //     const data = response.data;
+      
+  //     if (data.success) {
+        
+  //       // Store the search query in localStorage
+  //       let recentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+        
+  //       if (!Array.isArray(recentSearches)) {
+  //         recentSearches = [];
+  //       }
+
+  //        // Avoid duplicates
+  //       if (!recentSearches.includes(input)) {
+  //         recentSearches.unshift(input); // Add new search at the beginning
+
+  //         // Keep only the latest 5 searches
+  //         if (recentSearches.length > 5) {
+  //           recentSearches.pop();
+  //         }
+  //       }
+  //       localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+
+  //       return data;
+
+  //     }
+
+  //     return; 
+
+  //   } catch (error) {
+  //     console.error("Error fetching Product By Id:", error);
+  //   } finally{
+  //     set({ loading: false });
+
+  //   }
+  // }
+
+  getSearchProducts: async (input, page = "1", limit = "10") => {
+    console.log('number of calls 1');
+    
     try {
       set({ loading: true });
-      const response = await axios.get(`${baseURI}/api/v1/product/search?search=${input}&${page}&${limit}`);
+      const response = await axios.get(`${baseURI}/api/v1/product/search?search=${input}&page=${page}&limit=${limit}`);
       const data = response.data;
       if (data.success) {
-        set({ searchedProducts: data.products });
+        // Store the search query in localStorage
+        let recentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+        if (!Array.isArray(recentSearches)) {
+          recentSearches = [];
+        }
+        // Avoid duplicates
+        if (!recentSearches.includes(input)) {
+          recentSearches.unshift(input); // Add new search at the beginning
+          // Keep only the latest 5 searches
+          if (recentSearches.length > 5) {
+            recentSearches.pop();
+          }
+        }
+        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+        return data;
       }
+      return;
     } catch (error) {
       console.error("Error fetching Product By Id:", error);
-    } finally{
+    } finally {
       set({ loading: false });
-
     }
   }
 }))

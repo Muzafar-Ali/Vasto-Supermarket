@@ -18,7 +18,7 @@ const ProductCard = ({product}: {product: TProduct}) => {
           <div className='bg-green-100 rounded px-2 py-[1px] font-semibold'>min 10</div> 
           { product.discount > 0 && <div className='bg-green-100 rounded px-2 py-[1px] font-semibold'>{product.discount}% OFF</div>}
         </div>
-        <div className='font-medium text-sm lg:text-base text-ellipsis line-clamp-2'>{product.name}</div>
+        <div className='font-medium text-sm lg:text-base text-ellipsis line-clamp-1 mobile-m:line-clamp-2'>{product.name}</div>
         <div className='text-sm lg:text-base w-fit'>{product.unit}</div> 
 
         <div className='flex items-center justify-between text-sm lg:text-base'>
@@ -28,7 +28,6 @@ const ProductCard = ({product}: {product: TProduct}) => {
           </div>
         </div>
       </div>
-
     </Link>
 
   );

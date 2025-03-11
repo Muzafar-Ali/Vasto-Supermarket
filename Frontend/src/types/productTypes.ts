@@ -23,17 +23,24 @@ export type TProduct = {
   __v: number,
 }
 
+export type TSearchResults = {
+  limit: number,
+  page: number,
+  total: number,
+  products: TProduct[],
+  totalPages: number
+}
+
 export type TProductStore = {
   loading: boolean,
   products: TProduct[],
   product: TProduct | null,
-  searchedProducts: TProduct[],
   // allProducts: TProduct[],
   subCategoryProducts: TProduct[],
   categoryProducts: { [categoryId: string]: TProduct[] };
   getProductByCategory: (id: string) => Promise<void>
   getProductBySubCategory: (id: string) => Promise<void>
   getProductById: (id: string) => Promise<void>
-  getSearchProducts: (input: string, page?: string, limit?: string) => Promise<void>
+  getSearchProducts: (input: string, page?: string, limit?: string) => Promise<TSearchResults>
   // getProducts: () => Promise<void>
 }

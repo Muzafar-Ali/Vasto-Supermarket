@@ -7,34 +7,9 @@ import { BsCart3 } from 'react-icons/bs'
 import { IoPersonAddSharp, IoPersonSharp } from 'react-icons/io5'
 import Register from '@/components/Register'
 import Link from 'next/link'
-import Search from '@/components/Search'
-import { useEffect, useState } from 'react'
-import { useProductStore } from '@/store/prodcutStore'
+import SearchInput from '../search/SearchInput'
 
 const Navbar = () => {
-
-  const { searchedProducts, getSearchProducts } = useProductStore();
-
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false)
-  const [searchInput, setSearchInput] = useState<string>('')
-  const [debouncedSearchInput, setDebouncedSearchInput] = useState('');
-
-  // Debounce logic 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchInput(searchInput) // Update search term after delay
-    }, 1000); // 1-second delay
-    return () => clearTimeout(handler); // Cleanup on every keystroke
-  }, [searchInput])
- 
-  useEffect(() => {
-    const getProducts = async () => {
-      await getSearchProducts(debouncedSearchInput);
-    }
-    if (debouncedSearchInput) {
-      getProducts();
-    }
-  }, [debouncedSearchInput]);
   
   return (
     <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 z-50 w-full shadow-md pt-2 max-xl:pb-2">
@@ -46,18 +21,8 @@ const Navbar = () => {
         </Link>
   
         {/* search */}
-        <div className="bg-white h-7 md:h-10 min-w-[100px] sm:min-w-[400px] lg:min-w-[600px] flex items-center gap-2 px-1 rounded-md text-[#F65831]">
-          <BiSearch className="h-6 w-6 md:h-8 md:w-8" />
-          <input
-            type="text"
-            placeholder="Search"
-            className="h-10 rounded-md w-full outline-none"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-          />
-        </div>
-        <Search isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={searchedProducts}/>
+        <SearchInput/>
+
         {/* location
         <div className='text-white font-semibold'>
           <p>Location</p>
