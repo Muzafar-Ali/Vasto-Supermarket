@@ -18,6 +18,7 @@ const SearchInput = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPages] = useState<number>(1);
 
+  // Debounce search input
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchInput(searchInput); // Update search term after delay
@@ -25,15 +26,22 @@ const SearchInput = () => {
     return () => clearTimeout(handler); // Cleanup on every keystroke
   }, [searchInput]);
 
+  // Reset page and products when search term changes
+  useEffect(() => {
+    setPage(1); // Reset page to 1
+    setProductsSearched([]); // Clear previous search results
+  }, [debouncedSearchInput]);
+
+  // Fetch products
   useEffect(() => {
     const getProducts = async () => {
       try {
         setLoading(true);
-        const result = await getSearchProducts(debouncedSearchInput, (page.toString()), (10).toString());
-        if (result.page === 1) {
-          setProductsSearched(result.products);
+        const result = await getSearchProducts(debouncedSearchInput, page.toString(), (10).toString());
+        if (page === 1) {
+          setProductsSearched(result.products); // Reset results for new search
         } else {
-          setProductsSearched((prevProducts) => [...prevProducts, ...result.products]);
+          setProductsSearched((prevProducts) => [...prevProducts, ...result.products]); // Append new results
         }
         setTotalPages(result.totalPages);
       } catch (error) {
@@ -48,12 +56,12 @@ const SearchInput = () => {
     }
   }, [debouncedSearchInput, page]);
 
+  // Fetch more data for infinite scroll
   const fetchMoreData = () => {
     if (page < totalPage) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage + 1); // Increment page
     }
   };
-
 
   return (
     <div className='relative'>
@@ -83,42 +91,39 @@ const SearchInput = () => {
                     className="h-6 lg:h-8 w-full outline-none"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    // onClick={() => setIsSearchOpen(!isSearchOpen)}
                   />
                 </div>
                 <p className='font-bold'> Results for "{debouncedSearchInput}" </p>
               </div>
             </DrawerTitle>
           </DrawerHeader>
-            {
-              //no data 
-              !productsSearched[0] && !loading && (
-                <div className='flex flex-col justify-center items-center w-full mx-auto'>
-                  <Image
-                    src={noProductsImage}
-                    alt='no data found' 
-                    className='w-full h-full max-w-xs max-h-xs block'
-                  />
-                  <p className='font-semibold my-2'>No Data found</p>
-                </div>
-              )
-            }
-
+          {
+            // No data
+            !productsSearched[0] && !loading && (
+              <div className='flex flex-col justify-center items-center w-full mx-auto'>
+                <Image
+                  src={noProductsImage}
+                  alt='no data found'
+                  className='w-full h-full max-w-xs max-h-xs block'
+                />
+                <p className='font-semibold my-2'>No Data found</p>
+              </div>
+            )
+          }
           <InfiniteScroll
             dataLength={productsSearched.length}
             next={fetchMoreData}
             hasMore={page < totalPage}
             loader={undefined}
-            // endMessage={<p>No more products to load</p>}
             scrollableTarget="scrollableDiv"
           >
-            <div 
-              id="scrollableDiv" 
+            <div
+              id="scrollableDiv"
               className="grid grid-cols-2 mobile-m:grid-cols-3 tablet-s:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-4 max-h-[500px] overflow-y-auto p-4 pb-40"
             >
               {productsSearched.map((product) => (
                 <div key={product._id}>
-                  <SearchProductCards product={product} onProductClick={() => setIsSearchOpen(false)}/>
+                  <SearchProductCards product={product} onProductClick={() => setIsSearchOpen(false)} />
                 </div>
               ))}
             </div>
