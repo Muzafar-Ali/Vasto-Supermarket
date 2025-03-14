@@ -64,8 +64,6 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
         <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
           { subCategoryProducts?.map((product) => (
             <div key={product._id}>
-              {/* <Image src={product.imageUrl[0]} alt={product.name} width={100} height={100} className='h-20 w-20'/>
-              <div>{product.name}</div> */}
               <ProductCard product={product}/>
             </div>
           ))}

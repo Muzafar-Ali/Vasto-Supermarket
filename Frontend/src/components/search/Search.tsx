@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+
 import Wrapper from '../Wrapper'
 import { IoMdClose } from "react-icons/io";
 import { TProduct } from '@/types/productTypes';

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { TCartItemDocument } from "../types/cartItem.type.js";
 
-const productSchema = new mongoose.Schema<TCartItemDocument>({
+const CartItemSchema = new mongoose.Schema<TCartItemDocument>({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
@@ -16,6 +16,6 @@ const productSchema = new mongoose.Schema<TCartItemDocument>({
   }
 },{ timestamps: true })
 
-const CartItemModel = mongoose.models.CartItem || mongoose.model<TCartItemDocument>("CartItem", productSchema)
+const CartItemModel = mongoose.models.CartItem || mongoose.model<TCartItemDocument>("CartItem", CartItemSchema)
 
 export default CartItemModel

@@ -1,12 +1,14 @@
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useProductStore } from '@/store/prodcutStore';
-import { TProduct, TSearchResults } from '@/types/productTypes';
+import { TProduct } from '@/types/productTypes';
 import React, { useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '../ui/drawer';
+import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '../ui/drawer';
 import SearchProductCards from './SearchProductCards';
 import noProductsImage from '@/assets/nothing here yet.webp';
 import Image from 'next/image';
+import { Button } from '../ui/button';
+import { IoClose } from 'react-icons/io5';
 
 const SearchInput = () => {
   const { getSearchProducts } = useProductStore();
@@ -93,7 +95,15 @@ const SearchInput = () => {
                     onChange={(e) => setSearchInput(e.target.value)}
                   />
                 </div>
-                <p className='font-bold'> Results for "{debouncedSearchInput}" </p>
+                <div className="flex items-center justify-between px-5 lg:px-20">
+                  <p className='font-bold'> Results for "{debouncedSearchInput}" </p>
+                  <DrawerClose>
+                    <Button variant={'secondary'}>
+                      <IoClose/>
+                    </Button>
+                  </DrawerClose>
+
+                </div>
               </div>
             </DrawerTitle>
           </DrawerHeader>

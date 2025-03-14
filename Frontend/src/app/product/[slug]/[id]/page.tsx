@@ -14,7 +14,9 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
   const resolvedParams = use(params);
   const id = resolvedParams?.id;
   const slug = resolvedParams?.slug;
+
   const { product, getProductById } = useProductStore();
+  
   const [image, setImage] = useState(0);
   const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
   const [isMagnifierVisible, setIsMagnifierVisible] = useState(false);
@@ -31,17 +33,14 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
     }
   }, [id, slug, getProductById]);
 
+  // This function calculates the mouse position relative to the product image  
+  // and updates the state to control the position of a magnifier effect. 
   const handleMouseMove = (e: any) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.pageX - left) / width) * 100;
     const y = ((e.pageY - top) / height) * 100;
     setMagnifierPosition({ x, y });
   };
-
-  if (!product) {
-    return <p>Loading product...</p>;
-  }
-  console.log('product.discount', product.discount);
   
   return (
     <div className='bg-primary-base/5'>
@@ -124,25 +123,25 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             </div>
           </div>
           
-          {/* Description Unit More details */}
+          {/* Product Details */}
           <div className='my-4 hidden lg:grid gap-5 bg-white p-4 rounded-md'>
+              <p className='font-semibold text-lg lg:text-xl'>Product Details</p>
             <div>
-              <p className='font-semibold'>Description</p>
-              <p className='text-base'>{product.description}</p>
+              <p className='font-semibold text-sm'>Description</p>
+              <p className='text-base'>{product?.description}</p>
             </div>
             <div>
-              <p className='font-semibold'>Unit</p>
-              <p className='text-base'>{product.unit}</p>
+              <p className='font-semibold text-sm'>Unit</p>
+              <p className='text-base'>{product?.unit}</p>
             </div>
             {
-              product?.moreDetails && Object.keys(product?.moreDetails).map((element,index)=>{
-                return(
-                  <div>
-                      <p className='font-semibold'>{element}</p>
-                      <p className='text-base'>{product?.moreDetails[element]}</p>
-                  </div>
-                )
-              })
+              product?.moreDetails && Object.keys(product?.moreDetails).map((element,index)=>(
+                <div key={index}>
+                  <p className='font-semibold text-sm'>{element}</p>
+                  <p className='text-base'>{product?.moreDetails[element]}</p>
+                </div>
+
+              ))
             }
           </div>
 
@@ -162,25 +161,25 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
               <p className=''>Price</p> 
               <div className='flex items-center gap-2 lg:gap-4'>
                 <div className='border border-green-600 px-2 lg:px-4 py-2 rounded bg-green-50 w-fit'>
-                  { product.discount === 0 ? (
+                  { product?.discount === 0 ? (
                     <p className='font-semibold text-sm lg:text-xl'>
                       {displayCurrencyAndPrice(product?.price)}
                     </p>
 
                   ): (
                     <p className='font-semibold text-sm lg:text-xl'>
-                      {displayCurrencyAndPrice(priceWithDiscount(product?.price,product?.discount))}
+                      {displayCurrencyAndPrice(priceWithDiscount(product?.price, product?.discount))}
                     </p>
                   )}
                 </div>
                 
                 {
-                  product?.discount > 0 && (
+                 product && product?.discount > 0 && (
                     <p className='line-through text-sm lg:text-xl'>{displayCurrencyAndPrice(product?.price)}</p>
                   )
                 }
                 {
-                  product?.discount > 0 && (
+                  product && product?.discount > 0 && (
                     <p className="font-bold text-green-600 lg:text-2xl">{product?.discount}% <span className='text-base text-neutral-500'>Discount</span></p>
                   )
                 }

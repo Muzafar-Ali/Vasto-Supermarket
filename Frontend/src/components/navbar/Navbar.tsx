@@ -1,15 +1,17 @@
 'use client'
 import Image from 'next/image'
 import logo4 from '@/assets/logo4.png'
-import { BiGridSmall, BiMenuAltLeft, BiSearch } from 'react-icons/bi'
-
+import { BiGridSmall, BiMenuAltLeft} from 'react-icons/bi'
 import { BsCart3 } from 'react-icons/bs'
 import { IoPersonAddSharp, IoPersonSharp } from 'react-icons/io5'
 import Register from '@/components/Register'
 import Link from 'next/link'
 import SearchInput from '../search/SearchInput'
+import { useCartStore } from '@/store/cartStore'
 
 const Navbar = () => {
+
+  const {totalItems} = useCartStore()
   
   return (
     <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 z-50 w-full shadow-md pt-2 max-xl:pb-2">
@@ -43,13 +45,13 @@ const Navbar = () => {
           </div>
 
           {/* cart */}
-          <div className="flex items-center justify-between gap-2 text-white font-semibold">
+          <Link href={"/cart"} className="flex items-center justify-between gap-2 text-white font-semibold">
             <div className='relative'>
-              <p className='border rounded-full bg-[#EE2527] absolute -top-2 -right-2 h-5 w-5 pt-0.5 w text-center text-xs'>10</p>
+              <p className='border rounded-full bg-[#EE2527] absolute -top-2 -right-2 h-5 w-5 pt-0.5 w text-center text-xs'>{ totalItems }</p>
               <BsCart3  className='h-6 w-6 md:h-8 md:w-8'/>
             </div>
             <p className='text-base hidden xl:block'>My Cart</p>
-          </div>
+          </Link>
 
           {/* mobile Menu icon */}
           <div className='text-white font-semibold flex items-center gap-1 text-sm xl:hidden'>
