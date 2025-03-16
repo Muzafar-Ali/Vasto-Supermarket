@@ -37,7 +37,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
       <div className='sticky top-24 grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr]'> 
 
         {/* side bar- sub category dispaly */}
-        <div className='min-h-[88vh] max-h-[88h] p-2 grid gap-2 shadow-md scrollbarCustom bg-white py-2'>
+        <div className='min-h-[88vh] max-h-[88vh] overflow-y-scroll  grid gap-1 shadow-md scrollbarCustom bg-white py-2'>
           { subCategories?.map((subCategory) => (
             <Link
               href={{
@@ -49,7 +49,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
               }}
               key={subCategory._id} 
               onClick={async () => await getProductBySubCategory(subCategory._id)}
-              className={`w-full p-4 bg-white lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border`} 
+              className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border bg-white `}
             >
               <div className='w-fit mx-auto lg:mx-0 max-w-28 bg-white rounded-md box-border'>
                 <Image src={subCategory.image} alt={subCategory.name} width={1000} height={1000} 

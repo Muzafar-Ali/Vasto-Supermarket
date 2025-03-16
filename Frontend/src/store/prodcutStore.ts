@@ -1,6 +1,7 @@
 import { config } from "@/config/config";
 import { TProductStore } from "@/types/productTypes";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { create } from "zustand";
 
 const baseURI = config.baseUri
@@ -138,5 +139,25 @@ export const useProductStore= create<TProductStore>((set) => ({
     } finally {
       set({ loading: false });
     }
-  }
+  },
+  addProduct: async (data) => {
+    try {
+      set({ loading: true });
+
+      const response = await axios.post(`${baseURI}/api/v1/product`, data);
+      const responseData = response.data;
+      
+      if (responseData.success) {
+        toast.success(responseData.message)
+      }
+      return responseData.success;
+      
+    } catch (error) {
+      console.error("Error adding product:", error);
+      return false; // Ensure a boolean is always returned
+    } finally {
+      set({ loading: false });
+    }
+  },
+  
 }))

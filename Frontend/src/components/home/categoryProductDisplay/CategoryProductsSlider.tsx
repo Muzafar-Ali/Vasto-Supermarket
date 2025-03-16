@@ -34,7 +34,7 @@ const CategoryProductsSlider = ({id, category}: {id: string, category: string}) 
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y]}
           spaceBetween={20}
-          slidesPerView={3}
+          slidesPerView={1}
           navigation={true}
           breakpoints={{
             320: {

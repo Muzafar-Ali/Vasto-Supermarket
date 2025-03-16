@@ -8,10 +8,15 @@ import Register from '@/components/Register'
 import Link from 'next/link'
 import SearchInput from '../search/SearchInput'
 import { useCartStore } from '@/store/cartStore'
+import { AlertDialog, AlertDialogTrigger } from '../ui/alert-dialog'
+import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
+import { useState } from 'react'
+import Cart from '../Cart'
 
 const Navbar = () => {
 
   const {totalItems} = useCartStore()
+  const [isCartOpen, setIsCartOpen] = useState(false)
   
   return (
     <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 z-50 w-full shadow-md pt-2 max-xl:pb-2">
@@ -45,13 +50,21 @@ const Navbar = () => {
           </div>
 
           {/* cart */}
-          <Link href={"/cart"} className="flex items-center justify-between gap-2 text-white font-semibold">
-            <div className='relative'>
-              <p className='border rounded-full bg-[#EE2527] absolute -top-2 -right-2 h-5 w-5 pt-0.5 w text-center text-xs'>{ totalItems }</p>
-              <BsCart3  className='h-6 w-6 md:h-8 md:w-8'/>
-            </div>
-            <p className='text-base hidden xl:block'>My Cart</p>
-          </Link>
+          
+          <AlertDialog open={isCartOpen} onOpenChange={setIsCartOpen}>
+            <AlertDialogTrigger asChild>
+              <div className="flex items-center justify-between gap-2 text-white font-semibold">
+                <div className='relative'>
+                  <p className='border rounded-full bg-[#EE2527] absolute -top-2 -right-2 h-5 w-5 pt-0.5 w text-center text-xs'>{ totalItems }</p>
+                  <BsCart3  className='h-6 w-6 md:h-8 md:w-8'/>
+                </div>
+                <p className='text-base hidden xl:block'>My Cart</p>
+              </div>
+            </AlertDialogTrigger>
+            <AlertDialogContent asChild>
+              <Cart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen}/>
+            </AlertDialogContent>
+          </AlertDialog>
 
           {/* mobile Menu icon */}
           <div className='text-white font-semibold flex items-center gap-1 text-sm xl:hidden'>

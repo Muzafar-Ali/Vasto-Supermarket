@@ -2,6 +2,8 @@
 import { useCategoryStore } from '@/store/categoryStore';
 import Wrapper from '@/components/Wrapper';
 import CategoryProductsSlider from './CategoryProductsSlider';
+import CategoryWiseProductDisplay from '../CategoryWiseProductDisplay';
+import Link from 'next/link';
 
 const CategoriesToDisplay = [
   "flour-rice-and-lentils", 
@@ -20,7 +22,7 @@ const CategoryProductsDisplay = () => {
     <Wrapper>
       { filteredCAtegories?.map((item) => (
         <div key={item._id} className=''>
-          <CategoryProductsSlider id={item._id} category={item.name}/>
+          <CategoryWiseProductDisplay id={item._id} category={item.name}/>
         </div>
       ))}
     </ Wrapper>

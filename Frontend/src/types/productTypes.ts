@@ -43,4 +43,7 @@ export type TProductStore = {
   getProductById: (id: string) => Promise<void>
   getSearchProducts: (input: string, page?: string, limit?: string) => Promise<TSearchResults>
   // getProducts: () => Promise<void>
+  addProduct: (data: FormData) => Promise<boolean>
+  // updateProduct: (data: FormData) => Promise<void>
+  // deleteProduct: (id: string) => Promise<void>
 }

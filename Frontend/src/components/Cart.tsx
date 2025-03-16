@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useCartStore } from '@/store/cartStore'
 import Image from 'next/image'
 import imageEmpty from '@/assets/empty_cart.webp'
@@ -14,7 +14,12 @@ import { LiaShoppingBagSolid } from "react-icons/lia";
 import displayCurrencyAndPrice from '@/utils/displayCurrencyAndPrice';
 import { config } from '@/config/config'
 
-const Cart = () => {
+type TCartProps = {
+  isCartOpen: boolean,
+  setIsCartOpen: (value: boolean) => void
+}
+
+const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
   const {cart, totalItems, decreaseQuantity, increaseQuantity} = useCartStore()
   
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -23,21 +28,34 @@ const Cart = () => {
   const deliveryCharge = config.deliveryCharge;
   const totalAmount = (totalPrice - totalSavings) + handlingCharge;
 
-  const close = () => {
-    // document.getElementById('cart')?.classList.add('hidden')
-  }
+    // Create a reference for the cart container
+    const cartRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
+          setIsCartOpen(false); // Close the cart when clicking outside
+        }
+      }
   
+      if (isCartOpen) {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
+      
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [isCartOpen, setIsCartOpen]);
+  
+
   return (
     <div className='bg-neutral-900/50 bg-opacity-70 fixed top-0 bottom-0 left-0 right-0 z-50'>
-      <div className='bg-white w-full max-w-sm min-h-screen max-h-screen ml-auto'>
+      <div ref={cartRef} className='bg-white w-full max-w-sm min-h-screen max-h-screen ml-auto'>
         
         {/* heading and close icon */}
         <div className='flex items-center p-4 shadow-md gap-3 justify-between'>
           <h2 className='font-semibold'>Cart</h2>
-          <Link href={"/"} className='lg:hidden'>
-            <IoClose size={25}/>
-          </Link>
-          <button onClick={close} className="hidden lg:block">
+          <button onClick={() => setIsCartOpen(!isCartOpen)} className="">
             <IoClose size={25}/>
           </button>
         </div>
