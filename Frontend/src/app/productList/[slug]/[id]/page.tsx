@@ -34,10 +34,10 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
   
   return (
     <Wrapper className='sticky top-24 lg:top-20 pt-10'>
-      <div className='sticky top-24 grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr]'> 
+      <div className='sticky top-24 grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr] py-2'> 
 
         {/* side bar- sub category dispaly */}
-        <div className='min-h-[88vh] max-h-[88vh] overflow-y-scroll  grid gap-1 shadow-md scrollbarCustom bg-white py-2'>
+        <div className='min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col gap-3 shadow-md scrollbarCustom bg-white py-3 border'>
           { subCategories?.map((subCategory) => (
             <Link
               href={{

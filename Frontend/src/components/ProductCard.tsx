@@ -17,7 +17,7 @@ const ProductCard = ({product}: {product: TProduct}) => {
     <Link href={`/product/${product.slug}/${product._id}`} className='flex items-center justify-between w-full'>
       <div className='border p-2 lg:p-4 grid gap-1 lg:gap-3 min-w-36 lg:min-w-52 rounded-lg cursor-pointer shadow-md bg-white'>
         {/* image */}
-        <div className='min-h-20 w-full max-h-24 lg:max-h-32 bg-blue-50 rounded overflow-hidden'>
+        <div className='min-h-20 w-full max-h-24 lg:max-h-32 rounded overflow-hidden'>
           <Image src={product?.imageUrl[0]} alt={product.name} width={1000} height={1000} className='h-full w-full object-scale-down lg:scale-125 transition-all duration-200'/>
         </div>
 
@@ -32,10 +32,12 @@ const ProductCard = ({product}: {product: TProduct}) => {
         <div className='flex items-center justify-between text-sm lg:text-base'>
           <div className='font-semibold text-sm lg:text-base'>{displayCurrencyAndPrice(product.price)}</div>
           <div>
-            <button 
-              className='bg-primary-base/80 hover:bg-primary-base text-white px-2 lg:px-4 py-1 rounded'
-              onClick={handleAddToCard}
-            >Add</button>
+          <button
+            className='bg-primary-base/10 border ring ring-primary-base text-primary-base hover:bg-primary-base/50 hover:text-black px-2 lg:px-4 py-1 rounded'
+            onClick={handleAddToCard}
+          >
+            Add
+          </button>
           </div>
         </div>
       </div>

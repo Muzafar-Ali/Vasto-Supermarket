@@ -20,6 +20,7 @@ export const createProductHandler = async (req: Request<{}, {}, CreateProductInp
     await createProduct(requestData, images);
 
     res.status(201).json({
+      success: true,
       message: "Product created successfully",
     })
     

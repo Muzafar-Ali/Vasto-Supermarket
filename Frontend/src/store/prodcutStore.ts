@@ -152,8 +152,9 @@ export const useProductStore= create<TProductStore>((set) => ({
       }
       return responseData.success;
       
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error adding product:", error);
+      toast.error("Failed to add product.", error.message);
       return false; // Ensure a boolean is always returned
     } finally {
       set({ loading: false });

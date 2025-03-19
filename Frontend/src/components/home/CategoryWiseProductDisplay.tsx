@@ -38,13 +38,13 @@ const CategoryWiseProductDisplay = ({id, category}: TCategoryWiseProductDisplayP
   };
     
   return (
-    <div className='max-w-[1280px]'>
+    <div className='max-w-[1280px] my-14'>
       <div className='p-4 flex items-center justify-between gap-4'>
         <div className='font-semibold text-lg md:text-xl'>{category}</div>
         <Link href={""} className='text-green-600 hover:text-green-400'>See all</Link>
       </div>
 
-      <div className='flex items-center gap-4 md:gap-6 lg:gap-8 px-4 overflow-x-scroll scrollbar-none scroll-smooth' ref={containerRef}>
+      <div className='flex items-center gap-4 md:gap-6 lg:gap-8 px-4 overflow-x-scroll scrollbar-none scroll-smooth py-2' ref={containerRef}>
         {
           products.map((product) => (
             <div key={product._id}>

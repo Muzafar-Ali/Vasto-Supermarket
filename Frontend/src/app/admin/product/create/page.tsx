@@ -5,10 +5,11 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { useProductStore } from "@/store/prodcutStore";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useCategoryStore } from "@/store/categoryStore";
 import { useSubCategorytStore } from "@/store/subCategoryStore";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UploadProductCopy = () => {
   const { addProduct, loading } = useProductStore();
@@ -167,8 +168,8 @@ const UploadProductCopy = () => {
     try {
       const formData = prepareFormData();
       const success = await addProduct(formData); // Call Zustand's addProduct
+      
       if (success) {
-        toast.success("Product added successfully!");
         // Reset form after successful submission
         setData({
           name: "",
@@ -185,7 +186,8 @@ const UploadProductCopy = () => {
         });
       }
     } catch (error) {
-      toast.error("Failed to add product. Please try again.");
+      console.error(error);
+      
     }
   };
 
@@ -196,6 +198,7 @@ const UploadProductCopy = () => {
 
   return (
     <section className="max-w-[1024px] mx-auto mb-20">
+      <ToastContainer/>
       <div className="p-2 bg-white shadow-md flex items-center justify-between">
         <h2 className="font-semibold">Upload Product</h2>
       </div>
@@ -465,14 +468,14 @@ const UploadProductCopy = () => {
             <button
             disabled={loading}
             type="submit"
-            className="bg-primary-100 hover:bg-primary-200 py-2 rounded font-semibold border"
+            className="bg-primary-100 hover:bg-primary-200 py-2 rounded font-semibold border mt-10"
           >
             Loading ....
           </button>
           ) : (
             <button
             type="submit"
-            className="bg-primary-100 hover:bg-primary-200 py-2 rounded font-semibold border"
+            className="bg-primary-100 hover:bg-primary-200 py-2 rounded font-semibold border mt-10"
           >
             Submit
           </button>

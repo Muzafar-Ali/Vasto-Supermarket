@@ -29,13 +29,13 @@ const Categories = () => {
       { categories?.map((category) => (
         
         <Link 
-        href={{
-          pathname: `/productList/${category.slug}/${category._id}`,
-          query: {
-            subcategory: firstMatchingSubCategory?.slug,  // Dynamic Subcategory Slug
-            subcatId: firstMatchingSubCategory?._id       // Dynamic Subcategory ID
-          }
-        }}
+          href={{
+            pathname: `/productList/${category.slug}/${category._id}`,
+            query: {
+              subcategory: firstMatchingSubCategory?.slug,  // Dynamic Subcategory Slug
+              subcatId: firstMatchingSubCategory?._id       // Dynamic Subcategory ID
+            }
+          }}
           // href={`/products/${category.slug}/${category._id}/?${firstMatchingSubCategory?.slug}/${firstMatchingSubCategory?._id}`} 
           key={category._id} 
           className="w-full h-full"
@@ -46,7 +46,7 @@ const Categories = () => {
               alt={category.name} 
               width={1000} 
               height={1000} 
-              className="object-cover bg-primary-base/10 rounded-2xl"
+              className="object-cover bg-[#E5F3F3] rounded-2xl"
             /> 
           </div>
           <p className="font-semibold text-xs">{category.name}</p>
