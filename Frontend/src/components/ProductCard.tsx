@@ -13,6 +13,7 @@ const ProductCard = ({product}: {product: TProduct}) => {
     e.stopPropagation();
     addToCart(product);
   }
+  
   return (
     <Link href={`/product/${product.slug}/${product._id}`} className='flex items-center justify-between w-full'>
       <div className='border p-2 lg:p-4 grid gap-1 lg:gap-3 min-w-36 lg:min-w-52 rounded-lg cursor-pointer shadow-md bg-white'>

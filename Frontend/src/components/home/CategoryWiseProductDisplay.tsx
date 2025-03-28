@@ -40,7 +40,7 @@ const CategoryWiseProductDisplay = ({id, category}: TCategoryWiseProductDisplayP
   return (
     <div className='max-w-[1280px] my-14'>
       <div className='p-4 flex items-center justify-between gap-4'>
-        <div className='font-semibold text-lg md:text-xl'>{category}</div>
+        <div className='font-semibold text-base md:text-xl'>{category}</div>
         <Link href={""} className='text-green-600 hover:text-green-400'>See all</Link>
       </div>
 

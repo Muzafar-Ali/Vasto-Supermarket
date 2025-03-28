@@ -6,31 +6,41 @@ import { useSubCategorytStore } from '@/store/subCategoryStore'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { use, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 
 const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
-  const resolvedParams = use(params);
-  const id = resolvedParams?.id;
-  const slug = resolvedParams?.slug; 
+  // const resolvedParams = use(params);
+  // const id = resolvedParams?.id;
+  // const slug = resolvedParams?.slug; 
   const searchParams = useSearchParams();
   
-  const { subCategoryProducts, getProductBySubCategory} = useProductStore();
+  const { subCategoryProducts, categoryProducts, getProductBySubCategory, getProductByCategory} = useProductStore();
   const { subCategories, getSubCategoryByCategoryId } = useSubCategorytStore();
 
+  const [resolvedParams, setResolvedParams] = useState<{id: string, slug: string}>();
+  const id = resolvedParams?.id;
+  const slug = resolvedParams?.slug; 
+  
   const subcategory = searchParams.get("subcategory");
   const subCatId = searchParams.get("subcatId");
 
   useEffect(() => {
+    const fetchData = async () => {
+      const resolvedParams = await params;
+      setResolvedParams(resolvedParams);
+    };
+    fetchData();
+  }, [params])
+
+  useEffect(() => {
     if (id) {
-      const getSubCategories = async() => {
-        await getSubCategoryByCategoryId(id);
-        if (subcategory && subCatId) {
-          await getProductBySubCategory(subCatId);
-        }
-      }
-      getSubCategories();
+    const getCategoryProducts = async () => {
+      await getProductByCategory(id);
+      await getSubCategoryByCategoryId(id);
     }
-  }, [id]);
+      getCategoryProducts();
+    }
+  },[id])
   
   return (
     <Wrapper className='sticky top-24 lg:top-20 pt-10'>
@@ -61,6 +71,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
         </div>
         
         {/* product list display */}
+        { subCategoryProducts.length > 0 && subcategory && subCatId ? (
         <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
           { subCategoryProducts?.map((product) => (
             <div key={product._id}>
@@ -68,6 +79,16 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
             </div>
           ))}
         </div>
+
+        ): (
+          <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
+          { id && categoryProducts[id]?.map((product) => (
+            <div key={product._id}>
+              <ProductCard product={product}/>
+            </div>
+          ))}
+        </div>          
+        )}
 
       </div>
     </Wrapper>

@@ -3,7 +3,6 @@ import Image from "next/image"
 import pet from "@/assets/pet.png"
 import electronics from "@/assets/electronics.webp"
 import frozen from "@/assets/frozen.webp"
-import snacks from "@/assets/snacks.webp"
 import Link from "next/link"
 
 const Hero = () => {
@@ -16,11 +15,11 @@ const Hero = () => {
           <Image src={pet} alt="pet care" className="rounded-2xl w-full min-h-[130px] mobile-l:h-full md:hidden" />          
         </Link>
         
-        <Link href="productList/instant-and-frozen-food/#...?subcategory=#...&subcatId=#..." className="relative hidden tablet-s:block">
+        <Link href="productList/instant-and-frozen-food/67c62177c72f06c67f489655?subcategory=ready-to-cook-and-eat&subcatId=67dcf99ed383bfa5f89feca7" className="relative hidden tablet-s:block">
           <Image src={frozen} alt="frozen items" className="w-full h-full rounded-2xl "/>          
         </Link>
 
-        <Link href="productList/pet-care/#...?subcategory=#...&subcatId=#..." className="relative hidden lg:block">
+        <Link href="productList/pet-care/67c6200dc72f06c67f489652?subcategory=dog-needs&subcatId=67dcf84bd383bfa5f89fec64" className="relative hidden lg:block">
           <Image src={pet} alt="pet care" className="w-full h-full rounded-2xl" />
         </Link>
 
