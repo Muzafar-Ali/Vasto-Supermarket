@@ -9,11 +9,9 @@ import { useSearchParams } from 'next/navigation'
 import { use, useEffect, useState } from 'react'
 
 const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
-  // const resolvedParams = use(params);
-  // const id = resolvedParams?.id;
-  // const slug = resolvedParams?.slug; 
+
   const searchParams = useSearchParams();
-  
+
   const { subCategoryProducts, categoryProducts, getProductBySubCategory, getProductByCategory} = useProductStore();
   const { subCategories, getSubCategoryByCategoryId } = useSubCategorytStore();
 
@@ -34,10 +32,9 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
 
   useEffect(() => {
     if (id) {
-    const getCategoryProducts = async () => {
-      await getProductByCategory(id);
-      await getSubCategoryByCategoryId(id);
-    }
+      const getCategoryProducts = async () => {
+        await Promise.all([getSubCategoryByCategoryId(id), getProductByCategory(id)]);
+      }
       getCategoryProducts();
     }
   },[id])
@@ -72,7 +69,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
         
         {/* product list display */}
         { subCategoryProducts.length > 0 && subcategory && subCatId ? (
-        <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
+        <div className='grid grid-cols-1 min-[470px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
           { subCategoryProducts?.map((product) => (
             <div key={product._id}>
               <ProductCard product={product}/>
@@ -81,7 +78,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
         </div>
 
         ): (
-          <div className='grid grid-cols-1 tablet-s:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
+          <div className='grid grid-cols-1 min-[470px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
           { id && categoryProducts[id]?.map((product) => (
             <div key={product._id}>
               <ProductCard product={product}/>
