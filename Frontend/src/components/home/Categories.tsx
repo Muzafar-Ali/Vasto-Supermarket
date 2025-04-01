@@ -5,16 +5,12 @@ import { useSubCategorytStore } from "@/store/subCategoryStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
+import { CategoriesSkeleton } from "@/components/skeletons/CategoriesSkeleton ";
 
 const Categories = () => {
-  const { categories, getAllCategories } = useCategoryStore();
-  const { allSubCategories, getAllSubCategories} = useSubCategorytStore();
-
-  const catIds = categories?.map((cat) => cat._id);
-  const firstMatchingSubCategory = allSubCategories.find(subCat =>
-    catIds.includes(subCat.category[0]) // Check if subcategory belongs to a main category
-  );
-    
+  const { categories, loading, getAllCategories } = useCategoryStore();
+  const { getAllSubCategories} = useSubCategorytStore();
+  
   useEffect(() => {
     const getData = async () => {
       await getAllCategories();
@@ -25,21 +21,14 @@ const Categories = () => {
   }, [])
 
   return (
-    <Wrapper className="mt-5 lg:mt-10 border">
+    <Wrapper className="mt-5 lg:mt-10">
       <h2 className="text-base md:text-xl font-semibold">Shop by <span className="text-primary-base">category</span></h2>
+      { loading && <CategoriesSkeleton/>}
       <div className="my-4 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 gap-4">
-
-        { categories?.map((category) => (
+        { !loading && categories?.map((category) => (
           
           <Link 
-            href={{
-              pathname: `/productList/${category.slug}/${category._id}`,
-              // query: {
-              //   subcategory: firstMatchingSubCategory?.slug,  // Dynamic Subcategory Slug
-              //   subcatId: firstMatchingSubCategory?._id       // Dynamic Subcategory ID
-              // }
-            }}
-            // href={`/products/${category.slug}/${category._id}/?${firstMatchingSubCategory?.slug}/${firstMatchingSubCategory?._id}`} 
+            href={`/productList/${category.slug}/${category._id}`}
             key={category._id} 
             className="w-full h-full"
           >

@@ -6,7 +6,7 @@ import { useSubCategorytStore } from '@/store/subCategoryStore'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) => {
 
@@ -62,7 +62,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
                 <Image src={subCategory.image} alt={subCategory.name} width={1000} height={1000} 
                 className='w-14 lg:w-12 h-full lg:h-12 object-scale-down'/>
               </div>
-              <div className='-mt-6 text-[11px] text-gray-700 font-light lg:font-medium text-center lg:text-left lg:text-sm'>{subCategory.name}</div>
+              <div className='relative bg-white md:py-1 -mt-6 text-[11px] text-gray-700 font-light lg:font-medium text-center lg:text-left lg:text-sm'>{subCategory.name}</div>
             </Link>
           ))}
         </div>

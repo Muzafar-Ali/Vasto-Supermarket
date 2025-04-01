@@ -16,13 +16,14 @@ const CategoryProductsDisplay = () => {
   const { categories } = useCategoryStore();
   
   // Filter categories based on predefined list
-  const filteredCAtegories = categories.filter((cat) => CategoriesToDisplay.includes(cat.slug));
-
+  const filteredCategories = categories.filter((cat) => CategoriesToDisplay.includes(cat.slug));
+  console.log(filteredCategories);
+  
   return (
     <Wrapper>
-      { filteredCAtegories?.map((item) => (
+      { filteredCategories?.map((item) => (
         <div key={item._id} className=''>
-          <CategoryWiseProductDisplay id={item._id} category={item.name}/>
+          <CategoryWiseProductDisplay id={item._id} category={item.name} slug={item.slug}/>
         </div>
       ))}
     </ Wrapper>
