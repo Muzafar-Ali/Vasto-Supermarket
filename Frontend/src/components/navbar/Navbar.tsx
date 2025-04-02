@@ -1,9 +1,10 @@
 'use client'
 import Image from 'next/image'
 import logo4 from '@/assets/logo4.png'
-import { BiGridSmall, BiMenuAltLeft} from 'react-icons/bi'
+import { BiGridSmall } from 'react-icons/bi'
 import { BsCart3 } from 'react-icons/bs'
 import { IoPersonAddSharp, IoPersonSharp } from 'react-icons/io5'
+import { RxHamburgerMenu } from "react-icons/rx";
 import Register from '@/components/Register'
 import Link from 'next/link'
 import SearchInput from '../search/SearchInput'
@@ -12,11 +13,23 @@ import { AlertDialog, AlertDialogTrigger } from '../ui/alert-dialog'
 import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
 import { useState } from 'react'
 import Cart from '../Cart'
+import MobileMenu from './MobileMenu'
 
 const Navbar = () => {
 
-  const {totalItems} = useCartStore()
-  const [isCartOpen, setIsCartOpen] = useState(false)
+  const {totalItems} = useCartStore();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Function to toggle the mobile menu visibility
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prevState) => !prevState); // Toggle the mobile menu state
+  };
+
+  // Close mobile menu
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
   
   return (
     <div className="flex flex-col px-2 md:px-5 lg:px-10 bg-primary-base sticky top-0 left-0 right-0 z-50 w-full shadow-md pt-2 max-xl:pb-2">
@@ -50,7 +63,6 @@ const Navbar = () => {
           </div>
 
           {/* cart */}
-          
           <AlertDialog open={isCartOpen} onOpenChange={setIsCartOpen}>
             <AlertDialogTrigger asChild>
               <div className="flex items-center justify-between gap-2 text-white font-semibold">
@@ -67,12 +79,10 @@ const Navbar = () => {
           </AlertDialog>
 
           {/* mobile Menu icon */}
-          <div className='text-white font-semibold flex items-center gap-1 text-sm xl:hidden'>
-            <BiMenuAltLeft className='h-8 w-6 sm:h-8 sm:w-8'/>
+          <div className="text-white font-semibold flex items-center gap-1 text-sm xl:hidden" onClick={toggleMobileMenu}>
+            <RxHamburgerMenu className='h-8 w-6 sm:h-8 sm:w-8'/>
           </div>
         </div>
-
-
 
       </div>
 
@@ -103,6 +113,9 @@ const Navbar = () => {
           <Link href="/contact">Bakery & Biscuits</Link>
         </li>
       </menu>
+
+      {/* Mobile menu */}
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={handleCloseMobileMenu} />
 
     </div>
   )

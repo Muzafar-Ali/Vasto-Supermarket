@@ -11,14 +11,14 @@ const SearchProductCards = ({ product, onProductClick }: { product: TProduct; on
       className='flex items-center justify-between w-full h-auto'
       onClick={onProductClick}
     >
-      <div className="border p-1 grid gap-0.5 rounded-lg cursor-pointer shadow bg-white max-w-[120px] lg:max-w-[160px]">
+      <div className="border p-1 grid gap-0.5 rounded-lg cursor-pointer shadow bg-white min-w-[120px] lg:min-w-[160px] h-full">
         {/* Image */}
-        <div className="min-h-12 w-full max-h-12 lg:max-h-20 bg-blue-50 rounded overflow-hidden">
+        <div className="min-h-12 w-full max-h-12 lg:max-h-20 rounded overflow-hidden">
           <Image src={product?.imageUrl[0]} alt={product.name} width={500} height={500} className="h-full w-full object-scale-down transition-all duration-200"/>
         </div>
 
         {/* Quantity */}
-        <div className="rounded text-[10px] w-fit py-[1px] px-1 text-green-600 flex flex-col lg:flex-row items-start lg:items-center gap-1">
+        <div className="rounded text-[10px] w-fit py-[1px] px-1 text-green-600 flex flex-col lg:flex-row items-start lg:items-center gap-1 h-[40px] lg:h-auto">
           <div className="bg-green-100 rounded px-1 py-[1px] font-semibold">min 10</div> 
           {product.discount > 0 && <div className="bg-green-100 rounded px-1 py-[1px] font-semibold">{product.discount}% OFF</div>}
         </div>
