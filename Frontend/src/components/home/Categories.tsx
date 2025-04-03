@@ -8,18 +8,9 @@ import { useEffect } from "react";
 import { CategoriesSkeleton } from "@/components/skeletons/CategoriesSkeleton ";
 
 const Categories = () => {
-  const { categories, loading, getAllCategories } = useCategoryStore();
-  const { getAllSubCategories} = useSubCategorytStore();
+  const { categories, loading } = useCategoryStore();
+  // Note: getAllCategories &  getAllSubCategories func are called in the useEffect hook inside desktop menu
   
-  useEffect(() => {
-    const getData = async () => {
-      await getAllCategories();
-      await getAllSubCategories();
-    }
-    getData()
-    
-  }, [])
-
   return (
     <Wrapper className="mt-5 lg:mt-10">
       <h2 className="text-base md:text-xl font-semibold">Shop by <span className="text-primary-base">category</span></h2>

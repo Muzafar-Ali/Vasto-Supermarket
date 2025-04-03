@@ -38,24 +38,32 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
       getCategoryProducts();
     }
   },[id])
+
+  useEffect(() => {
+    if (subcategory && subCatId) {
+      const getSub = async () => {
+        await Promise.all([getProductBySubCategory(subCatId)]);
+      }
+      getSub();
+    }
+  },[subcategory, subCatId])
   
   return (
     <Wrapper className='sticky top-24 lg:top-20 pt-10'>
       <div className='sticky top-24 grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr] py-2'> 
 
-        {/* side bar- sub category dispaly */}
+        {/* side bar - sub category dispaly */}
         <div className='min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col gap-3 shadow-md scrollbarCustom bg-white py-3 border'>
           { subCategories?.map((subCategory) => (
             <Link
               href={{
                 pathname: `/productList/${slug}/${id}`,
                 query: {
-                  subcategory: subCategory.slug,  // Dynamic Subcategory Slug
-                  subcatId: subCategory._id       // Dynamic Subcategory ID
+                  subcategory: subCategory.slug,  
+                  subcatId: subCategory._id       
                 }
               }}
               key={subCategory._id} 
-              onClick={async () => await getProductBySubCategory(subCategory._id)}
               className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border bg-white `}
             >
               <div className='w-fit mx-auto lg:mx-0 max-w-28 bg-white rounded-md box-border'>

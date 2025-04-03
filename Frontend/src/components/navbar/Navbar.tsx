@@ -1,7 +1,6 @@
 'use client'
 import Image from 'next/image'
 import logo4 from '@/assets/logo4.png'
-import { BiGridSmall } from 'react-icons/bi'
 import { BsCart3 } from 'react-icons/bs'
 import { IoPersonAddSharp, IoPersonSharp } from 'react-icons/io5'
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -14,6 +13,7 @@ import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
 import { useState } from 'react'
 import Cart from '../Cart'
 import MobileMenu from './MobileMenu'
+import DesktopMenu from './DesktopMenu'
 
 const Navbar = () => {
 
@@ -88,7 +88,8 @@ const Navbar = () => {
 
       {/* menu  */}
       <menu className="hidden xl:flex items-center gap-5 py-3 text-white text-sm font-semibold mt-3 w-full bg-primary-base shadow-md relative">
-        <li className='flex items-center'>
+        <DesktopMenu />
+        {/* <li className='flex items-center'>
           <BiGridSmall size={40}/>
           <Link href="/">All categories</Link>
         </li>
@@ -111,7 +112,8 @@ const Navbar = () => {
         </li>
         <li>
           <Link href="/contact">Bakery & Biscuits</Link>
-        </li>
+        </li> */}
+
       </menu>
 
       {/* Mobile menu */}
