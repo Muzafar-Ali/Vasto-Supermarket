@@ -62,10 +62,10 @@ const DesktopMenu = () => {
                       <li key={category._id} className="mb-4">
                         <NavigationMenuLink asChild>
                           <div className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-transparent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
-                            <div className="text-sm font-medium leading-none mb-2 text-primary-base">
+                            <div className="text-sm font- font-semibold leading-none mb-2 text-primary-base">
                               {category.name}
                             </div>
-                            <ul className="space-y-1">
+                            <ul className="space-y-2 ">
                               {categorySubCategories.map((subCategory) => (
                                 <li key={subCategory._id}>
                                   <Link
@@ -76,7 +76,7 @@ const DesktopMenu = () => {
                                         subcatId: subCategory._id
                                       }
                                     }}
-                                    className="text-xs text-muted-foreground hover:text-primary-base"
+                                    className="text-xs hover:text-primary-base"
                                   >
                                     {subCategory.name}
                                   </Link>
@@ -110,17 +110,19 @@ const DesktopMenu = () => {
                 <ul className="grid xl:min-w-[1182px] min-[1400px]:w-[1310px] min-[1500px]:w-[1410px]  mx-auto p-4">
                     {categorySubCategories.map((sub) => (
                       <li key={sub._id}>
-                        <Link
-                          href={{
-                            pathname: `/productList/${category.slug}/${category._id}`,
-                            query: { subcategory: sub.slug, subcatId: sub._id }
-                          }}
-                          // className="block p-2 hover:bg-gray-100"
-                          className="block p-2 text-muted-foreground hover:text-primary-base text-sm font-medium leading-none"
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={{
+                              pathname: `/productList/${category.slug}/${category._id}`,
+                              query: { subcategory: sub.slug, subcatId: sub._id }
+                            }}
+                            // className="block p-2 hover:bg-gray-100"
+                            className="block p-2 hover:text-primary-base text-sm font-medium leading-none"
 
-                        >
-                          {sub.name}
-                        </Link>
+                          >
+                            {sub.name}
+                          </Link>
+                        </NavigationMenuLink>
                       </li>
                     ))}
                   </ul>

@@ -1,8 +1,8 @@
-import { useProductStore } from '@/store/prodcutStore';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react'
-import ProductCard from '../ProductCard';
+import { useEffect, useRef } from 'react'
+import { useProductStore } from '@/store/prodcutStore';
 import { FaAngleLeft } from "react-icons/fa6";
+import ProductCard from '@/components/ProductCard';
 
 type TCategoryWiseProductDisplayProps = {
   id: string,
@@ -45,7 +45,7 @@ const CategoryWiseProductDisplay = ({id, category, slug}: TCategoryWiseProductDi
         <Link href={`/productList/${slug}/${id}`} className='text-green-600 hover:text-green-400'>See all</Link>
       </div>
 
-      <div className='flex items-center gap-4 md:gap-6 lg:gap-8 px-4 overflow-x-scroll scrollbar-none scroll-smooth py-2' ref={containerRef}>
+      <div className='flex items-center gap-4 md:gap-3 lg:gap-4 px-4 overflow-x-scroll scrollbar-none scroll-smooth py-2' ref={containerRef}>
         {
           products.map((product) => (
             <div key={product._id}>

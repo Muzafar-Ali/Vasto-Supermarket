@@ -53,14 +53,16 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             onMouseEnter={() => setIsMagnifierVisible(true)}
             onMouseLeave={() => setIsMagnifierVisible(false)}
           >
-            <Image
-              src={product?.imageUrl[image]}
-              alt={product?.name}
-              width={1000}
-              height={1000}
-              className='w-full h-full object-scale-down'
-            />
-            
+            {product?.imageUrl?.[image] && (
+              <Image
+                src={product.imageUrl[image]}
+                alt={product.name}
+                width={1000}
+                height={1000}
+                className='w-full h-full object-scale-down'
+              />
+            )}
+                  
             {/* Highlighted Area Overlay */}
             {isMagnifierVisible && (
               <div
@@ -160,18 +162,23 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             <div>
               <p className=''>Price</p> 
               <div className='flex items-center gap-2 lg:gap-4'>
-                <div className='border border-green-600 px-2 lg:px-4 py-2 rounded bg-green-50 w-fit'>
-                  { product?.discount === 0 ? (
+              <div className='border border-green-600 px-2 lg:px-4 py-2 rounded bg-green-50 w-fit'>
+                {product?.price !== undefined ? (
+                  product.discount === 0 ? (
                     <p className='font-semibold text-sm lg:text-xl'>
-                      {displayCurrencyAndPrice(product?.price)}
+                      {displayCurrencyAndPrice(product.price)}
                     </p>
-
-                  ): (
+                  ) : (
                     <p className='font-semibold text-sm lg:text-xl'>
-                      {displayCurrencyAndPrice(priceWithDiscount(product?.price, product?.discount))}
+                      {displayCurrencyAndPrice(priceWithDiscount(product.price, product.discount))}
                     </p>
-                  )}
-                </div>
+                  )
+                ) : (
+                  <p className='font-semibold text-sm lg:text-xl'>
+                    {displayCurrencyAndPrice(0)}
+                  </p>
+                )}
+              </div>
                 
                 {
                  product && product?.discount > 0 && (

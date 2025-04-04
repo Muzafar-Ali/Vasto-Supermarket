@@ -89,31 +89,6 @@ const Navbar = () => {
       {/* menu  */}
       <menu className="hidden xl:flex items-center gap-5 py-3 text-white text-sm font-semibold mt-3 w-full bg-primary-base shadow-md relative">
         <DesktopMenu />
-        {/* <li className='flex items-center'>
-          <BiGridSmall size={40}/>
-          <Link href="/">All categories</Link>
-        </li>
-
-        
-        <li>
-          <Link href="/about">vegetable & Fruits</Link>
-        </li>
-        <li>
-          <Link href="/contact">Chiken, Meat & Fish</Link>
-        </li>
-        <li>
-          <Link href="/contact">Ice creams & frozen desserts</Link>
-        </li>
-        <li>
-          <Link href="/contact">Dairy and Breakfast</Link>
-        </li>
-        <li>
-          <Link href="/contact">instant & Frozen Food</Link>
-        </li>
-        <li>
-          <Link href="/contact">Bakery & Biscuits</Link>
-        </li> */}
-
       </menu>
 
       {/* Mobile menu */}

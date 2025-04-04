@@ -32,7 +32,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
     const cartRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-      function handleClickOutside(event: MouseEvent) {
+      const handleClickOutside = (event: MouseEvent) => {
         if (cartRef.current && !cartRef.current.contains(event.target as Node)) {
           setIsCartOpen(false); // Close the cart when clicking outside
         }
@@ -63,7 +63,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
         <div className='min-h-[75vh] lg:min-h-[80vh] h-full max-h-[calc(100vh-150px)] bg-blue-50 p-2 flex flex-col gap-4'>
           { cart[0] ? (
             <>
-              <div className='flex items-center justify-between px-4 py-2 bg-blue-100 font-semibold text-sm text-green-700 rounded-full'>
+              <div className='flex items-center justify-between px-4 py-2 bg-blue-100 font-semibold text-sm text-primary-base rounded-full'>
                 <p>Your Total Savings</p> 
                 <p>{displayCurrencyAndPrice(Number(totalSavings.toFixed(2)))}</p>
               </div>
@@ -88,14 +88,14 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
                       {/* increase decrease button */}
                       <div className='flex items-center gap-1 '>
                         <button 
-                          className='text-white bg-green-700 p-1 rounded'
+                          className='text-white bg-primary-base p-1 rounded'
                           onClick={() => decreaseQuantity(item)}
                         >
                           <FaMinus size={12}/>
                         </button>
                         <p className='text-sm border border-green-700 px-2 rounded'>{item.quantity}</p>
                         <button 
-                          className='text-white bg-green-700 p-1 rounded'
+                          className='text-white bg-primary-base p-1 rounded'
                           onClick={() => increaseQuantity(item)}
                         ><FaPlus size={12}/></button>
                       </div>
@@ -133,7 +133,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
                   </div>  
                   <div className='flex items-center gap-2'>
                     <p className='line-through text-neutral-500'>{displayCurrencyAndPrice(deliveryCharge)}</p>
-                    <p className='flex items-center gap-2 text-green-600'>Free</p>
+                    <p className='flex items-center gap-2 text-primary-base'>Free</p>
                   </div>
                 </div>
                 <div className='flex gap-4 justify-between ml-1 text-sm'>
@@ -164,7 +164,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
         {/* total price & Proceed */}
         { cart[0] && (
           <div className='p-2'>
-            <div className='bg-green-700 text-neutral-100 px-4 py-3 font-bold text-base static bottom-3 rounded flex items-center gap-4 justify-between'>
+            <div className='bg-primary-base text-neutral-100 px-4 py-3 font-bold text-base static bottom-3 rounded flex items-center gap-4 justify-between'>
               <div>
                 {/* total price */}
                 <div className='flex flex-col text-xs'>

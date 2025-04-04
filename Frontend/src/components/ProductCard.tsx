@@ -3,6 +3,7 @@ import displayCurrencyAndPrice from '@/utils/displayCurrencyAndPrice';
 import Link from 'next/link';
 import { TProduct } from '@/types/productTypes';
 import { useCartStore } from '@/store/cartStore';
+import { Button } from './ui/button';
 
 const ProductCard = ({product}: {product: TProduct}) => {
 
@@ -28,17 +29,17 @@ const ProductCard = ({product}: {product: TProduct}) => {
           { product.discount > 0 && <div className='bg-green-100 rounded px-2 py-[1px] font-semibold'>{product.discount}% OFF</div>}
         </div>
         <div className='font-medium text-sm lg:text-base text-ellipsis line-clamp-2 min-h-[40px]'>{product.name}</div>
-        <div className='text-sm lg:text-base w-fit'>{product.unit}</div> 
+        <div className='text-sm lg:text-base w-fit line-clamp-1'>{product.unit}</div> 
 
         <div className='flex items-center justify-between gap-x-1 text-sm lg:text-base'>
           <div className='font-semibold text-sm lg:text-sm'>{displayCurrencyAndPrice(product.price)}</div>
           <div>
-          <button
+          <Button
             className='bg-primary-base/10 border ring ring-primary-base text-primary-base hover:bg-primary-base/50 hover:text-black px-2 lg:px-4 py-1 rounded'
             onClick={handleAddToCard}
           >
             Add
-          </button>
+          </Button>
           </div>
         </div>
       </div>

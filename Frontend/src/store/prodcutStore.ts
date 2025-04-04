@@ -110,7 +110,6 @@ export const useProductStore= create<TProductStore>((set) => ({
   // }
 
   getSearchProducts: async (input, page = "1", limit = "10") => {
-    console.log('number of calls 1');
     
     try {
       set({ loading: true });

@@ -69,7 +69,7 @@ const SearchInput = () => {
     <div className='relative'>
       <Drawer open={isSearchOpen} onOpenChange={setIsSearchOpen}>
         <DrawerTrigger>
-          <div className="bg-white h-7 md:h-10 min-w-[100px] sm:min-w-[400px] lg:min-w-[600px] flex items-center gap-2 px-1 rounded-md text-[#F65831] md:pr-5">
+          <div className="bg-white h-7 md:h-10 min-w-[100px] sm:min-w-[400px] lg:min-w-[600px] flex items-center gap-2 px-1 rounded-md text-primary-base md:pr-5">
             <BiSearch className="h-6 w-6 md:h-8 md:w-8" />
             <input
               type="text"
@@ -79,33 +79,50 @@ const SearchInput = () => {
               onChange={(e) => setSearchInput(e.target.value)}
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
-            {searchInput && <IoClose size={20} onClick={() => setSearchInput('')}/>}
+            {searchInput && (
+              <IoClose 
+                size={25} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSearchInput('');
+                }}
+              />
+            )}
           </div>
         </DrawerTrigger>
-        <DrawerContent className="top-0 max-w-[90%] mx-auto w-full rounded-lg shadow-lg scroll-auto">
+        <DrawerContent className="top-0 max-w-[98%] md:max-w-[90%] mx-auto w-full rounded-t-lg shadow-lg scroll-auto">
           <DrawerHeader>
             <DrawerTitle asChild>
               <div className='flex flex-col gap-1 '>
-                <div className="bg-white h-7 md:h-10 min-w-[100px] sm:min-w-[400px] lg:min-w-[600px] max-w-[60%] border-2 border-primary-base flex items-center gap-2 px-1 md:pr-5 mx-auto rounded-md text-[#F65831]/70">
-                  <BiSearch className="h-6 w-6 md:h-8 md:w-8" />
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    className="h-6 lg:h-8 w-full outline-none"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                  />
-                  {searchInput && <IoClose size={20} onClick={() => setSearchInput('')}/>}
-                </div>
-                <div className="flex items-center justify-between px-5 lg:px-20">
-                  <p className='font-bold'> Results for "{debouncedSearchInput}" </p>
-                  <DrawerClose>
-                    <Button variant={'secondary'}>
-                      <IoClose/>
-                    </Button>
-                  </DrawerClose>
+                <div className='flex items-center'>
+                  <div className="bg-white h-9 md:h-10 min-w-[100px] sm:min-w-[400px] lg:min-w-[600px] max-w-[80%] border-2 border-primary-base flex items-center gap-2 px-1 md:pr-5 mx-auto rounded-md text-[#F65831]/70">
+                    <BiSearch className="h-6 w-6 md:h-8 md:w-8" />
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      className="h-6 lg:h-8 w-full outline-none"
+                      value={searchInput}
+                      onChange={(e) => setSearchInput(e.target.value)}
+                    />
+                    {searchInput && <IoClose size={25} onClick={() => setSearchInput('')}/>}
+                  </div>
 
+                  <DrawerClose className='md:pr-10'>
+                    <div className='md:hidden'>
+                      <Button variant={'secondary'}>
+                          <IoClose/>
+                      </Button>
+                    </div>
+                    <div className='hidden md:block'>
+                      <Button variant={'secondary'}>
+                          Close
+                      </Button>
+                    </div>
+                  </DrawerClose>
                 </div>
+                <p className='font-bold text-sm md:text-base pl-1 lg:pl-6 mt-5'> 
+                  Results for <span className='text-primary-base capitalize'>"{debouncedSearchInput}"</span> 
+                </p>
               </div>
             </DrawerTitle>
           </DrawerHeader>
@@ -131,7 +148,7 @@ const SearchInput = () => {
           >
             <div
               id="scrollableDiv"
-              className="grid grid-cols-2 mobile-m:grid-cols-3 tablet-s:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-4 max-h-[500px] overflow-y-auto py-4 px-4 md:px-10 pb-40"
+              className="grid grid-cols-2 mobile-l:grid-cols-3 tablet-s:grid-cols-4 laptop-m:grid-cols-5 laptop-l:grid-cols-6 gap-4 max-h-[500px] overflow-y-auto py-4 px-4 lg:px-10 pb-50"
             >
               {productsSearched.map((product) => (
                 <div key={product._id}>

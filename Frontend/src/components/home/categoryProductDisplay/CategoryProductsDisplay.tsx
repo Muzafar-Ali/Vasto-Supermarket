@@ -1,13 +1,12 @@
 'use client'
 import { useCategoryStore } from '@/store/categoryStore';
 import Wrapper from '@/components/Wrapper';
-import CategoryProductsSlider from './CategoryProductsSlider';
-import CategoryWiseProductDisplay from '../CategoryWiseProductDisplay';
-import Link from 'next/link';
+import CategoryWiseProductDisplay from './CategoryWiseProductDisplay';
+
 
 const CategoriesToDisplay = [
-  "flour-rice-and-lentils", 
   'home-and-office', 
+  "flour-rice-and-lentils", 
   'snacks-and-munchies', 
   "pharma-and-wellness"
 ]
@@ -17,7 +16,6 @@ const CategoryProductsDisplay = () => {
   
   // Filter categories based on predefined list
   const filteredCategories = categories.filter((cat) => CategoriesToDisplay.includes(cat.slug));
-  console.log(filteredCategories);
   
   return (
     <Wrapper>

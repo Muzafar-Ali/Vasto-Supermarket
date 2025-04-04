@@ -159,27 +159,12 @@
   }
 }
 
-.swiper-button-prev {
-  left: 10px;
-  @apply bg-white rounded-full p-5 border border-black/50 font-semibold
-}
-
-.swiper-button-next {
-  right: 10px;
-  @apply bg-white rounded-full p-5 border border-black/50 font-semibold
-}
-
-.swiper-slide {
-  width: auto !important; /* Ensures slides adjust dynamically */
-  min-width: 100px; /* Prevents extreme shrinking */
-}
-
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
 
 .scrollbarCustom::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
   @apply bg-slate-100
 }
 
