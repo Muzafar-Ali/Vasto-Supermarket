@@ -19,7 +19,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Vasto Supermarket",
   description: "Vasto Supermarket - Your one-stop online grocery shop. Browse fresh produce, pantry staples, household essentials, and more. Enjoy fast delivery and great prices on quality products for your home.",
-  keywords: "online grocery, supermarket, food delivery, fresh produce, household essentials",
+  keywords: [
+    "online grocery", 
+    "supermarket", 
+    "food delivery", 
+    "fresh produce",
+    "grocery delivery",
+    "online shopping",
+    "household essentials",
+    "Vasto Supermarket"
+  ],
   // openGraph: {
   //   title: "Vasto Supermarket - Online Grocery Delivery",
   //   description: "Shop for groceries online and get them delivered to your doorstep. Fresh produce, pantry items, and household essentials at competitive prices.",
@@ -34,6 +43,12 @@ export const metadata: Metadata = {
   //   ],
   //   locale: "en_US",
   //   type: "website",
+  // },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Vasto Supermarket - Online Grocery",
+  //   description: "Your favorite groceries delivered fast",
+  //   images: ['/og-image.jpg'], // Same as OG or specific Twitter image
   // },
 };
 
