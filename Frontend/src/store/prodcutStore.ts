@@ -115,24 +115,31 @@ export const useProductStore= create<TProductStore>((set) => ({
       set({ loading: true });
       const response = await axios.get(`${baseURI}/api/v1/product/search?search=${input}&page=${page}&limit=${limit}`);
       const data = response.data;
+
       if (data.success) {
-        // Store the search query in localStorage
-        let recentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
-        if (!Array.isArray(recentSearches)) {
-          recentSearches = [];
-        }
-        // Avoid duplicates
-        if (!recentSearches.includes(input)) {
-          recentSearches.unshift(input); // Add new search at the beginning
-          // Keep only the latest 5 searches
-          if (recentSearches.length > 5) {
-            recentSearches.pop();
+        if (data.products.length > 0 ){
+          // Store the search query in localStorage
+          let recentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+          if (!Array.isArray(recentSearches)) {
+            recentSearches = [];
           }
+          // Avoid duplicates
+          if (!recentSearches.includes(input)) {
+            recentSearches.unshift(input); // Add new search at the beginning
+            // Keep only the latest 5 searches
+            if (recentSearches.length > 5) {
+              recentSearches.pop();
+            }
+          }
+          
+          localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
         }
-        localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+
         return data;
       }
+
       return;
+      
     } catch (error) {
       console.error("Error fetching Product By Id:", error);
     } finally {
