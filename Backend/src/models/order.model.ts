@@ -1,26 +1,29 @@
 import mongoose from "mongoose";
 import { TOrderDocument } from "../types/order.type.js";
-import { object } from "zod";
 
 const orderSchema = new mongoose.Schema<TOrderDocument>({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: [true, "User id is missing"],
   },
   orderId: {
     type: String,
     required: [true, "order id is required"],
     unique: [true, "order id already exists" ]
   },
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
-  },
-  productDetails: {
-    name: String,
-    image: String,
-  },
+  products: [{
+    _id: false,
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true
+    },
+    quantity: {
+      type: String,
+      required: true,
+      min: 1
+    }
+  }],
   paymentId: {
     type: String,
     default:""
@@ -30,9 +33,17 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
     enum: ['unpaid', 'paid', 'pending', 'refunded'],
     default:'unpaid'
   },
-  deliveryAddress: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Address",
+  // deliveryAddress: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Address",
+  // },
+  deliveryDetails: {
+    name: String,
+    email: String,
+    contact: String,
+    address: String,
+    state: String,
+    country: String,
   },
   deliveryStatus: {
     type: String,
@@ -53,6 +64,6 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
   },
 }, { timestamps: true })
 
-const Order = mongoose.models.Order || mongoose.model<TOrderDocument>("Order", orderSchema);
+const OrderModel = mongoose.models.Order || mongoose.model<TOrderDocument>("Order", orderSchema);
 
-export default Order;
+export default OrderModel;

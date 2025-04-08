@@ -6,29 +6,36 @@ import config from "./config/confiq.js";
 import helmet from "helmet";
 import { connectDB } from "./config/connectDB.js";
 import v1Routes from "./routes/v1/index.js";
+import stripeWebhookRoutes from './routes/v1/stripeWebhook.routes.js';
+
 import { errorHandler } from "./middlewares/error.middleware.js";
 
-// Swagger imports
+// Swagger documentation imports
 import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs"; // To load the YAML file
+import YAML from "yamljs"; // For loading YAML files
 
 const app = express();
 
-// Load the OpenAPI specification from the YAML file
+/// Load OpenAPI specification from YAML file
 const swaggerDocument = YAML.load("./openapi.yaml");
 
 app.use(cors({
   origin: "*",
   credentials: true
 }));
+
+// Stripe webhook route must come before express.json() middleware
+// to access the raw request body
+app.use("/api/v1/stripe", stripeWebhookRoutes)
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet({
-  crossOriginResourcePolicy: false
-}))
+  crossOriginResourcePolicy: false // Disable for file downloads if needed
+}));
 app.use(morgan("dev"));
 
-// Serve Swagger docs
+// Swagger documentation route
 app.use("/api/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Home route
@@ -38,7 +45,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1", v1Routes)
 
-// Error middleware 
+// Global error handling middleware
 app.use(errorHandler);
 
 app.listen(config.port, () => {

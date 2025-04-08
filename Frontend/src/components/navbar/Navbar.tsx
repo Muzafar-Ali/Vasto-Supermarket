@@ -6,12 +6,11 @@ import { IoPersonAddSharp, IoPersonSharp } from 'react-icons/io5'
 import { RxHamburgerMenu } from "react-icons/rx";
 import Register from '@/components/Register'
 import Link from 'next/link'
-import SearchInput from '../search/SearchInput'
+import Search from '../search/Search'
 import { useCartStore } from '@/store/cartStore'
-import { AlertDialog, AlertDialogTrigger } from '../ui/alert-dialog'
-import { AlertDialogContent } from '@radix-ui/react-alert-dialog'
+import { AlertDialog, AlertDialogContent, AlertDialogTrigger } from '../ui/alert-dialog'
 import { useState } from 'react'
-import Cart from '../Cart'
+import Cart from '../cart/Cart'
 import MobileMenu from './MobileMenu'
 import DesktopMenu from './DesktopMenu'
 
@@ -41,7 +40,7 @@ const Navbar = () => {
         </Link>
   
         {/* search */}
-        <SearchInput/>
+        <Search/>
 
         {/* location
         <div className='text-white font-semibold'>

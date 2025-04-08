@@ -1,3 +1,4 @@
+"use client"
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useProductStore } from '@/store/prodcutStore';
 import { TProduct } from '@/types/productTypes';
@@ -7,10 +8,9 @@ import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle, DrawerTr
 import SearchProductCards from './SearchProductCards';
 import noProductsImage from '@/assets/nothing here yet.webp';
 import Image from 'next/image';
-import { Button } from '../ui/button';
 import { IoClose } from 'react-icons/io5';
 
-const SearchInput = () => {
+const Search = () => {
   const { getSearchProducts } = useProductStore();
 
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
@@ -93,7 +93,7 @@ const SearchInput = () => {
     }
   };
   
-   // Get the latest recent searches from localStorage
+  // Get the latest recent searches from localStorage
   const latestRecentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]")
   
   /**
@@ -207,15 +207,13 @@ const SearchInput = () => {
                   </div>
 
                   <DrawerClose className='md:pr-10'>
-                    <div className='md:hidden'>
-                      <Button variant={'secondary'}>
-                          <IoClose/>
-                      </Button>
+                    <div className='md:hidden bg-primary-base/10 border ring ring-primary-base text-primary-base hover:bg-primary-base/50 hover:text-black px-2 lg:px-4 py-1 rounded'>
+                      <IoClose/>
                     </div>
                     <div className='hidden md:block'>
-                      <Button variant={'secondary'}>
+                      <p className='bg-primary-base/10 border ring ring-primary-base text-primary-base hover:bg-primary-base/50 hover:text-black px-2 lg:px-4 py-1 rounded'>
                           Close
-                      </Button>
+                      </p>
                     </div>
                   </DrawerClose>
                 </section>
@@ -263,4 +261,4 @@ const SearchInput = () => {
   );
 };
 
-export default SearchInput;
+export default Search;
