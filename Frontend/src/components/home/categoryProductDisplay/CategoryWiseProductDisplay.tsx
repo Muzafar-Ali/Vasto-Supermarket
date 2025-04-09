@@ -55,13 +55,22 @@ const CategoryWiseProductDisplay = ({id, category, slug}: TCategoryWiseProductDi
         }
 
         <div className='absolute right-0 left-0 px-2 hidden lg:flex justify-between w-full max-w-[1280px] mx-auto'>
-          {/* left */}
-          <button onClick={handleScrollLeft} className='z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-3 rounded-full '>
-            <FaAngleLeft className=''/>
+          {/* Left arrow button */}          
+          <button 
+            onClick={handleScrollLeft} 
+            className='z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-3 rounded-full'
+            aria-label={`Scroll ${category} products left`}
+          >
+             <FaAngleLeft aria-hidden="true"/>
           </button>
+
           {/* right */}
-          <button onClick={handleScrollRight} className='z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-3 rounded-full '>
-            <FaAngleLeft  className='rotate-180'/>
+          <button 
+            onClick={handleScrollRight} 
+            className='z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-3 rounded-full'
+            aria-label={`Scroll ${category} products right`}
+          >
+            <FaAngleLeft className='rotate-180' aria-hidden="true"/>
           </button>
 
         </div>

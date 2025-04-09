@@ -6,7 +6,8 @@ import Image from 'next/image';
 import logo4 from '@/assets/logo4.png'
 import { useCategoryStore } from '@/store/categoryStore';
 import { BiGridSmall } from 'react-icons/bi';
-import { menuData } from '@/utils/menuData';
+import { menuData } from '@/constants/menu';
+
 
 const MobileMenu = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
   const [isAllCategoriesOpen, setIsAllCategoriesOpen] = useState(false)

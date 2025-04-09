@@ -1,5 +1,10 @@
+type TMenuItem = {
+  id: number;
+  name: string;
+  href: string;
+};
 
-export const menuData = [
+export const menuData: TMenuItem[] = [
   {
     id: 1,
     name: "Vegetable & Fruits",

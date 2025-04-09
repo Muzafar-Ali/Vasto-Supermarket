@@ -12,6 +12,7 @@ import { useCategoryStore } from "@/store/categoryStore"
 import { useSubCategorytStore } from "@/store/subCategoryStore"
 import { BiGridSmall } from "react-icons/bi"
 import { useEffect } from "react"
+import { featuredCategories } from "@/constants/featuredCategories"
 
 const DesktopMenu = () => {
   const { categories, getAllCategories } = useCategoryStore();
@@ -27,12 +28,6 @@ const DesktopMenu = () => {
     getCategories();
   }, [getAllCategories, getAllSubCategories]);
 
-  // Manually specify which categories to show in main nav
-  const featuredCategories = [
-    "Instant & Frozen Food",
-    "Pharma & Wellness", 
-    "Bakery & Biscuits"
-  ];
 
   // Filter categories to only show the featured ones
   const mainCategories = categories.filter(category => 

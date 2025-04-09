@@ -14,11 +14,15 @@ export const useCategoryStore = create<TCategoryStore>((set) => ({
 
   getAllCategories: async () => {    
     try {
-      set({ loading: true });
-      const response = await axios.get(`${baseURI}/api/v1/category`);
-      const data = response.data;
-      if (data.success) {
-        set({ categories: data.categories });
+      // Only fetch if we don't have data already
+      if (useCategoryStore.getState().categories.length === 0) {
+        set({ loading: true });
+        const response = await axios.get(`${baseURI}/api/v1/category`);
+        const data = response.data;
+        
+        if (data.success) {
+          set({ categories: data.categories });
+        }
       }
     } catch (error) {
       console.error("Error fetching categories:", error);

@@ -65,10 +65,14 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
         {/* Cart container */}
         <section 
           ref={cartRef} 
-          className='bg-white w-full max-w-sm min-h-screen max-h-screen ml-auto'
+          className='bg-white w-full max-w-sm min-h-screen max-h-screen ml-auto relative'
           aria-labelledby="cart-heading"
         >
-          <CheckoutConfirm open={isCheckoutConfirmOpen} setOpen={setIsCheckoutConfirmOpen}/>
+          {/* CheckoutConfirm positioned absolutely within cart width */}
+          <div className={`absolute top-0 right-0 w-full max-w-sm h-full ${isCheckoutConfirmOpen ? "z-10" : "-z-10"}`}>
+            <CheckoutConfirm open={isCheckoutConfirmOpen} setOpen={setIsCheckoutConfirmOpen}/>
+          </div>
+
           {/* Cart header and close icon */}
           <header className='flex items-center p-4 shadow-md gap-3 justify-between'>
             <h2 className='font-semibold'>Cart</h2>
