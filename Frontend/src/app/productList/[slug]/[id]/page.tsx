@@ -12,16 +12,23 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
 
   const searchParams = useSearchParams();
 
-  const { subCategoryProducts, categoryProducts, getProductBySubCategory, getProductByCategory} = useProductStore();
+  const { subCategoryProducts, categoryProducts, getProductBySubCategory, getProductByCategory } = useProductStore();
   const { subCategories, getSubCategoryByCategoryId } = useSubCategorytStore();
-
+ 
+  // State to hold resolved route parameters (from async promise)
   const [resolvedParams, setResolvedParams] = useState<{id: string, slug: string}>();
+ 
+  // Extract ID and slug from resolved params
   const id = resolvedParams?.id;
   const slug = resolvedParams?.slug; 
   
   const subcategory = searchParams.get("subcategory");
   const subCatId = searchParams.get("subcatId");
 
+  /**
+   * Effect to resolve async route parameters and fetch data
+   * Runs when the params prop changes
+   */
   useEffect(() => {
     const fetchData = async () => {
       const resolvedParams = await params;
@@ -49,11 +56,11 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
   },[subcategory, subCatId])
   
   return (
-    <Wrapper className='pt-10'>
-      <div className='grid grid-cols-[90px_1fr] md:grid-cols-[200px_1fr] lg:grid-cols-[280px_1fr] py-2'> 
+    <Wrapper className='pt-5 lg:pt-10 bg-primary-base/5'>
+      <div className='grid grid-cols-[80px_1fr] md:grid-cols-[160px_1fr] lg:grid-cols-[270px_1fr] py-2'> 
 
-        {/* side bar - sub category dispaly */}
-        <div className='sticky top-24 min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col gap-3 shadow-md scrollbarCustom bg-white py-3 border'>
+        {/* Sidebar - Subcategory navigation */}
+        <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col gap-3 shadow-md scrollbarCustom bg-white py-3 border'>
           { subCategories?.map((subCategory) => (
             <Link
               href={{
@@ -75,9 +82,11 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
           ))}
         </div>
         
-        {/* product list display */}
+        {/* Product list display area */}
+        {/* Conditional rendering based on whether subcategory is selected */}
         { subCategoryProducts.length > 0 && subcategory && subCatId ? (
-        <div className='grid grid-cols-1 min-[470px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
+          <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-auto grid mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 bg-primary-base/5'>
+          {/* Map through filtered subcategory products */}
           { subCategoryProducts?.map((product) => (
             <div key={product._id}>
               <ProductCard product={product}/>
@@ -86,7 +95,8 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
         </div>
 
         ): (
-          <div className='grid grid-cols-1 min-[470px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4  bg-primary-base/5'>
+          <div className='sticky top-24 min-h-[88vh] max-h-[88vh] overflow-y-auto grid grid-cols-1 mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 '>
+          {/* Default view - shows all category products */}
           { id && categoryProducts[id]?.map((product) => (
             <div key={product._id}>
               <ProductCard product={product}/>

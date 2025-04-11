@@ -221,7 +221,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
                   aria-label="Proceed to checkout"
                   onClick={() => setIsCheckoutConfirmOpen(true)}
                 >
-                  <span>Login to Proceed</span>
+                  <span>Proceed</span>
                   <FaCaretRight/>
                 </button>
               </div>

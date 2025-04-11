@@ -79,13 +79,13 @@ const CheckoutConfirm = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetS
       </div>
       <Separator/>
 
-      <h3 className="text-base font-semibold mt-5 p-2">Shipping Information</h3>
+      <h3 className="text-base font-semibold mt-5 p-2 text-primary-base">Shipping Information</h3>
 
       <div className="p-4">
         <form onSubmit={handleSubmit}>
           {/* Name Field */}
           <div className="mb-4">
-            <label htmlFor="delivery-name" className="block text-sm font-medium text-primary-base">
+            <label htmlFor="delivery-name" className="block text-sm font-medium text-gray-900">
               Name
             </label>
             <input
@@ -101,7 +101,7 @@ const CheckoutConfirm = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetS
 
           {/* Email Field */}
           <div className="mb-4">
-            <label htmlFor="delivery-email" className="block text-sm font-medium text-primary-base">
+            <label htmlFor="delivery-email" className="block text-sm font-medium text-gray-900">
               Email
             </label>
             <input
@@ -117,7 +117,7 @@ const CheckoutConfirm = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetS
 
           {/* Contact Field */}
           <div className="mb-4">
-            <label htmlFor="delivery-contact" className="block text-sm font-medium text-primary-base">
+            <label htmlFor="delivery-contact" className="block text-sm font-medium text-gray-900">
               Contact No.
             </label>
             <input
@@ -133,7 +133,7 @@ const CheckoutConfirm = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetS
 
           {/* Address Field */}
           <div className="mb-4">
-            <label htmlFor="delivery-address" className="block text-sm font-medium text-primary-base">
+            <label htmlFor="delivery-address" className="block text-sm font-medium text-gray-900">
               Address
             </label>
             <input
@@ -149,7 +149,7 @@ const CheckoutConfirm = ({open, setOpen}: {open: boolean, setOpen: Dispatch<SetS
 
           {/* State Field */}
           <div className="mb-4">
-            <label htmlFor="delivery-emirate" className="block text-sm font-medium text-primary-base">
+            <label htmlFor="delivery-emirate" className="block text-sm font-medium text-gray-900">
               Emirate
             </label>
             <select

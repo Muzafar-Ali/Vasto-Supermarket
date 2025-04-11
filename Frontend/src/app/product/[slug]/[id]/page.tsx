@@ -1,6 +1,7 @@
 'use client';
 import Wrapper from '@/components/Wrapper';
 import { useProductStore } from '@/store/prodcutStore';
+import { useCartStore } from '@/store/cartStore';
 import displayCurrencyAndPrice from '@/utils/displayCurrencyAndPrice';
 import Image from 'next/image';
 import { use, useEffect, useState } from 'react';
@@ -9,6 +10,7 @@ import bestPriceImage from "@/assets/Best_Prices_Offers.png"
 import basket from '@/assets/basket.png';
 import priceWithDiscount from '@/utils/priceWithDiscount';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
 const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: string }> }) => {
   const resolvedParams = use(params);
@@ -16,6 +18,7 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
   const slug = resolvedParams?.slug;
 
   const { product, getProductById } = useProductStore();
+  const { addToCart } = useCartStore();
   
   const [image, setImage] = useState(0);
   const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
@@ -45,8 +48,9 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
   return (
     <div className='bg-primary-base/5'>
       <Wrapper className='p-4 grid lg:grid-cols-2 gap-5'>
-        {/* thumbnail */}
-        <div className='flex flex-col gap-3 scroll-auto'>
+        {/* Product Images Section */}
+        <section className='flex flex-col gap-3 scroll-auto'>
+          {/* thumbnail */}
           <div
             className='bg-white min-h-56 lg:min-h-[65vh] max-h-56 lg:max-h-[65vh] rounded-md h-full w-full relative'
             onMouseMove={handleMouseMove}
@@ -63,11 +67,11 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
               />
             )}
                   
-            {/* Highlighted Area Overlay */}
+            {/* Highlighted Area Overlay start*/}
             {isMagnifierVisible && (
               <div
-                className='highlight-area'
-                style={{
+              className='highlight-area'
+              style={{
                   position: 'absolute',
                   left: `${magnifierPosition.x}%`,
                   top: `${magnifierPosition.y}%`,
@@ -79,13 +83,14 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
                   border: '2px solid rgba(0, 0, 0, 0.5)', // Optional: Add a border
                   pointerEvents: 'none', // Ensure it doesn't block mouse events
                 }}
-              />
-            )}
+                />
+              )}
+              {/* Highlighted Area Overlay end*/}
 
-            {/* Magnifier Area */}
+            {/* Magnifier Area start*/}
             {isMagnifierVisible && (
               <div
-                className='magnifier'
+              className='magnifier'
                 style={{
                   position: 'absolute',
                   // left: `${magnifierPosition.x}%`,
@@ -103,8 +108,9 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
                   pointerEvents: 'none',
                   boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)', // 👈 Optional: Add shadow
                 }}
-              />
-            )}
+                />
+              )}
+              {/* Magnifier Area end*/}
           </div>
 
           {/* small images */}
@@ -147,13 +153,13 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             }
           </div>
 
-        </div>
+        </section>
         
         {/* Right side - product details */}
         <div className='flex flex-col gap-3  p-4 lg:p-7 bg-white rounded-md lg:max-h-[700px]'>
           <div className='text-base lg:text-lg'>
-            <p className='bg-green-300 w-fit px-2 rounded-full'>10 Min</p>
-            <h2 className='text-lg font-semibold lg:text-3xl'>{product?.name}</h2>  
+            <p className=' bg-teal-600 text-white w-fit px-2 rounded-full'>10 Min</p>
+            <h2 className='text-lg text-gray-900 font-semibold lg:text-3xl'>{product?.name}</h2>  
             <p className='text-sm lg:text-base'>{product?.unit}</p> 
             {/* <Divider/> */}
             <Separator className='my-3'/>
@@ -162,7 +168,7 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             <div>
               <p className=''>Price</p> 
               <div className='flex items-center gap-2 lg:gap-4'>
-              <div className='border border-green-600 px-2 lg:px-4 py-2 rounded bg-green-50 w-fit'>
+              <div className='border border-green-600 px-2 lg:px-4 py-2 rounded bg-teal-50 w-fit'>
                 {product?.price !== undefined ? (
                   product.discount === 0 ? (
                     <p className='font-semibold text-sm lg:text-xl'>
@@ -179,15 +185,16 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
                   </p>
                 )}
               </div>
-                
+                {/* price original */}
                 {
                  product && product?.discount > 0 && (
-                    <p className='line-through text-sm lg:text-xl'>{displayCurrencyAndPrice(product?.price)}</p>
+                    <p className='text-gray-500 line-through text-sm lg:text-xl'>{displayCurrencyAndPrice(product?.price)}</p>
                   )
                 }
+                {/* discount percentage */}
                 {
                   product && product?.discount > 0 && (
-                    <p className="font-bold text-green-600 lg:text-2xl">{product?.discount}% <span className='text-base text-neutral-500'>Discount</span></p>
+                    <p className="font-bold text-teal-600 lg:text-2xl">{product?.discount}% <span className='text-base text-gray-900'>Discount</span></p>
                   )
                 }
                 
@@ -201,8 +208,12 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             ) 
             : (
               <div className='my-4'>
-                <button className='my-4 px-4 py-1 bg-green-600 hover:bg-green-700 text-white rounded'>Add</button>
-                {/* <AddToCartButton data={data}/> */}
+                <Button
+                  className='bg-teal-600 border ring ring-teal-800 text-white hover:bg-teal-400 px-2 lg:px-4 py-1 rounded cursor-pointer'
+                  onClick={() => product && addToCart(product)}
+                >
+                  Add
+                </Button>
               </div>
             )
           }
@@ -220,7 +231,7 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
             {
               product?.moreDetails && Object.keys(product?.moreDetails).map((element,index)=>{
                 return(
-                  <div>
+                  <div key={index}>
                     <p className='font-semibold'>{element}</p>
                     <p className='text-base'>{product?.moreDetails[element]}</p>
                   </div>
