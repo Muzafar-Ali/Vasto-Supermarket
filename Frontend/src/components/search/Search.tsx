@@ -21,9 +21,7 @@ const Search = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPages] = useState<number>(1);
-  const [recentSearches, setRecentSearches] = useState<string[]>(
-    JSON.parse(localStorage.getItem("recentSearches") || "[]")
-  );
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   /**
    * Debounces the search input to prevent excessive API calls.
@@ -94,7 +92,7 @@ const Search = () => {
   };
   
   // Get the latest recent searches from localStorage
-  const latestRecentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]")
+  // const latestRecentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]")
   
   /**
    * Removes a search term from recent searches in both localStorage and state.
@@ -110,6 +108,13 @@ const Search = () => {
     // Update state to trigger re-render
     setRecentSearches(updatedSearches);
   };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+      setRecentSearches(storedSearches);
+    }
+  }, [debouncedSearchInput]);
 
   return (
     <div className='relative'>
@@ -172,7 +177,7 @@ const Search = () => {
                     >
                       <div className='flex gap-2 items-center flex-wrap gap-y-2 min-w-[210px] mobile-m:min-w-[260px] mobile-l:min-w-[270px] sm:min-w-[400px] lg:min-w-[590px] max-w-[80%] rounded-md px-5 text-sm text-gray-900 bg-white mt-2 border border-primary-base py-5'>
                       <p className='text-sm text-gray-600'>Recent Searches:</p>
-                      {latestRecentSearches.map((item: string, index: number) => (
+                      {recentSearches.map((item: string, index: number) => (
                         <div 
                           key={index} 
                           onClick={() => {

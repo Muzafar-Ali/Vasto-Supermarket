@@ -17,7 +17,10 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
  
   // State to hold resolved route parameters (from async promise)
   const [resolvedParams, setResolvedParams] = useState<{id: string, slug: string}>();
- 
+
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
+  console.log(selectedSubcategory);
+  
   // Extract ID and slug from resolved params
   const id = resolvedParams?.id;
   const slug = resolvedParams?.slug; 
@@ -48,19 +51,17 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
 
   useEffect(() => {
     if (subcategory && subCatId) {
-      const getSub = async () => {
-        await Promise.all([getProductBySubCategory(subCatId)]);
-      }
-      getSub();
+      getProductBySubCategory(subCatId);
+      setSelectedSubcategory(subCatId)
     }
-  },[subcategory, subCatId])
+  }, [subcategory, subCatId])
   
   return (
     <Wrapper className='pt-5 lg:pt-10 bg-primary-base/5'>
       <div className='grid grid-cols-[80px_1fr] md:grid-cols-[160px_1fr] lg:grid-cols-[270px_1fr] py-2'> 
 
         {/* Sidebar - Subcategory navigation */}
-        <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col gap-3 shadow-md scrollbarCustom bg-white py-3 border'>
+        <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col shadow-md scrollbarCustom bg-white pb-3 border'>
           { subCategories?.map((subCategory) => (
             <Link
               href={{
@@ -71,13 +72,18 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
                 }
               }}
               key={subCategory._id} 
-              className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border bg-white `}
+              className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border  
+                ${selectedSubcategory === subCategory._id
+                 ? "border-r-4 border-r-primary-base"
+                 : "border-r-4 border-r-transparent  bg-white"
+                }`
+              }
             >
               <div className='w-fit mx-auto lg:mx-0 max-w-28 bg-white rounded-md box-border'>
                 <Image src={subCategory.image} alt={subCategory.name} width={1000} height={1000} 
                 className='w-14 lg:w-12 h-full lg:h-12 object-scale-down'/>
               </div>
-              <div className='relative bg-white md:py-1 -mt-6 text-[11px] text-gray-700 font-light lg:font-medium text-center lg:text-left lg:text-sm'>{subCategory.name}</div>
+              <div className={`relative bg-white md:py-1 -mt-6 lg:-mt-3 text-[11px] text-gray-700 text-center lg:text-left lg:text-sm ${selectedSubcategory === subCategory._id ? 'font-bold lg:text-primary-base lg:font-semibold': 'font-medium '}`}>{subCategory.name}</div>
             </Link>
           ))}
         </div>

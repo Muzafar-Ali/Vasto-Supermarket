@@ -117,16 +117,20 @@ export const useProductStore= create<TProductStore>((set) => ({
       const data = response.data;
 
       if (data.success) {
+          // Only store search if results were found
         if (data.products.length > 0 ){
-          // Store the search query in localStorage
+          // Get recent searches from localStorage or initialize empty array
           let recentSearches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+          
+          // Ensure we're working with an array (safety check)
           if (!Array.isArray(recentSearches)) {
             recentSearches = [];
           }
-          // Avoid duplicates
+
+          // Add new search term if not already present (avoid duplicates)
           if (!recentSearches.includes(input)) {
-            recentSearches.unshift(input); // Add new search at the beginning
-            // Keep only the latest 5 searches
+            recentSearches.unshift(input);
+            // Keep only 5 most recent searches
             if (recentSearches.length > 5) {
               recentSearches.pop();
             }
