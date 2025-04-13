@@ -13,11 +13,7 @@ import { GetProductByIdInput } from "../schema/product.schema.js";
  * @access  Private (requires authentication)
  */
 export const addCategoryHandler = async (req: Request<{}, {}, AddCategoryInput["body"]>, res: Response, next: NextFunction) => {
-  const session = await mongoose.startSession(); // Start a new session
-
   try {
-    session.startTransaction(); // Start the transaction
-
     const { name, description } = req.body;
     const image = req.file;
 

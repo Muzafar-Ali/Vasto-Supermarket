@@ -9,7 +9,7 @@ export const addSubCategory = async (name: string, category: string[], image: Ex
   const session = await mongoose.startSession();
   
   try {
-    session.startTransaction(); // Start the transaction
+    session.startTransaction();
 
     // Check if category already exists
     const subCategoryExists = await SubCategoryModel.findOne({ name }).session(session);
@@ -28,16 +28,15 @@ export const addSubCategory = async (name: string, category: string[], image: Ex
 
     if (!subCategory) throw new ErrorHandler("Sub Category not created", 400);
 
-    // Commit the transaction if everything is successful
     await session.commitTransaction();
 
-    return subCategory; // Return the created sub category to the controller
+    return subCategory;
 
   } catch (error) {
-    await session.abortTransaction(); // Rollback all changes in the transaction
+    await session.abortTransaction(); 
     throw error; // Propagate the error to the controller
   } finally {
-    session.endSession(); // End the session
+    session.endSession();
   }
 };
 

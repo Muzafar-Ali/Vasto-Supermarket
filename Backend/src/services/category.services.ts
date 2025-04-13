@@ -10,35 +10,33 @@ export const addCategory = async (name: string, description: string, image: Expr
   const session = await mongoose.startSession();
   
   try {
-    session.startTransaction(); // Start the transaction
+    session.startTransaction();
 
-    // Check if category already exists
+    // Check if category exists
     const categoryExists = await CategoryModel.findOne({ name }).session(session);
     if (categoryExists) throw new ErrorHandler("Category already exists", 400);
 
-    // Upload image to Cloudinary
+    // Upload image (outside transaction since it's external)
     const imageUrl = await uploadSingleImageToCloudinary(image, "category", name);
-    if (!imageUrl) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
+    if (!imageUrl) throw new ErrorHandler("Failed to upload image", 500);
 
-    // Create the category in the database
-    const category = await CategoryModel.create([{
+    // Create category
+    const [category] = await CategoryModel.create([{
       name,
       description,
       image: imageUrl
-    }], { session }); // Pass the session with the create operation
+    }], { session });
 
     if (!category) throw new ErrorHandler("Category not created", 400);
 
-    // Commit the transaction if everything is successful
     await session.commitTransaction();
-
-    return category; // Return the created category to the controller
+    return category;
 
   } catch (error) {
-    await session.abortTransaction(); // Rollback all changes in the transaction
-    throw error; // Propagate the error to the controller
+    await session.abortTransaction();
+    throw error;
   } finally {
-    session.endSession(); // End the session
+    session.endSession();
   }
 };
 

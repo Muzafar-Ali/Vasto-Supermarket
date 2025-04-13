@@ -30,6 +30,9 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       shipping_address_collection: {
         allowed_countries: ["AE"],
       },
+      invoice_creation: {
+        enabled: true
+      },
       success_url: `${config.clientUrl}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${config.clientUrl}/checkout-failed`,
       metadata: {
@@ -41,7 +44,6 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
         deliveryDetails: JSON.stringify(deliveryDetails),
         totalAmount: totalAmount.toString()
       },
-
     });
 
     if(!session.url) throw new ErrorHandler("Error creating checkout session", 500);    
@@ -58,9 +60,6 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
 
 export const stripeWebhookHandler = async ( req: Request, res: Response): Promise<void> => { // Explicitly return Promise<void>
   const sig = req.headers['stripe-signature'] as string;
-  // console.log('Using webhook secret:', config.stripeSecretKey);
-  // console.log('Received signature:', sig);
-  // console.log('Raw body length:', req.body.length);
 
   try {
     const event = stripe.webhooks.constructEvent( req.body, sig, config.stripeWebhookSecret as string );
@@ -70,7 +69,7 @@ export const stripeWebhookHandler = async ( req: Request, res: Response): Promis
 
       // Only create order if payment was successful
       if (session.payment_status === 'paid') {
-          await createOrderFromSession(session);
+          await createOrderFromSession(session, stripe);
       }
     }
 

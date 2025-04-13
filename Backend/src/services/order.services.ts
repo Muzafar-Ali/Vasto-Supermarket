@@ -1,45 +1,70 @@
+import mongoose from "mongoose";
 import OrderModel from "../models/order.model.js";
 import ProductModel from "../models/product.model.js";
 import Stripe from "stripe";
 
-export const createOrderFromSession = async (session: Stripe.Checkout.Session) => {
-  console.log('session', session);
-  console.log('session.metadata', session.metadata);
-  
-  const { userId, products, deliveryDetails, totalAmount } = session.metadata;
+type TMetadata = {
+  userId?: string;
+  products: string; // JSON string
+  deliveryDetails: string; // JSON string
+  totalAmount: string; // string, needs parsing
+};
 
-  const order = new OrderModel({
-    // userId,
-    products: JSON.parse(products).map((productId: string, quantity: string) => ({
-      productId: productId,
-      quantity: quantity
-    })),
-    deliveryDetails: JSON.parse(deliveryDetails),
-    deliveryStatus: 'processing',
-    totalAmount: parseFloat(totalAmount),
-    // subTotalAmount:
-    paymentId: session.payment_intent,
-    paymentStatus: session.payment_status.toLowerCase(),
-    // stripeSessionId: session.id
-    orderId: session.id,
-    // invoiceReceipt: 
-  });
-
-  await order.save();
-
-    
-  // Additional post-payment logic (send email, update inventory, etc.)
+export const createOrderFromSession = async (stripeSession: Stripe.Checkout.Session, stripe: Stripe) => {
+  const dbSession = await mongoose.startSession();
   
-  // update inventory
-  const updatedProducts = JSON.parse(products);
-  
-  for (const product of updatedProducts) {
-    const { productId, quantity } = product;
-    await ProductModel.findByIdAndUpdate(
-      productId,
-      { $inc: { stock: -quantity } }, // Decrease stock by quantity purchased
-      { new: true }
-    );
+  try {
+    dbSession.startTransaction();
+
+    const { userId, products, deliveryDetails, totalAmount } = stripeSession.metadata as TMetadata;
+
+    // Fetch invoice if exists
+    let invoiceNumber = null;
+    let invoicePdfUrl = null;
+    if (stripeSession.invoice) {
+      const invoice = await stripe.invoices.retrieve(stripeSession.invoice as string);
+      invoiceNumber = invoice.number;
+      invoicePdfUrl = invoice.invoice_pdf;
+    }
+
+    const parsedProducts = JSON.parse(products) as Array<{
+      productId: string;
+      quantity: string;
+    }>;
+
+    // Create order
+    const order = new OrderModel({
+      userId,
+      products: parsedProducts.map(item => ({
+        productId: item.productId,
+        quantity: parseInt(item.quantity)
+      })),
+      deliveryDetails: JSON.parse(deliveryDetails),
+      deliveryStatus: 'processing',
+      totalAmount: parseFloat(totalAmount),
+      paymentId: stripeSession.payment_intent,
+      paymentStatus: stripeSession.payment_status.toLowerCase(),
+      orderId: stripeSession.id,
+      invoiceReceipt: invoicePdfUrl
+    });
+
+    await order.save({ session: dbSession });
+
+    // Update inventory in transaction
+    for (const product of parsedProducts) {
+      await ProductModel.findByIdAndUpdate(
+        product.productId,
+        { $inc: { stock: -parseInt(product.quantity) } },
+        { new: true, session: dbSession }
+      );
+    }
+
+    await dbSession.commitTransaction();
+  } catch (error) {
+    await dbSession.abortTransaction();
+    console.error('Order creation failed:', error);
+    throw error; // Re-throw to be caught by the webhook handler
+  } finally {
+    dbSession.endSession();
   }
-
-}
+};

@@ -26,13 +26,12 @@ export const createProduct = async (productData: TCreateProduct, images: Express
   const session = await mongoose.startSession();
 
   try {
-    session.startTransaction(); // Start the transaction
+    session.startTransaction();
 
     // Upload image to Cloudinary
     const imageUrls = await uploadMultipleImagesToCloudinary(images, "product", productData.name);
     if (!imageUrls) throw new ErrorHandler("Failed to upload image to Cloudinary", 500);
 
-    // Create the product in the database
     const newProduct = await ProductModel.create([{
       ...productData,
       imageUrl: imageUrls
@@ -40,13 +39,12 @@ export const createProduct = async (productData: TCreateProduct, images: Express
 
     if (!newProduct) throw new ErrorHandler("Product not created", 400);
 
-    // Commit the transaction if everything is successful
     await session.commitTransaction();
 
     return newProduct; // Return the product to the controller
 
   } catch (error) {
-    await session.abortTransaction(); // Rollback all changes in the transaction
+    await session.abortTransaction();
     throw error; // Propagate the error to the controller
   } finally {
     session.endSession(); // End the session
