@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
@@ -10,6 +10,7 @@ import { useSubCategorytStore } from "@/store/subCategoryStore";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 const UploadProductCopy = () => {
   const { addProduct, loading } = useProductStore();
@@ -35,7 +36,6 @@ const UploadProductCopy = () => {
   const [selectSubCategory, setSelectSubCategory] = useState("");
   const [fieldName, setFieldName] = useState("");
   const [openAddField, setOpenAddField] = useState(false);
-  const [ViewImageURL, setViewImageURL] = useState("");
 
   // Handle input changes
   const handleChange = (
@@ -194,7 +194,7 @@ const UploadProductCopy = () => {
   useEffect(() => {
     getAllCategories();
     getAllSubCategories();
-  }, []);
+  }, [getAllCategories, getAllSubCategories]);
 
   return (
     <section className="max-w-[1024px] mx-auto mb-20">
@@ -270,11 +270,12 @@ const UploadProductCopy = () => {
                       key={index}
                       className="h-20 mt-1 w-20 min-w-20 bg-blue-50 border relative group"
                     >
-                      <img
+                      <Image
                         src={imageUrl}
                         alt="Uploaded"
                         className="w-full h-full object-scale-down cursor-pointer"
-                        onClick={() => setViewImageURL(imageUrl)}
+                        width={80} 
+                        height={80}
                       />
                       <div
                         onClick={() => handleDeleteImage(index)}

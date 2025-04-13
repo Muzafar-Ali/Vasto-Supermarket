@@ -1,6 +1,5 @@
 
 export type TProduct = {
-  more_details: any;
   _id: number,
   name: string,
   slug: string,
@@ -18,7 +17,9 @@ export type TProduct = {
   stock: number,
   subCategory: [],
   unit: string,
-  moreDetails: { [key: string]: string },
+  moreDetails: { 
+    [key: string]: string 
+  },
   updatedAt: string,
   __v: number,
 }

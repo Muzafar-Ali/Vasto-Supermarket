@@ -10,7 +10,6 @@ export type TCategory = {
 export type TCategoryStore = {
   loading: boolean;
   categories: TCategory[];
-  products: any[];
   getAllCategories: () => Promise<void>;
   getCategoryById: (id: number) => Promise<void>;
 }

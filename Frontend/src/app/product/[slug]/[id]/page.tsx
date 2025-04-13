@@ -1,10 +1,10 @@
 'use client';
+import { MouseEvent, use, useEffect, useState } from 'react';
 import Wrapper from '@/components/Wrapper';
 import { useProductStore } from '@/store/prodcutStore';
 import { useCartStore } from '@/store/cartStore';
 import displayCurrencyAndPrice from '@/utils/displayCurrencyAndPrice';
 import Image from 'next/image';
-import { use, useEffect, useState } from 'react';
 import fastImage from "@/assets/minute_delivery.png"
 import bestPriceImage from "@/assets/Best_Prices_Offers.png"
 import basket from '@/assets/basket.png';
@@ -38,7 +38,7 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
 
   // This function calculates the mouse position relative to the product image  
   // and updates the state to control the position of a magnifier effect. 
-  const handleMouseMove = (e: any) => {
+  const handleMouseMove = (e: MouseEvent<HTMLElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.pageX - left) / width) * 100;
     const y = ((e.pageY - top) / height) * 100;

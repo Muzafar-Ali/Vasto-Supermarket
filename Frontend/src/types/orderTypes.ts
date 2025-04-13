@@ -29,5 +29,5 @@ export type TCheckoutSessionRequest = {
 
 export type TOrderState = {
   loading: boolean;
-  createStripeCheckoutSession: (checkoutSessionRequest: any) => Promise<void>;
+  createStripeCheckoutSession: (checkoutSessionRequest: TCheckoutSessionRequest) => Promise<void>;
 }

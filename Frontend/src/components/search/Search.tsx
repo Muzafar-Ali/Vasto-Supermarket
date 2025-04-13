@@ -224,7 +224,7 @@ const Search = () => {
                 </section>
                 <p className='font-bold text-sm md:text-base pl-1 lg:pl-6 mt-5'>
                   We found <span className="text-primary-base">{productsSearched.length} results</span> for: 
-                  <span className="text-primary-base capitalize block mt-1">"{debouncedSearchInput}"</span>
+                  <span className="text-primary-base capitalize block mt-1">&quot;{debouncedSearchInput}&quot;</span>
                 </p>
               </div>
             </DrawerTitle>

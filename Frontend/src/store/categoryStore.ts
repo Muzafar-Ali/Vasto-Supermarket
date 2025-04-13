@@ -1,6 +1,5 @@
 import { config } from "@/config/config";
 import { TCategoryStore } from "@/types/categpryTypes";
-
 import axios from "axios";
 import { create } from "zustand";
 
@@ -10,7 +9,6 @@ export const useCategoryStore = create<TCategoryStore>((set) => ({
   loading: false,
   categories: [],
   subCategories: [],
-  products: [],
 
   getAllCategories: async () => {    
     try {
