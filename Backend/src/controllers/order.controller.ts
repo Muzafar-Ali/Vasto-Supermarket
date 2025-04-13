@@ -4,13 +4,20 @@ import config from "../config/confiq.js";
 import ErrorHandler from "../utils/errorClass.js";
 import OrderModel from "../models/order.model.js";
 import { createOrderFromSession } from "../services/order.services.js";
+import { OrderRequest } from "../schema/order.schema.js";
 
 const stripe = new Stripe(config.stripeSecretKey as string);
 
-export const createCheckoutSessionHandler = async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @desc    Create a Stripe checkout session for order payment
+ * @route   POST /api/v1/order/payment/create-checkout-session
+ * @access  Private (requires authentication)
+ */
+export const createCheckoutSessionHandler = async (req: Request<{}, {}, OrderRequest["body"]>, res: Response, next: NextFunction) => {
   try {
     const { cartItems, deliveryDetails, totalAmount, userId } = req.body;
-      
+    console.log('req.body', req.body);
+    
     const lineItems = cartItems.map((item: any) => ({
       price_data: {
         currency: "aed",
@@ -22,7 +29,8 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       },
       quantity: item.quantity,
     }));
-    
+
+    // Create Stripe checkout session with configured options
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       mode: "payment",
@@ -36,7 +44,7 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
       success_url: `${config.clientUrl}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${config.clientUrl}/checkout-failed`,
       metadata: {
-        userId,
+        ...(userId && {userId}),
         products: JSON.stringify(cartItems.map((item: any) => ({
           productId : item._id,
           quantity : item.quantity
@@ -47,7 +55,8 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
     });
 
     if(!session.url) throw new ErrorHandler("Error creating checkout session", 500);    
-
+    console.log('worked');
+    
     res.status(200).json({ 
       success: true,
       message: "Checkout session created successfully",
@@ -58,6 +67,11 @@ export const createCheckoutSessionHandler = async (req: Request, res: Response, 
   }
 }
 
+/**
+ * @desc    Handle Stripe webhook events for payment processing
+ * @route   POST /api/v1/stripe/webhook
+ * @access  Public (called by Stripe, not by client directly)
+ */
 export const stripeWebhookHandler = async ( req: Request, res: Response): Promise<void> => { // Explicitly return Promise<void>
   const sig = req.headers['stripe-signature'] as string;
 
@@ -76,12 +90,16 @@ export const stripeWebhookHandler = async ( req: Request, res: Response): Promis
     res.json({ received: true }); // Final response
   } catch (error: any) {
     console.error('Webhook Error:', error.message);
-    res.status(400).json({ error: `Webhook Error: ${error.message}` });
+    res.status(400).json({ error: `Webhook Error: ${error.message}` }); 
     return;
   }
 };
 
-
+/**
+ * @desc    Get all orders with populated product details
+ * @route   GET /api/v1/order/all
+ * @access  Private (requires authentication, typically admin-only)
+ */
 export const getOrdersHandler = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const orders = await OrderModel.find().populate({

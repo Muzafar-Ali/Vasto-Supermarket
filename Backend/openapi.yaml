@@ -1666,3 +1666,276 @@ paths:
                   message:
                     type: string
                     example: "Internal server error"
+                    
+  /order/payment/create-checkout-session:
+    post:
+      tags:
+        - Orders
+      summary: Create a Stripe checkout session (Public)
+      description: |
+        Creates a Stripe checkout session for processing order payments.
+        This is a public endpoint accessible without authentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: Optional user ID
+                  example: "65a8f9b3e123456789abcd01"
+                cartItems:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "65a1b2c3d4e5f67890123456"
+                      name:
+                        type: string
+                        example: "iPhone 15 Pro"
+                      slug:
+                        type: string
+                        example: "iphone-15-pro"
+                      imageUrl:
+                        type: string
+                        format: uri
+                        example: "https://example.com/product-image.jpg"
+                      unit:
+                        type: string
+                        example: "piece"
+                      stock:
+                        type: integer
+                        minimum: 0
+                        example: 100
+                      price:
+                        oneOf:
+                          - type: string
+                            example: "999.99"
+                          - type: number
+                            example: 999.99
+                      quantity:
+                        oneOf:
+                          - type: string
+                            example: "1"
+                          - type: integer
+                            minimum: 1
+                            example: 1
+                      discount:
+                        type: integer
+                        minimum: 0
+                        maximum: 100
+                        example: 10
+                    required:
+                      - _id
+                      - name
+                      - slug
+                      - imageUrl
+                      - unit
+                      - stock
+                      - price
+                      - quantity
+                deliveryDetails:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      minLength: 2
+                      example: "John Doe"
+                    email:
+                      type: string
+                      format: email
+                      example: "john@example.com"
+                    contact:
+                      type: string
+                      minLength: 8
+                      example: "+971501234567"
+                    address:
+                      type: string
+                      minLength: 5
+                      example: "123 Main St, Downtown"
+                    emirate:
+                      type: string
+                      example: "Dubai"
+                  required:
+                    - name
+                    - email
+                    - contact
+                    - address
+                    - emirate
+                totalAmount:
+                  oneOf:
+                    - type: string
+                      example: "999.99"
+                    - type: number
+                      example: 999.99
+              required:
+                - cartItems
+                - deliveryDetails
+                - totalAmount
+      responses:
+        '200':
+          description: Checkout session created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Checkout session created successfully"
+                  url:
+                    type: string
+                    format: uri
+                    example: "https://checkout.stripe.com/pay/cs_test_abc123"
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid cart items"
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                          example: "cartItems.0.price"
+                        message:
+                          type: string
+                          example: "Price must be non-negative"
+        '500':
+          description: Error creating checkout session
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Error processing payment"
+
+  /order/all:
+    get:
+      tags:
+        - Orders
+      summary: Get all orders (Public)
+      description: |
+        Retrieves all orders with populated product details.
+        This is a public endpoint accessible without authentication.
+      responses:
+        '200':
+          description: Orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Orders fetched successfully"
+                  orders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: "65a1b2c3d4e5f67890123456"
+                        userId:
+                          type: string
+                          example: "65a8f9b3e123456789abcd01"
+                        products:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              productId:
+                                type: object
+                                properties:
+                                  _id:
+                                    type: string
+                                    example: "65a1b2c3d4e5f67890123456"
+                                  name:
+                                    type: string
+                                    example: "iPhone 15 Pro"
+                                  imageUrl:
+                                    type: string
+                                    example: "https://example.com/product-image.jpg"
+                                  unit:
+                                    type: string
+                                    example: "piece"
+                                  stock:
+                                    type: number
+                                    example: 100
+                                  discount:
+                                    type: number
+                                    example: 10
+                                  price:
+                                    type: number
+                                    example: 999.99
+                              quantity:
+                                type: number
+                                example: 1
+                        deliveryDetails:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: "John Doe"
+                            email:
+                              type: string
+                              example: "john@example.com"
+                            contact:
+                              type: string
+                              example: "+971501234567"
+                            address:
+                              type: string
+                              example: "123 Main St, Dubai"
+                            emirate:
+                              type: string
+                              example: "Dubai"
+                        totalAmount:
+                          type: number
+                          example: 999.99
+                        paymentStatus:
+                          type: string
+                          example: "paid"
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: "2024-03-08T10:15:30.000Z"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"

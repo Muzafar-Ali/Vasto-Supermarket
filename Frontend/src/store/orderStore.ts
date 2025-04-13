@@ -11,7 +11,7 @@ export const useOrderStore= create<TOrderState>((set) => ({
   createStripeCheckoutSession: async (orderData) => {    
     try {
       set({ loading: true });
-      const response = await axios.post(`${baseURI}/api/v1/order/create-checkout-session`, orderData, {
+      const response = await axios.post(`${baseURI}/api/v1/order/payment/create-checkout-session`, orderData, {
         headers: {
           "Content-Type": "application/json",
         },
