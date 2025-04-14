@@ -32,10 +32,7 @@ export const addItemToCartHandler = async (req: Request, res: Response, next: Ne
         success: true,
         message: "item added successfully",
       });
-      
-      
-      // const cart = await req.cartService.addItemToCart(cartId, productId, quantity);
-      // res.status(200).json(cart);
+
   } catch (error) {
       next(error);
   }
