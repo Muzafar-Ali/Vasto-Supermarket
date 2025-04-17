@@ -83,15 +83,35 @@ productSchema.pre('save', function (next) {
 });
 
 // create index named text
-productSchema.index({
-  name: 'text',
-  description: 'text',
-}, {
-  weights: {
-    name: 5,
-    description: 1,
+// productSchema.index({
+//   name: 'text',
+//   description: 'text',
+// }, {
+//   weights: {
+//     name: 5,
+//     description: 1,
+//   },
+// })
+
+productSchema.index(
+  {
+    name: 'text',
+    description: 'text',
+    'moreDetails.Key Features': 'text',
+    'moreDetails.Flavour': 'text',
+    'moreDetails.Type': 'text',
   },
-})
+  {
+    weights: {
+      name: 10,                          // Highest priority
+      description: 3,                    // Medium priority
+      'moreDetails.Key Features': 2,     // Useful for product highlights
+      'moreDetails.Flavour': 2,          // For food/products with flavors
+      'moreDetails.Type': 1,             // E.g., "Inhaler", "Atta"
+    },
+    name: 'product_search_index'         // Name the index
+  }
+);
 
 const ProductModel = mongoose.models.Product || mongoose.model<TProductDocument>("Product", productSchema)
 

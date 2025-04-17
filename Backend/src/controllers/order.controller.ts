@@ -16,7 +16,6 @@ const stripe = new Stripe(config.stripeSecretKey as string);
 export const createCheckoutSessionHandler = async (req: Request<{}, {}, OrderRequest["body"]>, res: Response, next: NextFunction) => {
   try {
     const { cartItems, deliveryDetails, totalAmount, userId } = req.body;
-    console.log('req.body', req.body);
     
     const lineItems = cartItems.map((item: any) => ({
       price_data: {
@@ -55,7 +54,6 @@ export const createCheckoutSessionHandler = async (req: Request<{}, {}, OrderReq
     });
 
     if(!session.url) throw new ErrorHandler("Error creating checkout session", 500);    
-    console.log('worked');
     
     res.status(200).json({ 
       success: true,

@@ -25,7 +25,7 @@ export const createProductHandler = async (req: Request<{}, {}, CreateProductInp
     })
     
   } catch (error) {
-    console.log('error', error);
+    console.error('error', error);
     next(error)
 
   }
@@ -82,7 +82,6 @@ export const getProductHandler = async (req: Request<GetProductByIdInput['params
 export const getProductByCategory = async (req: Request<GetProductByIdInput['params']>, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params
-    console.log('id', id);
     
     // const products = (await ProductModel.find({category: id}).populate('category subCategory').sort({ createdAt: -1 }).limit(15));
     const products = await ProductModel.find({
@@ -181,8 +180,6 @@ export const updateProductHandler = async(req: Request<UpdateProductInput['param
  */
 export const searchProductsHandler = async (req: Request<{}, {}, {}, SearchProductsInput["query"]>, res: Response, next: NextFunction) => {
   try {
-    console.log(req.query);
-    
     let { search, limit, page } = req.query;
 
     let limitNumber = Number(limit);
@@ -212,7 +209,6 @@ export const searchProductsHandler = async (req: Request<{}, {}, {}, SearchProdu
       
       ProductModel.countDocuments({ $text: { $search: search as string } })
     ])
-    console.log(products);
     
     if(!products) throw new ErrorHandler("No product found", 404);
       
