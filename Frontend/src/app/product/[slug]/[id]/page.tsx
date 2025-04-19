@@ -46,7 +46,7 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
   };
   
   return (
-    <div className='bg-primary-base/5'>
+    <div className='bg-primary-base/5 pb-10'>
       <Wrapper className='p-4 grid lg:grid-cols-2 gap-5'>
         {/* Product Images Section */}
         <section className='flex flex-col gap-3 scroll-auto'>
@@ -136,17 +136,17 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
               <p className='font-semibold text-lg lg:text-xl'>Product Details</p>
             <div>
               <p className='font-semibold text-sm'>Description</p>
-              <p className='text-base'>{product?.description}</p>
+              <p className='text-sm md:text-base text-gray-850'>{product?.description}</p>
             </div>
             <div>
               <p className='font-semibold text-sm'>Unit</p>
-              <p className='text-base'>{product?.unit}</p>
+              <p className='text-sm md:text-base text-gray-850'>{product?.unit}</p>
             </div>
             {
               product?.moreDetails && Object.keys(product?.moreDetails).map((element,index)=>(
                 <div key={index}>
                   <p className='font-semibold text-sm'>{element}</p>
-                  <p className='text-base'>{product?.moreDetails[element]}</p>
+                  <p className='text-sm md:text-base text-gray-850'>{product?.moreDetails[element]}</p>
                 </div>
 
               ))
@@ -157,10 +157,10 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
         
         {/* Right side - product details */}
         <div className='flex flex-col gap-3  p-4 lg:p-7 bg-white rounded-md lg:max-h-[700px]'>
-          <div className='text-base lg:text-lg'>
+          <div className='text-sm md:text-base text-gray-850 lg:text-lg'>
             <p className=' bg-teal-600 text-white w-fit px-2 rounded-full'>10 Min</p>
             <h2 className='text-lg text-gray-900 font-semibold lg:text-3xl'>{product?.name}</h2>  
-            <p className='text-sm lg:text-base'>{product?.unit}</p> 
+            <p className='text-sm lg:text-sm md:text-base text-gray-850'>{product?.unit}</p> 
             {/* <Divider/> */}
             <Separator className='my-3'/>
             
@@ -194,7 +194,7 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
                 {/* discount percentage */}
                 {
                   product && product?.discount > 0 && (
-                    <p className="font-bold text-teal-600 lg:text-2xl">{product?.discount}% <span className='text-base text-gray-900'>Discount</span></p>
+                    <p className="font-bold text-teal-600 lg:text-2xl">{product?.discount}% <span className='text-sm md:text-base text-gray-850 text-gray-900'>Discount</span></p>
                   )
                 }
                 
@@ -222,18 +222,18 @@ const ProductDetailsPage = ({ params }: { params: Promise<{ id: string, slug: st
           <div className='my-4 grid gap-3 lg:hidden rounded-md bg-white'>
             <div>
               <p className='font-semibold'>Description</p>
-              <p className='text-base'>{product?.description}</p>
+              <p className='text-sm md:text-base text-gray-850'>{product?.description}</p>
             </div>
             <div>
               <p className='font-semibold'>Unit</p>
-              <p className='text-base'>{product?.unit}</p>
+              <p className='text-sm md:text-base text-gray-850'>{product?.unit}</p>
             </div>
             {
               product?.moreDetails && Object.keys(product?.moreDetails).map((element,index)=>{
                 return(
                   <div key={index}>
                     <p className='font-semibold'>{element}</p>
-                    <p className='text-base'>{product?.moreDetails[element]}</p>
+                    <p className='text-sm md:text-base text-gray-850'>{product?.moreDetails[element]}</p>
                   </div>
                 )
               })

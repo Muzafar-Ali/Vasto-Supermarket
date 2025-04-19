@@ -57,62 +57,64 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
   }, [subcategory, subCatId])
   
   return (
-    <Wrapper className='pt-5 lg:pt-10 bg-primary-base/5'>
-      <div className='grid grid-cols-[80px_1fr] md:grid-cols-[160px_1fr] lg:grid-cols-[270px_1fr] py-2'> 
+    <div className='bg-primary-base/5'>
+      <Wrapper className='pt-5 lg:pt-10  pb-5'>
+        <div className='grid grid-cols-[80px_1fr] md:grid-cols-[160px_1fr] lg:grid-cols-[270px_1fr] py-2'> 
 
-        {/* Sidebar - Subcategory navigation */}
-        <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col shadow-md scrollbarCustom bg-white pb-3 border'>
-          { subCategories?.map((subCategory) => (
-            <Link
-              href={{
-                pathname: `/productList/${slug}/${id}`,
-                query: {
-                  subcategory: subCategory.slug,  
-                  subcatId: subCategory._id       
+          {/* Sidebar - Subcategory navigation */}
+          <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-scroll flex flex-col shadow-md scrollbarCustom bg-white pb-3 border'>
+            { subCategories?.map((subCategory) => (
+              <Link
+                href={{
+                  pathname: `/productList/${slug}/${id}`,
+                  query: {
+                    subcategory: subCategory.slug,  
+                    subcatId: subCategory._id       
+                  }
+                }}
+                key={subCategory._id} 
+                className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border  
+                  ${selectedSubcategory === subCategory._id
+                  ? "border-r-4 border-r-primary-base"
+                  : "border-r-4 border-r-transparent  bg-white"
+                  }`
                 }
-              }}
-              key={subCategory._id} 
-              className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 lg:gap-4 border-b box-border  
-                ${selectedSubcategory === subCategory._id
-                 ? "border-r-4 border-r-primary-base"
-                 : "border-r-4 border-r-transparent  bg-white"
-                }`
-              }
-            >
-              <div className='w-fit mx-auto lg:mx-0 max-w-28 bg-white rounded-md box-border'>
-                <Image src={subCategory.image} alt={subCategory.name} width={1000} height={1000} 
-                className='w-14 lg:w-12 h-full lg:h-12 object-scale-down'/>
+              >
+                <div className='w-fit mx-auto lg:mx-0 max-w-28 bg-white rounded-md box-border'>
+                  <Image src={subCategory.image} alt={subCategory.name} width={1000} height={1000} 
+                  className='w-14 lg:w-12 h-full lg:h-12 object-scale-down'/>
+                </div>
+                <div className={`relative bg-white md:py-1 -mt-6 lg:-mt-3 text-[11px] text-gray-700 text-center lg:text-left lg:text-sm ${selectedSubcategory === subCategory._id ? 'font-bold lg:text-primary-base lg:font-semibold': 'font-medium '}`}>{subCategory.name}</div>
+              </Link>
+            ))}
+          </div>
+          
+          {/* Product list display area */}
+          {/* Conditional rendering based on whether subcategory is selected */}
+          { subCategoryProducts.length > 0 && subcategory && subCatId ? (
+            <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-auto grid mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 bg-primary-base/5'>
+            {/* Map through filtered subcategory products */}
+            { subCategoryProducts?.map((product) => (
+              <div key={product._id}>
+                <ProductCard product={product}/>
               </div>
-              <div className={`relative bg-white md:py-1 -mt-6 lg:-mt-3 text-[11px] text-gray-700 text-center lg:text-left lg:text-sm ${selectedSubcategory === subCategory._id ? 'font-bold lg:text-primary-base lg:font-semibold': 'font-medium '}`}>{subCategory.name}</div>
-            </Link>
-          ))}
-        </div>
-        
-        {/* Product list display area */}
-        {/* Conditional rendering based on whether subcategory is selected */}
-        { subCategoryProducts.length > 0 && subcategory && subCatId ? (
-          <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-auto grid mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 bg-primary-base/5'>
-          {/* Map through filtered subcategory products */}
-          { subCategoryProducts?.map((product) => (
-            <div key={product._id}>
-              <ProductCard product={product}/>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        ): (
-          <div className='sticky top-24 min-h-[88vh] max-h-[88vh] overflow-y-auto grid grid-cols-1 mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 '>
-          {/* Default view - shows all category products */}
-          { id && categoryProducts[id]?.map((product) => (
-            <div key={product._id}>
-              <ProductCard product={product}/>
-            </div>
-          ))}
-        </div>          
-        )}
+          ): (
+            <div className='sticky top-24 min-h-[88vh] max-h-[88vh] overflow-y-auto grid grid-cols-1 mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 '>
+            {/* Default view - shows all category products */}
+            { id && categoryProducts[id]?.map((product) => (
+              <div key={product._id}>
+                <ProductCard product={product}/>
+              </div>
+            ))}
+          </div>          
+          )}
 
-      </div>
-    </Wrapper>
+        </div>
+      </Wrapper>
+    </div>
   )
 }
 
