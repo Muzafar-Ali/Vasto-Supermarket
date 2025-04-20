@@ -197,18 +197,18 @@ export const searchProductsHandler = async (req: Request<{}, {}, {}, SearchProdu
 
     const skip = (pageNumber-1) * limitNumber
 
-    const [products , productCount] = await Promise.all([
+    const [products, productCount] = await Promise.all([
       ProductModel.find(
-        { $text: {$search: search as string } },
+        { $text: { $search: search as string } },
         { score: { $meta: "textScore" } }
       )
-      .sort({ createdAt: -1 })
+      .sort({ score: { $meta: "textScore" }, createdAt: -1 }) // Sort by relevance first, then date
       .skip(skip)
       .limit(limitNumber)
       .populate('category subCategory'),
       
       ProductModel.countDocuments({ $text: { $search: search as string } })
-    ])
+    ]);
     
     if(!products) throw new ErrorHandler("No product found", 404);
       

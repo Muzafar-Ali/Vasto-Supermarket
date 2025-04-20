@@ -92,7 +92,7 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
           {/* Product list display area */}
           {/* Conditional rendering based on whether subcategory is selected */}
           { subCategoryProducts.length > 0 && subcategory && subCatId ? (
-            <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-auto grid mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4 bg-primary-base/5'>
+            <div className='sticky top-20 min-h-[88vh] max-h-[88vh] overflow-y-auto grid mobile-l:grid-cols-2 min-[470px]:grid-cols-2 tablet-s:grid-cols-3 lg:grid-cols-4 gap-2 tablet-s:gap-4 p-2 tablet-s:p-4'>
             {/* Map through filtered subcategory products */}
             { subCategoryProducts?.map((product) => (
               <div key={product._id}>
