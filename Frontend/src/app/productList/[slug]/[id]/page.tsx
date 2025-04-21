@@ -19,7 +19,6 @@ const ProductList = ({params}: {params: Promise<{ id: string, slug: string}>}) =
   const [resolvedParams, setResolvedParams] = useState<{id: string, slug: string}>();
 
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | null>(null);
-  console.log(selectedSubcategory);
   
   // Extract ID and slug from resolved params
   const id = resolvedParams?.id;

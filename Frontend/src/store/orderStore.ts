@@ -17,7 +17,6 @@ export const useOrderStore= create<TOrderState>((set) => ({
         },
         // withCredentials: true,
       })
-      console.log('response.data', response.data);
       
       if (response.data.success) {
         toast.success(response.data.message);
