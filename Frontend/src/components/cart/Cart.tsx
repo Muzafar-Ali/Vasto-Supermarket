@@ -196,7 +196,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }: TCartProps) => {
                 />
                 <p className='text-center text-neutral-400'>Your cart is empty</p>
                 <Link 
-                  onClick={close} 
+                  onClick={() => setIsCartOpen(!isCartOpen)} 
                   href={"/"} 
                   className='block bg-green-600 px-4 py-2 text-white rounded mt-5'
                 >

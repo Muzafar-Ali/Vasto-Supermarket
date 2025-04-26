@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import OrderModel from "../models/order.model.js";
 import ProductModel from "../models/product.model.js";
 import Stripe from "stripe";
+import generateOrderNumber from "../utils/generateOrderNumber.js";
 
 type TMetadata = {
   userId?: string;
@@ -32,6 +33,8 @@ export const createOrderFromSession = async (stripeSession: Stripe.Checkout.Sess
       quantity: string;
     }>;
 
+    const orderId = generateOrderNumber();
+    
     // Create order
     const order = new OrderModel({
       userId,

@@ -23,9 +23,9 @@ export type TCartStore = {
   addToCart: (product: TProduct) => void,
   increaseQuantity: (product: TProduct) => void,
   decreaseQuantity: (product: TProduct) => void,
-  setIsCartOPen: (value: boolean) => void
+  setIsCartOpen: (value: boolean) => void
+  clearCart: () => void,
   // removeFromCart: (product: TProduct) => void,
-  // clearCart: () => void,
   // getCart: () => void,
   // getCartTotal: () => void
 
