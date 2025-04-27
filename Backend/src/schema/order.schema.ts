@@ -132,4 +132,16 @@ export const orderRequestSchema = z.object({
   })
 });
 
+export const orderIdSchema = z.object({
+  params: z.object({
+    sessionId: z.string({
+      required_error: "session Id is required",
+      invalid_type_error: "session Id must be a string"
+    })
+    .min(1, "Order ID is required")
+    .transform(value => domPurify.sanitize(value.trim()))
+  })
+});
+
 export type OrderRequest = z.infer<typeof orderRequestSchema>;
+export type OrderIdInput = z.infer<typeof orderIdSchema>;

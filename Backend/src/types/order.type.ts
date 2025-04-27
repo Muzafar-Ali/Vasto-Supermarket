@@ -8,6 +8,7 @@ export type TOrder = {
     quantity: string,
   }[];
   paymentId: string;
+  stripeSessionId: string,
   paymentStatus: 'unpaid' | 'paid' | 'pending' | 'refunded';
   deliveryAddress: Object;
   deliveryStatus: 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'returned';

@@ -4,7 +4,7 @@ import config from "../config/confiq.js";
 import ErrorHandler from "../utils/errorClass.js";
 import OrderModel from "../models/order.model.js";
 import { createOrderFromSession } from "../services/order.services.js";
-import { OrderRequest } from "../schema/order.schema.js";
+import { OrderIdInput, OrderRequest } from "../schema/order.schema.js";
 
 const stripe = new Stripe(config.stripeSecretKey as string);
 
@@ -81,7 +81,7 @@ export const stripeWebhookHandler = async ( req: Request, res: Response): Promis
 
       // Only create order if payment was successful
       if (session.payment_status === 'paid') {
-          await createOrderFromSession(session, stripe);
+        await createOrderFromSession(session, stripe);
       }
     }
 
@@ -109,6 +109,29 @@ export const getOrdersHandler = async (req: Request, res: Response, next: NextFu
       success: true,
       message: "Orders fetched successfully",
       orders
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * @desc    Get order id
+ * @route   GET /api/v1/order/:sessionId
+ * @access  Public 
+ */
+export const getOrderIdHandler = async (req: Request< OrderIdInput['params']>, res: Response, next: NextFunction) => {
+  try {
+    const {sessionId} = req.params;
+
+    const order = await OrderModel.findOne({ stripeSessionId: sessionId });
+    
+    if(!order) throw new ErrorHandler("Order not found", 404);
+
+    res.status(200).json({
+      success: true,
+      message: "Order fetched successfully",
+      orderId: order.orderId
     });
   } catch (error) {
     next(error);

@@ -30,5 +30,22 @@ export const useOrderStore= create<TOrderState>((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+  getOrderId: async (sessionId) => {
+    try {  
+      const response = await axios.get(`${baseURI}/api/v1/order/${sessionId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // withCredentials: true,
+      })
+
+      if (response.data.success) {
+        return response.data.orderId;
+      }
+    } catch (error) {
+      console.error("Error getting order id:", error);
+      console.error(error)
+    }
   }
 }))

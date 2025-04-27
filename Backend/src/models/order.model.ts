@@ -28,6 +28,10 @@ const orderSchema = new mongoose.Schema<TOrderDocument>({
     type: String,
     default:""
   },
+  stripeSessionId: {
+    type: String,
+    default:""
+  },
   paymentStatus: {
     type: String,
     enum: ['unpaid', 'paid', 'pending', 'refunded'],

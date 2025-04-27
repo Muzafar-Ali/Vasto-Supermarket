@@ -47,7 +47,8 @@ export const createOrderFromSession = async (stripeSession: Stripe.Checkout.Sess
       totalAmount: parseFloat(totalAmount),
       paymentId: stripeSession.payment_intent,
       paymentStatus: stripeSession.payment_status.toLowerCase(),
-      orderId: stripeSession.id,
+      stripeSessionId: stripeSession.id,
+      orderId,
       invoiceReceipt: invoicePdfUrl
     });
 
