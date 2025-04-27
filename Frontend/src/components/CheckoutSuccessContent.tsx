@@ -38,11 +38,11 @@ const CheckoutSuccessContent = () => {
 
   useEffect(() =>{
     const fetchOrderId = async () => {
-      const orderId = await getOrderId("cs_test_b1yqNtspnUF5w9Xs7wB2yaG9BryjbCHCSSjEbRRVEo0eC7fDua829MqNaI");
+      const orderId = await getOrderId(sessionId as string);
       setOrderId(orderId);
     }
     fetchOrderId();
-  },[]);
+  },[sessionId]);
 
   return (
     <div className="min-h-[650px] flex items-center">
@@ -52,7 +52,7 @@ const CheckoutSuccessContent = () => {
             Order Confirmed! 🎉
           </div>
           
-          <div className="mt-6 p-4 bg-white rounded-md border border-gray-200">
+          <div className="mt-6 p-4 bg-white rounded-md border border-gray-200 relative flex max-md:flex-col items-center justify-center gap-2">
             <div className="font-medium text-gray-600 mb-1 text-center">
               Your order number:
             </div>
@@ -74,11 +74,6 @@ const CheckoutSuccessContent = () => {
                 )}
               </button>
             </div>
-            {copied && (
-              <div className="text-center text-sm text-green-500 mt-1">
-                Copied to clipboard!
-              </div>
-            )}
           </div>
 
           <div className="text-lg font-bold mt-6 text-center">

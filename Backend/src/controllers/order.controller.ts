@@ -70,26 +70,52 @@ export const createCheckoutSessionHandler = async (req: Request<{}, {}, OrderReq
  * @route   POST /api/v1/stripe/webhook
  * @access  Public (called by Stripe, not by client directly)
  */
-export const stripeWebhookHandler = async ( req: Request, res: Response): Promise<void> => { // Explicitly return Promise<void>
+// export const stripeWebhookHandler = async ( req: Request, res: Response): Promise<void> => { // Explicitly return Promise<void>
+//   const sig = req.headers['stripe-signature'] as string;
+
+//   try {
+//     const event = stripe.webhooks.constructEvent( req.body, sig, config.stripeWebhookSecret as string );
+
+//     if (event.type === 'checkout.session.completed') {
+//       const session = event.data.object;    
+
+//       // Only create order if payment was successful
+//       if (session.payment_status === 'paid') {
+//         await createOrderFromSession(session, stripe);
+//       }
+//     }
+
+//     res.json({ received: true }); // Final response
+//   } catch (error: any) {
+//     console.error('Webhook Error:', error.message);
+//     res.status(400).json({ error: `Webhook Error: ${error.message}` }); 
+//     return;
+//   }
+// };
+export const stripeWebhookHandler = async (req: Request, res: Response): Promise<void> => {
   const sig = req.headers['stripe-signature'] as string;
+  console.log('Webhook received - raw body:', req.body); // Add this
 
   try {
-    const event = stripe.webhooks.constructEvent( req.body, sig, config.stripeWebhookSecret as string );
+    const event = stripe.webhooks.constructEvent(req.body, sig, config.stripeWebhookSecret as string);
+    console.log('Event constructed:', event.type); // Add this
 
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;    
+      const session = event.data.object as Stripe.Checkout.Session;
+      console.log('Session details:', JSON.stringify(session, null, 2)); // Detailed session log
 
-      // Only create order if payment was successful
       if (session.payment_status === 'paid') {
+        console.log('Attempting to create order...');
         await createOrderFromSession(session, stripe);
+        console.log('Order creation completed');
       }
     }
 
-    res.json({ received: true }); // Final response
+    res.json({ received: true });
   } catch (error: any) {
     console.error('Webhook Error:', error.message);
-    res.status(400).json({ error: `Webhook Error: ${error.message}` }); 
-    return;
+    console.error('Stack trace:', error.stack); // Add stack trace
+    res.status(400).json({ error: `Webhook Error: ${error.message}` });
   }
 };
 
