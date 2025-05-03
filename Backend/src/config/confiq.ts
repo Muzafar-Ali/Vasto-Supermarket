@@ -7,6 +7,7 @@ const config = {
   clientUrl: process.env.CLIENT_URL,
   mongoURI: process.env.MONGO_URI,
   sameSiteValue: "strict",
+  corsOrigin: process.env.CLIENT_URL,
   // JWT
   jwtSecret: process.env.JWT_SECRET,
   accessTokenExpiresIn: 24 * 60 * 60 * 1000, // 24 hours

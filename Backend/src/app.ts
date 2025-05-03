@@ -20,7 +20,7 @@ const app = express();
 const swaggerDocument = YAML.load("./openapi.yaml");
 
 app.use(cors({
-  origin: "*",
+  origin: config.corsOrigin,
   credentials: true
 }));
 
