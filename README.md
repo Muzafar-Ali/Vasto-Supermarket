@@ -9,6 +9,8 @@ Vasto Supermarket is an online grocery shopping platform developed using the MER
 The app is deployed with:
 - **Frontend**: [Vasto supermarket Frontend](https://vasto-supermarket.vercel.app/) (Vercel)
 - **Backend**: Hosted on [Render](https://vasto-supermarket.onrender.com)
+- **Application Demo**: [Watch on YouTube](https://youtu.be/BZqnlxT_54U?si=u4arzUjjOIIbRL_r)
+
 
 ## 🛠️ Tech Stack
 
